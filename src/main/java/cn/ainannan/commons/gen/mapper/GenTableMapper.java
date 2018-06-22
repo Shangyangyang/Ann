@@ -1,0 +1,9 @@
+package cn.ainannan.commons.gen.mapper;
+
+import org.springframework.stereotype.Repository;
+
+import cn.ainannan.base.dao.CrudDao;
+import cn.ainannan.commons.gen.bean.GenTable;
+@Repository
+public interface GenTableMapper extends CrudDao<GenTable>{
+}
