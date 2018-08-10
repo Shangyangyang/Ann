@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.cost.large.mapper.LargeMapper">
+	
+	<sql id="largeColumns">
+		a.id as "id",
+		a.money as "money",
+		a.type as "type",
+		a.cost_date as "costDate",
+		a.reason as "reason",
+		a.related_person as "relatedPerson",
+		a.jinpozhi as "jinpozhi",
+		a.create_date as "createDate",
+		a.create_user as "createUser.id",
+		a.update_date as "updateDate",
+		a.update_user as "updateUser.id",
+		a.del_flag as "delFlag",
+		type.name as "typeName",
+		jinpozhi.name as "jinpozhiName",
+		relatedPerson.name as "relatedPersonName"
+	</sql>
+
+	<sql id="large_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="relatedPerson != null and relatedPerson != ''">
+			and a.related_person = #{relatedPerson}
+		</if>
+		<if test="jinpozhi != null and jinpozhi != ''">
+			and a.jinpozhi = #{jinpozhi}
+		</if>
+		<if test="relatedPerson != null and relatedPerson != ''">
+			and a.related_person = #{relatedPerson}
+		</if>
+	</sql>
+
+	<sql id="largeJoins">
+		left join sys_dict type on type.value = a.type and type.label = 'cost_large_type'
+		left join sys_dict jinpozhi on jinpozhi.value = a.jinpozhi and jinpozhi.label = 'dengjixing'
+		left join sys_dict relatedPerson on relatedPerson.value = a.related_person and relatedPerson.label = 'cost_relatedPerson'
+	</sql>
+
+	<select id="get" parameterType="String" resultType="large">
+		select
+		<include refid="largeColumns" />
+		from cost_large a 
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" parameterType="large" resultType="large">
+		select
+		<include refid="largeColumns" />
+		from cost_large a 
+		<include refid="largeJoins" />
+		<where>
+			<include refid="large_where" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+	<select id="findAllList" parameterType="large" resultType="large">
+		select
+		<include refid="largeColumns" />
+		from cost_large a 
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		order by a.create_date desc
+	</select>
+
+	<insert id="insert" parameterType="large">
+		insert into cost_large(id, money, type, cost_date, reason, related_person, jinpozhi, create_date, create_user, update_date, update_user, del_flag )
+		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{jinpozhi}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+	</insert>
+
+	<update id="update" parameterType="large">
+		update cost_large
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="costDate != null">
+				cost_date = #{costDate},
+			</if>
+			<if test="reason != null">
+				reason = #{reason},
+			</if>
+			<if test="relatedPerson != null">
+				related_person = #{relatedPerson},
+			</if>
+			<if test="jinpozhi != null">
+				jinpozhi = #{jinpozhi},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="createUser.id != null">
+				create_user = #{createUser.id},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="updateUser.id != null">
+				update_user = #{updateUser.id},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE cost_large SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByEntity" parameterType="large">
+		delete from cost_large where id = #{id}
+	</delete>
+
+</mapper>

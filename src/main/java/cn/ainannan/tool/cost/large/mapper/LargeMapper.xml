@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.cost.largeCost.mapper.LargeCostMapper">
+	<resultMap type="largeCost" id="largeCostMap">
+		<id column="id" property="id"/>
+		<result column="money" property="money"/>
+		<result column="type" property="type"/>
+		<result column="cost_date" property="costDate"/>
+		<result column="reason" property="reason"/>
+		<result column="related_person" property="relatedPerson"/>
+		<result column="jinpozhi" property="jinpozhi"/>
+		<result column="create_date" property="createDate"/>
+		<result column="create_user" property="createUser"/>
+		<result column="del_flag" property="delFlag"/>
+	</resultMap>
+
+	<sql id="largeCostColumns">
+		a.id as "id",
+		a.money as "money",
+		a.type as "type",
+		a.cost_date as "costDate",
+		a.reason as "reason",
+		a.related_person as "relatedPerson",
+		a.jinpozhi as "jinpozhi",
+		a.create_date as "createDate",
+		a.create_user as "createUser",
+		a.del_flag as "delFlag"
+	</sql>
+
+	<sql id="largeCost_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="relatedPerson != null and relatedPerson != ''">
+			and a.related_person = #{relatedPerson}
+		</if>
+		<if test="jinpozhi != null and jinpozhi != ''">
+			and a.jinpozhi = #{jinpozhi}
+		</if>
+	</sql>
+
+	<sql id="largeCostJoins">
+	</sql>
+
+	<select id="get" parameterType="String" resultType="largeCost">
+		select
+		<include refid="largeCostColumns" />
+		from cost_large a 
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" parameterType="largeCost" resultMap="largeCostMap">
+		select
+		<include refid="largeCostColumns" />
+		from cost_large a 
+		<where>
+			<include refid="largeCost_where" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+	<select id="findAllList" parameterType="largeCost" resultMap="largeCostMap">
+		select
+		<include refid="largeCostColumns" />
+		from cost_large a 
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		order by a.create_date desc
+	</select>
+
+	<insert id="insert" parameterType="largeCost">
+		insert into cost_large(id, money, type, cost_date, reason, related_person, jinpozhi, create_date, create_user, del_flag )
+		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{jinpozhi}, #{createDate}, #{createUser},  #{DEL_FLAG_NORMAL})
+	</insert>
+
+	<update id="update" parameterType="largeCost">
+		update cost_large
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="costDate != null">
+				cost_date = #{costDate},
+			</if>
+			<if test="reason != null">
+				reason = #{reason},
+			</if>
+			<if test="relatedPerson != null">
+				related_person = #{relatedPerson},
+			</if>
+			<if test="jinpozhi != null">
+				jinpozhi = #{jinpozhi},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE cost_large SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByEntity" parameterType="largeCost">
+		delete from cost_large where id = #{id}
+	</delete>
+
+</mapper>

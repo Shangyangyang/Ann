@@ -65,12 +65,7 @@ public class MD5Utils {
 		return s;
 
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(getFileMD5(new File("F://个人文件/水晶DJ/无损/7.1声道3D环绕立体声 重低音伤感dj.mp3")));
-		System.out.println(getFileMD5(new File("F://个人文件/水晶DJ/无损/7.1声道3D环绕立体声 重低音伤感dj - 副本.mp3")));
-	}
-	
+		
 	/**
 	 * 获取文件的MD5身份证值。
 	 * @param file

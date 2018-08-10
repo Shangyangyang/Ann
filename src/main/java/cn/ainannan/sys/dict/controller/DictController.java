@@ -13,7 +13,7 @@ import cn.ainannan.sys.dict.bean.Dict;
 import cn.ainannan.sys.dict.service.DictService;
 
 @RestController
-@RequestMapping("dict")
+@RequestMapping("sys/dict")
 public class DictController {
 	@Autowired
 	private DictService dictService;
