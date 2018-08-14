@@ -6,8 +6,8 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   # json格式化，日期格式化，时间加8小时。
   jackson:
-    date-format: yyyy-MM-dd
-    #date-format: yyyy-MM-dd HH:mm:ss
+    #date-format: yyyy-MM-dd
+    date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
     
 mybatis:

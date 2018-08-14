@@ -31,9 +31,6 @@
 		<if test="jinpozhi != null and jinpozhi != ''">
 			and a.jinpozhi = #{jinpozhi}
 		</if>
-		<if test="relatedPerson != null and relatedPerson != ''">
-			and a.related_person = #{relatedPerson}
-		</if>
 	</sql>
 
 	<sql id="largeJoins">
@@ -57,15 +54,7 @@
 		<where>
 			<include refid="large_where" />
 		</where>
-		order by a.create_date desc
-	</select>
-
-	<select id="findAllList" parameterType="large" resultType="large">
-		select
-		<include refid="largeColumns" />
-		from cost_large a 
-		a.del_flag = #{DEL_FLAG_NORMAL}
-		order by a.create_date desc
+		order by a.cost_date desc
 	</select>
 
 	<insert id="insert" parameterType="large">
@@ -73,7 +62,7 @@
 		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{jinpozhi}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
 	</insert>
 
-	<update id="update" parameterType="large">
+	<update id="update">
 		update cost_large
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="money != null">
@@ -97,13 +86,13 @@
 			<if test="createDate != null">
 				create_date = #{createDate},
 			</if>
-			<if test="createUser.id != null">
+			<if test="createUser != null and createUser.id != null and '' != createUser.id">
 				create_user = #{createUser.id},
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
-			<if test="updateUser.id != null">
+			<if test="updateUser != null and updateUser.id != null and '' != updateUser.id">
 				update_user = #{updateUser.id},
 			</if>
 		</trim>

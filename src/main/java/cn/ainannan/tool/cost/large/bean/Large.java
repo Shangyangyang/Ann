@@ -2,11 +2,17 @@ package cn.ainannan.tool.cost.large.bean;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.ainannan.base.bean.BaseBean;
 
 public class Large extends BaseBean<Large> {
 	private Double money;
 	private String type;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	private Date costDate;
 	private String reason;
 	private String relatedPerson;
@@ -15,6 +21,16 @@ public class Large extends BaseBean<Large> {
 	private String typeName;
 	private String jinpozhiName;
 	private String relatedPersonName;
+
+	
+	
+	public Large() {
+		super();
+	}
+
+	public Large(String id) {
+		this.id = id;
+	}
 
 	public Double getMoney() {
 		return money;

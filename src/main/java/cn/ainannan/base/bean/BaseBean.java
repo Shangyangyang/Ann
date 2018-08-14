@@ -3,6 +3,7 @@ package cn.ainannan.base.bean;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -13,8 +14,10 @@ import cn.ainannan.sys.user.bean.User;
 public abstract class BaseBean<T> {
 	protected String id;
 	protected User createUser;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date createDate;
 	protected User updateUser;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date updateDate;
 	protected String delFlag;
 

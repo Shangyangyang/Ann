@@ -40,7 +40,15 @@ public class LargeController {
 	 */
 	@RequestMapping("save")
 	public ResultObject save(Large large) {
+		
 		largeService.save(large);
+		return ResultGen.genSuccessResult();
+	}
+	
+	@RequestMapping("delete")
+	public ResultObject delete(String id) {
+		
+		largeService.delete(new Large(id));
 		return ResultGen.genSuccessResult();
 	}
 	
