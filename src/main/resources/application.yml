@@ -19,3 +19,6 @@ logging:
   level:
     org.springframework.web: info
     org.mybatis: debug
+
+spring.resources.static-locations: H:\尚羊羊\图片\个人相册\
+spring.mvc.static-path-pattern: /**

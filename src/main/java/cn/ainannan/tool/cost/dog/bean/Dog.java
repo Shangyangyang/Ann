@@ -2,16 +2,22 @@ package cn.ainannan.tool.cost.dog.bean;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import cn.ainannan.base.bean.BaseBean;
 
 public class Dog extends BaseBean<Dog> {
 	private Double money;
 	private String type;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
 	private Date costDate;
 	private String reason;
 	private String relatedPerson;
-
-	
+	private String typeName;
+	private String relatedPersonName;
 	
 	public Dog() {
 		super();
@@ -59,6 +65,22 @@ public class Dog extends BaseBean<Dog> {
 
 	public void setRelatedPerson(String relatedPerson) {
 		this.relatedPerson = relatedPerson;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getRelatedPersonName() {
+		return relatedPersonName;
+	}
+
+	public void setRelatedPersonName(String relatedPersonName) {
+		this.relatedPersonName = relatedPersonName;
 	}
 
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.cost.dog.mapper.DogMapper">
+	
+	<sql id="dogColumns">
+		a.id as "id",
+		a.money as "money",
+		a.type as "type",
+		a.cost_date as "costDate",
+		a.reason as "reason",
+		a.related_person as "relatedPerson",
+		a.create_date as "createDate",
+		a.create_user as "createUser.id",
+		a.update_date as "updateDate",
+		a.update_user as "updateUser.id",
+		a.del_flag as "delFlag",
+		type.name as "typeName",
+		relatedPerson.name as "relatedPersonName"
+	</sql>
+
+	<sql id="dog_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="relatedPerson != null and relatedPerson != ''">
+			and a.related_person = #{relatedPerson}
+		</if>
+	</sql>
+
+	<sql id="dogJoins">
+		left join sys_dict type on type.value = a.type and type.label = 'cost_dog_type'
+		left join sys_dict relatedPerson on relatedPerson.value = a.related_person and relatedPerson.label = 'cost_relatedPerson'
+	</sql>
+
+	<select id="get" parameterType="String" resultType="dog">
+		select
+		<include refid="dogColumns" />
+		from cost_dog a 
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" parameterType="dog" resultType="dog">
+		select
+		<include refid="dogColumns" />
+		from cost_dog a 
+		<include refid="dogJoins" />
+		<where>
+			<include refid="dog_where" />
+		</where>
+		order by a.cost_date desc
+	</select>
+
+	<insert id="insert" parameterType="dog">
+		insert into cost_dog(id, money, type, cost_date, reason, related_person, create_date, create_user, update_date, update_user, del_flag )
+		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+	</insert>
+
+	<update id="update">
+		update cost_dog
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="money != null">
+				money = #{money},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="costDate != null">
+				cost_date = #{costDate},
+			</if>
+			<if test="reason != null">
+				reason = #{reason},
+			</if>
+			<if test="relatedPerson != null">
+				related_person = #{relatedPerson},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="createUser != null and createUser.id != null and '' != createUser.id">
+				create_user = #{createUser.id},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="updateUser != null and updateUser.id != null and '' != updateUser.id">
+				update_user = #{updateUser.id},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE cost_dog SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByEntity" parameterType="dog">
+		delete from cost_dog where id = #{id}
+	</delete>
+
+</mapper>

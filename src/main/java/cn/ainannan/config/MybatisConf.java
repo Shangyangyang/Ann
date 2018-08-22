@@ -1,4 +1,4 @@
-package cn.ainannan;
+package cn.ainannan.config;
 
 import java.util.Properties;
 

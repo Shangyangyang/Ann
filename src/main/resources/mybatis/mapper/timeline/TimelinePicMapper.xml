@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelinePicMapper">
+	
+	<sql id="timelinePicColumns">
+		a.id as "id",
+		a.short_id as "shortId",
+		a.filename as "filename",
+		a.path as "path",
+		a.src as "src",
+		a.suffix as "suffix",
+		a.size as "size",
+		a.MD5 as "MD5",
+		a.finger_print as "fingerPrint",
+		a.shot_date as "shotDate",
+		a.similar_id as "similarId",
+		a.state as "state",
+		a.create_date as "createDate",
+		a.create_user as "createUser.id",
+		a.update_date as "updateDate",
+		a.update_user as "updateUser.id",
+		a.del_flag as "delFlag"
+	</sql>
+
+	<sql id="timelinePic_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="filename != null and filename != ''">
+			and a.filename = #{filename}
+		</if>
+		<if test="path != null and path != ''">
+			and a.path = #{path} 
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state} 
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state} 
+		</if>
+	</sql> 
+
+	<sql id="timelinePicJoins">
+	</sql>
+
+	<select id="get" parameterType="String" resultType="timelinePic">
+		select
+		<include refid="timelinePicColumns" />
+		from timeline_pic a 
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" parameterType="timelinePic" resultType="timelinePic">
+		select
+		<include refid="timelinePicColumns" />
+		from timeline_pic a 
+		<include refid="timelinePicJoins" />
+		<where>
+			<include refid="timelinePic_where" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+	<insert id="insert" parameterType="timelinePic">
+		insert into timeline_pic(id, short_id, filename, path, src, suffix, size, MD5, finger_print, shot_date, similar_id, state, create_date, create_user, update_date, update_user, del_flag)
+		value(#{id}, #{shortId}, #{filename}, #{path}, #{src}, #{suffix}, #{size}, #{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+	</insert>
+
+	<update id="update">
+		update timeline_pic
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="shortId != null">
+				short_id = #{shortId},
+			</if>
+			<if test="filename != null">
+				filename = #{filename},
+			</if>
+			<if test="path != null">
+				path = #{path},
+			</if>
+			<if test="src != null">
+				src = #{src},
+			</if>
+			<if test="suffix != null">
+				suffix = #{suffix},
+			</if>
+			<if test="size != null">
+				size = #{size},
+			</if>
+			<if test="MD5 != null">
+				MD5 = #{MD5},
+			</if>
+			<if test="fingerPrint != null">
+				finger_print = #{fingerPrint},
+			</if>
+			<if test="shotDate != null">
+				shot_date = #{shotDate},
+			</if>
+			<if test="similarId != null">
+				similar_id = #{similarId},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="createUser != null and createUser.id != null and '' != createUser.id">
+				create_user = #{createUser.id},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="updateUser != null and updateUser.id != null and '' != updateUser.id">
+				update_user = #{updateUser.id},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE timeline_pic SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByEntity" parameterType="timelinePic">
+		delete from timeline_pic where id = #{id}
+	</delete>
+
+</mapper>
