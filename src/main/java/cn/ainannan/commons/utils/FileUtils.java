@@ -11,7 +11,7 @@ import cn.ainannan.commons.Constant;
 
 public class FileUtils {
 
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		List<String> fileList = Lists.newArrayList();
 		
 		for(String s : Constant.picFiles) {

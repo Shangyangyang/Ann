@@ -3,12 +3,17 @@ package cn.ainannan.timeline.picManager.controller;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 
 import cn.ainannan.base.result.ResultGen;
@@ -26,7 +31,7 @@ import cn.ainannan.timeline.picManager.service.TimelinePicService;
 @RequestMapping("timeline/importPic")
 public class ImportPicController {
 	
-	@Value("${spring.resources.static-locations}")
+	@Value("${myPic-basePath}")
 	private String basePath;
 	
 	@Autowired
@@ -34,8 +39,22 @@ public class ImportPicController {
 	
 	
 	@RequestMapping({"","list"})
-	public ResultObject list(TimelinePic timelinePic) {
-		
+	public ResultObject list(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page, 
+			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+		PageHelper.startPage(page, size);
+		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
+		PageInfo pageInfo = new PageInfo(resultList);
+		return ResultGen.genSuccessResult(pageInfo);
+	}
+	
+	/**
+	 * 添加照片到数据中
+	 * @param timelinePic
+	 * @return
+	 */
+	@RequestMapping("addPic")
+	public ResultObject addPic(TimelinePic timelinePic) {
+
 		List<String> fileList = getFileList();
 		
 		int i = 0;
@@ -59,6 +78,8 @@ public class ImportPicController {
 		
 		return ResultGen.genSuccessResult("共添加了 " + i);
 	}
+	
+	
 	
 	/**
 	 * 清除掉：数据库中有而文件系统中没有的照片

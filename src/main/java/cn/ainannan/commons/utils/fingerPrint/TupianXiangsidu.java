@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class TupianXiangsidu {
 
-	public static void main(String[] args) throws IOException {
+	public static void main1(String[] args) throws IOException {
 		String oneFilename = "C:\\Users\\Administrator\\Documents\\Tencent Files\\602390269\\Image\\Group\\{E4U)74R9@]H7_UM3O~FMXP.jpg";
 		String twoFilename = "c:\\你那么屌，你敢在中国扶老人吗？ (3).jpg";
 		String oneHashcode = produceFingerPrint(oneFilename);
