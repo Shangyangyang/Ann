@@ -47,6 +47,33 @@
 		from timeline_pic a 
 		WHERE a.id = #{id}
 	</select>
+	
+	<select id="getLastStatus" resultType="timelinePic">
+		SELECT
+			count(1) AS total,
+			b.lastShotDate,
+			c.lastImportDate
+		FROM
+			timeline_pic a
+		LEFT JOIN (
+			SELECT
+				max(shot_date) as lastShotDate
+			FROM
+				timeline_pic
+			WHERE
+				del_flag = '0'
+		) b ON 1 = 1
+		left join (
+			SELECT
+				max(create_date) as lastImportDate
+			FROM
+				timeline_pic
+			WHERE
+				del_flag = '0'
+		) c on 1=1
+		WHERE
+			a.del_flag = '0'
+	</select>
 
 	<select id="findList" parameterType="timelinePic" resultType="timelinePic">
 		select
