@@ -2,6 +2,8 @@ package cn.ainannan.timeline.picManager.bean;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import cn.ainannan.base.bean.BaseBean;
 
 public class TimelinePic extends BaseBean<TimelinePic> {
@@ -16,7 +18,14 @@ public class TimelinePic extends BaseBean<TimelinePic> {
 	private Date shotDate;
 	private String similarId;
 	private String state;
-
+	
+	// 三个统计字段
+	private String lastTotal;	// 最新总数
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date lastShotDate;	// 最新拍摄日期
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date lastImportDate;	// 最近导入日期
+	
 	public String getShortId() {
 		return shortId;
 	}
@@ -103,6 +112,30 @@ public class TimelinePic extends BaseBean<TimelinePic> {
 
 	public void setShotDate(Date shotDate) {
 		this.shotDate = shotDate;
+	}
+
+	public String getLastTotal() {
+		return lastTotal;
+	}
+
+	public void setLastTotal(String lastTotal) {
+		this.lastTotal = lastTotal;
+	}
+
+	public Date getLastShotDate() {
+		return lastShotDate;
+	}
+
+	public void setLastShotDate(Date lastShotDate) {
+		this.lastShotDate = lastShotDate;
+	}
+
+	public Date getLastImportDate() {
+		return lastImportDate;
+	}
+
+	public void setLastImportDate(Date lastImportDate) {
+		this.lastImportDate = lastImportDate;
 	}
 
 }

@@ -38,6 +38,20 @@ public class ImportPicController {
 	private TimelinePicService timelinePicService;
 	
 	
+	public static Integer addPercent = 0;	// 图片新增进度统计
+	
+	/**
+	 * 获取图片库最近状态
+	 * @param timelinePic
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("getLastStatus")
+	public ResultObject getLastStatus(TimelinePic timelinePic, HttpServletRequest request) {
+		timelinePic = timelinePicService.getLastStatus();
+		return ResultGen.genSuccessResult(timelinePic);
+	}
+	
 	@RequestMapping({"","list"})
 	public ResultObject list(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
@@ -57,11 +71,9 @@ public class ImportPicController {
 
 		List<String> fileList = getFileList();
 		
-		int i = 0;
+		int i = 0;	// 进度统计-当前进度
 		
 		for(String str : fileList) {
-			// System.out.println(FilenameUtils.getFullPath(str));
-			
 			// 先去数据库查询对比是否已经添加
 			timelinePic.setFilename(FilenameUtils.getName(str));
 			timelinePic.setPath(FilenameUtils.getFullPath(str));
@@ -72,11 +84,20 @@ public class ImportPicController {
 			
 			// 增加到数据库的操作
 			timelinePicService.save(getTimelinePic(str));
-			System.out.println(++i);
+			
+			addPercent = ++i / fileList.size() * 100;
 		}
 		
-		
-		return ResultGen.genSuccessResult("共添加了 " + i);
+		return ResultGen.genSuccessResult();
+	}
+	
+	/**
+	 * 获得添加进度情况
+	 * @return
+	 */
+	@RequestMapping("getAddPercent")
+	public ResultObject getAddPercent() {
+		return ResultGen.genSuccessResult(addPercent);
 	}
 	
 	
