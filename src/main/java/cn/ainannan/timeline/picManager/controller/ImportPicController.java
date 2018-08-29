@@ -39,6 +39,7 @@ public class ImportPicController {
 	
 	
 	public static Integer addPercent = 0;	// 图片新增进度统计
+	public static Integer addNum = 0;		// 新增图片数量
 	
 	/**
 	 * 获取图片库最近状态
@@ -78,14 +79,16 @@ public class ImportPicController {
 			timelinePic.setFilename(FilenameUtils.getName(str));
 			timelinePic.setPath(FilenameUtils.getFullPath(str));
 			List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
-			
+			// 进度统计
+			addPercent = (int) ((double)++i / (double)fileList.size() * 100);
 			// 数据库中已经存在同路径同名的文件
 			if(resultList.size() > 0) continue;
 			
 			// 增加到数据库的操作
 			timelinePicService.save(getTimelinePic(str));
 			
-			addPercent = ++i / fileList.size() * 100;
+			addNum++; 	// 新增图片数据增加
+			
 		}
 		
 		return ResultGen.genSuccessResult();
@@ -98,6 +101,25 @@ public class ImportPicController {
 	@RequestMapping("getAddPercent")
 	public ResultObject getAddPercent() {
 		return ResultGen.genSuccessResult(addPercent);
+	}
+	
+	/**
+	 * 获取新增图片数量
+	 * @return
+	 */
+	@RequestMapping("getAddNum")
+	public ResultObject getAddNum() {
+		return ResultGen.genSuccessResult(addNum);
+	}
+	
+	/**
+	 * 将进度值与新增数量清空
+	 * @return
+	 */
+	@RequestMapping("clearAddPercentAndNum")
+	public ResultObject clearAddPercentAndNum() {
+		addPercent = addNum = 0;
+		return ResultGen.genSuccessResult();
 	}
 	
 	
