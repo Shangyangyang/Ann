@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.assertj.core.util.Lists;
 
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	
@@ -34,7 +34,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     
     /**
      * 转换为字节数组
-     * @param str
+     * @param bytes
      * @return
      */
     public static String toString(byte[] bytes){
