@@ -37,9 +37,7 @@ public class ImportPicController {
 	@Autowired
 	private TimelinePicService timelinePicService;
 	
-	
-	public static Integer addPercent = 0;	// 图片新增进度统计
-	public static Integer addNum = 0;		// 新增图片数量
+	public static Integer percent = 0;	// 图片新增进度统计
 	
 	/**
 	 * 获取图片库最近状态
@@ -69,7 +67,7 @@ public class ImportPicController {
 	 */
 	@RequestMapping("addPic")
 	public ResultObject addPic(TimelinePic timelinePic) {
-
+		int addNum = 0; // 新增图片计数器
 		List<String> fileList = getFileList();
 		
 		int i = 0;	// 进度统计-当前进度
@@ -80,7 +78,7 @@ public class ImportPicController {
 			timelinePic.setPath(FilenameUtils.getFullPath(str));
 			List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
 			// 进度统计
-			addPercent = (int) ((double)++i / (double)fileList.size() * 100);
+			percent = (int) ((double)++i / (double)fileList.size() * 100);
 			// 数据库中已经存在同路径同名的文件
 			if(resultList.size() > 0) continue;
 			
@@ -91,56 +89,42 @@ public class ImportPicController {
 			
 		}
 		
-		return ResultGen.genSuccessResult();
+		percent = 0;
+		
+		return ResultGen.genSuccessResult("新增完成，本次共添加了 " + addNum + " 张照片！");
 	}
 	
 	/**
 	 * 获得添加进度情况
 	 * @return
 	 */
-	@RequestMapping("getAddPercent")
-	public ResultObject getAddPercent() {
-		return ResultGen.genSuccessResult(addPercent);
+	@RequestMapping("getPercent")
+	public ResultObject getPercent() {
+		return ResultGen.genSuccessResult(percent);
 	}
-	
-	/**
-	 * 获取新增图片数量
-	 * @return
-	 */
-	@RequestMapping("getAddNum")
-	public ResultObject getAddNum() {
-		return ResultGen.genSuccessResult(addNum);
-	}
-	
-	/**
-	 * 将进度值与新增数量清空
-	 * @return
-	 */
-	@RequestMapping("clearAddPercentAndNum")
-	public ResultObject clearAddPercentAndNum() {
-		addPercent = addNum = 0;
-		return ResultGen.genSuccessResult();
-	}
-	
-	
 	
 	/**
 	 * 清除掉：数据库中有而文件系统中没有的照片
 	 * @param timelinePic
 	 * @return
 	 */
-	@RequestMapping("clean")
-	public ResultObject clean(TimelinePic timelinePic) {
+	@RequestMapping("cleanDatabase")
+	public ResultObject cleanDatabase(TimelinePic timelinePic) {
 		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
-		int i = 0;
+		int i = 0;	// 进度统计-当前进度
+		int deleteNum = 0;
+		double size = (double)resultList.size();
 		for (TimelinePic tp : resultList) {
+			// 进度统计
+			percent = (int) ((double)++i / size * 100);
+			
 			if(!new File(tp.getPath() + tp.getFilename()).exists()) {
 				timelinePicService.delete(tp);
-				i++;
+				deleteNum++;
 			}
 		}
 		
-		return ResultGen.genSuccessResult("共清除了  " + i + "  条。");
+		return ResultGen.genSuccessResult("共清除了  " + deleteNum + "  条。");
 	}
 	
 	
