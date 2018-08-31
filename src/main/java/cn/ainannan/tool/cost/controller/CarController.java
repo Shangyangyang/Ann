@@ -1,4 +1,4 @@
-package cn.ainannan.tool.cost.car.controller;
+package cn.ainannan.tool.cost.controller;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.utils.DateUtil;
 import cn.ainannan.commons.utils.NumberUtils;
-import cn.ainannan.tool.cost.car.bean.Car;
-import cn.ainannan.tool.cost.car.bean.CarOilWear;
-import cn.ainannan.tool.cost.car.service.CarService;
+import cn.ainannan.tool.cost.bean.Car;
+import cn.ainannan.tool.cost.bean.CarOilWear;
+import cn.ainannan.tool.cost.service.CarService;
 
 @RestController
 @RequestMapping("cost/car")

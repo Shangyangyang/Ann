@@ -1,4 +1,4 @@
-package cn.ainannan.tool.cost.large.controller;
+package cn.ainannan.tool.cost.controller;
 
 import java.util.List;
 
@@ -14,21 +14,21 @@ import com.github.pagehelper.PageInfo;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.tool.cost.large.bean.Large;
-import cn.ainannan.tool.cost.large.service.LargeService;
+import cn.ainannan.tool.cost.bean.Dog;
+import cn.ainannan.tool.cost.service.DogService;
 
 @RestController
-@RequestMapping("cost/large")
-public class LargeController {
+@RequestMapping("cost/dog")
+public class DogController {
 	@Autowired
-	private LargeService largeService;
+	private DogService dogService;
 	
 	@RequestMapping({"","list"})
-	public ResultObject list(Large large, @RequestParam(defaultValue = "1") Integer page, 
+	public ResultObject list(Dog dog, @RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
 		PageHelper.startPage(page, size);
-		List<Large> list = largeService.findList(large);
-		PageInfo<Large> pageInfo = new PageInfo<Large>(list);
+		List<Dog> list = dogService.findList(dog);
+		PageInfo<Dog> pageInfo = new PageInfo<Dog>(list);
 		
 		return ResultGen.genSuccessResult(pageInfo);
 	}
@@ -39,16 +39,16 @@ public class LargeController {
 	 * @return
 	 */
 	@RequestMapping("save")
-	public ResultObject save(Large large) {
+	public ResultObject save(Dog dog) {
 		
-		largeService.save(large);
+		dogService.save(dog);
 		return ResultGen.genSuccessResult();
 	}
 	
 	@RequestMapping("delete")
 	public ResultObject delete(String id) {
 		
-		largeService.delete(new Large(id));
+		dogService.delete(new Dog(id));
 		return ResultGen.genSuccessResult();
 	}
 	

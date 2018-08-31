@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.cost.mapper.CostLijinMapper">
+    
+	<sql id="costLijinColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.money AS "money",
+		a.type AS "type",
+		a.isyihuan AS "isyihuan",
+		a.guishuren AS "guishuren",
+		a.input_date AS "inputDate",
+		a.yihuan_money AS "yihuanMoney",
+		a.yihuan_date AS "yihuanDate",
+		a.create_date AS "createDate",
+		a.create_user AS "createUser",
+		a.update_date AS "updateDate",
+		a.update_user AS "updateUser",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="costLijinJoins">
+	</sql>
+    
+	<select id="get" resultType="CostLijin">
+		SELECT 
+			<include refid="costLijinColumns"/>
+		FROM cost_lijin a
+		<include refid="costLijinJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="CostLijin">
+		SELECT 
+			<include refid="costLijinColumns"/>
+		FROM cost_lijin a
+		<include refid="costLijinJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbType == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbType == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbType == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="isyihuan != null and isyihuan != ''">
+				AND a.isyihuan = #{isyihuan}
+			</if>
+			<if test="guishuren != null and guishuren != ''">
+				AND a.guishuren = #{guishuren}
+			</if>
+		</where>
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>		
+	</select>
+
+	<select id="findAllList" resultType="CostLijin">
+		SELECT 
+			<include refid="costLijinColumns"/>
+		FROM cost_lijin a
+		<include refid="costLijinJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO cost_lijin(
+			id,
+			name,
+			money,
+			type,
+			isyihuan,
+			guishuren,
+			input_date,
+			yihuan_money,
+			yihuan_date,
+			create_date,
+			create_user,
+			update_date,
+			update_user,
+			del_flag,
+		) VALUES (
+			#{id},
+			#{name},
+			#{money},
+			#{type},
+			#{isyihuan},
+			#{guishuren},
+			#{inputDate},
+			#{yihuanMoney},
+			#{yihuanDate},
+			#{createDate},
+			#{createUser},
+			#{updateDate},
+			#{updateUser},
+			#{delFlag},
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cost_lijin	
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name},
+			</if>	
+			<if test="money != null">
+				money = #{money},
+			</if>	
+			<if test="type != null">
+				type = #{type},
+			</if>	
+			<if test="isyihuan != null">
+				isyihuan = #{isyihuan},
+			</if>	
+			<if test="guishuren != null">
+				guishuren = #{guishuren},
+			</if>	
+			<if test="inputDate != null">
+				input_date = #{inputDate},
+			</if>	
+			<if test="yihuanMoney != null">
+				yihuan_money = #{yihuanMoney},
+			</if>	
+			<if test="yihuanDate != null">
+				yihuan_date = #{yihuanDate},
+			</if>	
+			<if test="createUser != null">
+				create_user = #{createUser},
+			</if>	
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>	
+			<if test="updateUser != null">
+				update_user = #{updateUser}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">	
+		UPDATE cost_lijin SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

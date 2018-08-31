@@ -1,4 +1,4 @@
-package cn.ainannan.tool.cost.car.bean;
+package cn.ainannan.tool.cost.bean;
 
 import cn.ainannan.base.bean.BaseBean;
 
