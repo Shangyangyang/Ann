@@ -12,7 +12,10 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("file:H:\\尚羊羊\\图片\\个人相册\\");
+        registry.addResourceHandler("/**").addResourceLocations(
+        		"file:H:\\尚羊羊\\图片\\个人相册\\", 
+        		"file:H:\\尚羊羊\\个人文档\\excel\\"
+        	);
         super.addResourceHandlers(registry);
     }
 }

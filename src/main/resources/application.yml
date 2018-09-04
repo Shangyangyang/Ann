@@ -21,6 +21,7 @@ logging:
     org.mybatis: debug
 
 myPic-basePath: H:\尚羊羊\图片\个人相册\
+ecxel-basePath: H:\尚羊羊\个人文档\excel\
 
 #spring.resources.static-locations: file:H:\尚羊羊\图片\个人相册\
 #spring.mvc.static-path-pattern: /**

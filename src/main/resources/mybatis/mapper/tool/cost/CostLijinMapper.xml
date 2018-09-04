@@ -9,6 +9,7 @@
 		a.type AS "type",
 		a.isyihuan AS "isyihuan",
 		a.guishuren AS "guishuren",
+		a.reason AS "reason",
 		a.input_date AS "inputDate",
 		a.yihuan_money AS "yihuanMoney",
 		a.yihuan_date AS "yihuanDate",
@@ -16,10 +17,16 @@
 		a.create_user AS "createUser",
 		a.update_date AS "updateDate",
 		a.update_user AS "updateUser",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		d.name as "typeName",
+		d2.name as "isyihuanName",
+		d3.name as "guishurenName"
 	</sql>
 	
 	<sql id="costLijinJoins">
+		left join sys_dict d on d.value = a.type and d.label = 'lijin_type'
+		left join sys_dict d2 on d2.value = a.isyihuan and d2.label = 'lijin_isyihuan'
+		left join sys_dict d3 on d3.value = a.guishuren and d3.label = 'lijin_guishuren'
 	</sql>
     
 	<select id="get" resultType="CostLijin">
@@ -30,7 +37,7 @@
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="list" resultType="CostLijin">
+	<select id="findList" resultType="CostLijin">
 		SELECT 
 			<include refid="costLijinColumns"/>
 		FROM cost_lijin a
@@ -53,14 +60,8 @@
 				AND a.guishuren = #{guishuren}
 			</if>
 		</where>
-		<choose>
-			<when test="sqlOrderBy != null and sqlOrderBy != ''">
-				ORDER BY #{sqlOrderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>		
+		
+		order by a.input_date desc	
 	</select>
 
 	<select id="findAllList" resultType="CostLijin">
@@ -70,15 +71,7 @@
 		<include refid="costLijinJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="sqlOrderBy != null and sqlOrderBy != ''">
-				ORDER BY #{sqlOrderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+		</where>
 	</select>
 		
 	<insert id="insert">
@@ -89,6 +82,7 @@
 			type,
 			isyihuan,
 			guishuren,
+			reason,
 			input_date,
 			yihuan_money,
 			yihuan_date,
@@ -96,60 +90,61 @@
 			create_user,
 			update_date,
 			update_user,
-			del_flag,
-		) VALUES (
+			del_flag
+		) VALUE (
 			#{id},
 			#{name},
 			#{money},
 			#{type},
 			#{isyihuan},
 			#{guishuren},
+			#{reason},
 			#{inputDate},
 			#{yihuanMoney},
 			#{yihuanDate},
 			#{createDate},
-			#{createUser},
+			#{createUser.id},
 			#{updateDate},
-			#{updateUser},
-			#{delFlag},
+			#{updateUser.id},
+			#{delFlag}
 		)
 	</insert>
 
 	<update id="update">
 		UPDATE cost_lijin	
 		<trim prefix="SET" suffixOverrides=",">
-			<if test="name != null">
+			<if test="name != null and name != ''">
 				name = #{name},
 			</if>	
-			<if test="money != null">
+			<if test="money != null and money != ''">
 				money = #{money},
 			</if>	
-			<if test="type != null">
+			<if test="type != null and type != ''">
 				type = #{type},
 			</if>	
-			<if test="isyihuan != null">
+			<if test="isyihuan != null and isyihuan != ''">
 				isyihuan = #{isyihuan},
 			</if>	
-			<if test="guishuren != null">
+			<if test="guishuren != null and guishuren != ''">
 				guishuren = #{guishuren},
+			</if>	
+			<if test="reason != null and reason != ''">
+				reason = #{reason},
 			</if>	
 			<if test="inputDate != null">
 				input_date = #{inputDate},
 			</if>	
-			<if test="yihuanMoney != null">
+			<if test="yihuanMoney != null and yihuanMoney != ''">
 				yihuan_money = #{yihuanMoney},
 			</if>	
 			<if test="yihuanDate != null">
 				yihuan_date = #{yihuanDate},
-			</if>	
-			<if test="createUser != null">
-				create_user = #{createUser},
-			</if>	
-			<if test="updateDate != null">
+			</if>
+			<if test="updateDate != null and updateDate != ''">
 				update_date = #{updateDate},
 			</if>	
-			<if test="updateUser != null">
-				update_user = #{updateUser}
+			<if test="updateUser != null and updateUser.id != ''">
+				update_user = #{updateUser.id}
 			</if>
 		</trim>
 		WHERE id = #{id}
