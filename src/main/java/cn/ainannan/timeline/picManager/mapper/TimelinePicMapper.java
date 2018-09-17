@@ -1,6 +1,8 @@
 package cn.ainannan.timeline.picManager.mapper;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import cn.ainannan.base.dao.CrudDao;
@@ -13,4 +15,16 @@ public interface TimelinePicMapper extends CrudDao<TimelinePic> {
 	 * @return
 	 */
 	TimelinePic getLastStatus();
+	
+	/**
+	 * 获取相同MD5的数据
+	 * @return
+	 */
+	List<TimelinePic> getEqualMd5();
+	
+	/**
+	 * 获取文件指纹相同的数据
+	 * @return
+	 */
+	List<TimelinePic> getEqualFingerPrint();
 }

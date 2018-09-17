@@ -48,6 +48,58 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<select id="getEqualMd5" parameterType="String" resultType="timelinePic">
+		SELECT
+			<include refid="timelinePicColumns" />
+		FROM
+			timeline_pic a
+		WHERE
+			a.md5 = (
+				SELECT
+					md5
+				FROM
+					timeline_pic
+				WHERE
+					del_flag = '0'
+				GROUP BY
+					md5
+				HAVING
+					count(md5) > 1
+				LIMIT 1
+			)
+		order by a.src asc
+	</select>
+	
+	<select id="getEqualFingerPrint" parameterType="String" resultType="timelinePic">
+		SELECT
+			<include refid="timelinePicColumns" />
+		FROM
+			timeline_pic a
+		WHERE
+			a.del_flag = '0'
+		AND EXISTS (
+			SELECT
+				c.finger_print
+			FROM
+				(
+					SELECT
+						b.finger_print
+					FROM
+						timeline_pic b
+					WHERE
+						b.del_flag = '0'
+					GROUP BY
+						b.finger_print
+					HAVING
+						count(b.finger_print) > 1
+				) c
+			WHERE
+				c.finger_print = a.finger_print
+		)
+		ORDER BY
+			a.create_date DESC
+	</select>
+	
 	<select id="getLastStatus" resultType="timelinePic">
 		SELECT
 			count(1) AS lastTotal,

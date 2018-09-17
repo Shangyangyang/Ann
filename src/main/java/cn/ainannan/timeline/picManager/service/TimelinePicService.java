@@ -1,5 +1,7 @@
 package cn.ainannan.timeline.picManager.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import cn.ainannan.base.service.CrudService;
@@ -14,5 +16,21 @@ public class TimelinePicService extends CrudService<TimelinePicMapper, TimelineP
 	 */
 	public TimelinePic getLastStatus() {
 		return dao.getLastStatus();
+	}
+
+	/**
+	 * 获取相同MD5的数据
+	 * @return
+	 */
+	public List<TimelinePic> getEqualMd5(){
+		return dao.getEqualMd5();
+	}
+	
+	/**
+	 * 获取相同文件指纹的数据
+	 * @return
+	 */
+	public List<TimelinePic> getEqualFingerPrint(){
+		return dao.getEqualFingerPrint();
 	}
 }

@@ -40,6 +40,154 @@ public class ImportPicController {
 	public static Integer percent = 0;	// 图片新增进度统计
 	
 	/**
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("skipByTpList")
+	public ResultObject skipByIds(String tpList){
+		
+		if(tpList == null || "".equals(tpList.trim())) return this.getEqualFingerPrint();
+		
+		List<TimelinePic> tps = Lists.newArrayList();
+		
+		String [] objs = tpList.split(";");
+		for (int i = 0; i < objs.length; i++) {
+			
+			String [] obj = objs[i].split(",");
+			TimelinePic tp = new TimelinePic();
+			
+			tp.setId(obj[0]);
+			tp.setShortId(obj[1]);
+			tp.setSimilarId("null".equals(obj[2]) ? "" : obj[2]);	// 先判断一下是不是为空
+			
+			tps.add(tp);
+		}
+		
+		// 循环判断
+		int size = tps.size();
+		for (int i = 0; i < size; i++) {
+			
+			TimelinePic tpI = tps.get(i);
+			
+			for (int j = i + 1; j < size; j++) {
+				TimelinePic tpJ = tps.get(j);
+				
+				// 如果双方的similarId都不包含对方，则互相添加
+				if(tpJ.getSimilarId() == null || "".equals(tpJ.getSimilarId()) 
+						|| tpJ.getSimilarId().indexOf(tpI.getShortId()) == -1) {
+					
+					tpI.setSimilarId(tpI.getSimilarId() + tpJ.getShortId() + ",");
+					tpJ.setSimilarId(tpJ.getSimilarId() + tpI.getShortId() + ",");
+				}
+			}
+		}
+		
+		// 循环保存
+		for (TimelinePic tp : tps) {
+			timelinePicService.save(tp);
+		}
+		
+		return this.getEqualFingerPrint();
+	}
+	
+	/**
+	 * 获取相同文件指纹的记录
+	 * @return
+	 */
+	@RequestMapping("getEqualFingerPrint")
+	public ResultObject getEqualFingerPrint(){
+		List<TimelinePic> tpList = timelinePicService.getEqualFingerPrint();
+		
+		// List为空则是没有可去重的记录了
+		if(tpList.size() == 0) {
+			return ResultGen.genFailResult("99");
+		}
+		
+		List<TimelinePic> resultList = null;
+		
+		for (int i = 0; i < tpList.size(); i++) {
+			
+			resultList = Lists.newArrayList();			
+			TimelinePic tpI = tpList.get(i);
+			resultList.add(tpI);
+			
+			for (int j = i + 1; j < tpList.size(); j++) {
+				
+				TimelinePic tpJ = tpList.get(j);				
+				
+				// 如果是相同文件指纹的情况下
+				if(tpJ.getFingerPrint().equals(tpI.getFingerPrint())) {
+					// 查找如果类似ID集中有I的ID，则删除该记录
+//					if(null != tpJ.getSimilarId() && !"".equals(tpJ.getSimilarId()) 
+//							&& tpJ.getSimilarId().indexOf(tpI.getShortId()) > -1) {
+//						tpList.remove(j);
+//					}
+					
+					//查找如果类似ID集中有I的ID
+					if(tpJ.getSimilarId() == null || "".equals(tpJ.getSimilarId()) 
+							|| tpJ.getSimilarId().indexOf(tpI.getShortId()) == -1) {
+						
+						resultList.add(tpJ);
+					}
+				}
+			}
+			
+			// 判断如果List的长度大于2，则代表有重复内容需要判断，则返回。
+			if(resultList.size() > 1) {
+				return ResultGen.genSuccessResult(resultList);
+			}
+			
+		}// for i 循环结束
+		
+		return ResultGen.genFailResult("99");
+	}
+	
+	/**
+	 * 删除数据库记录以及物理文件
+	 * @param tp
+	 * @return
+	 */
+	@RequestMapping("delete")
+	public ResultObject delete(TimelinePic tp) {
+		// 先删除物理文件，先获取前端传递过来的path，如果为空，则通过Id获取数据库里的记录
+		if(tp.getPath() == null || "".equals(tp.getPath())) {
+			if(tp.getId() != null && !"".equals(tp.getId())) {
+				TimelinePic result = timelinePicService.get(tp.getId());
+				tp.setPath(result.getPath() + result.getFilename());
+			}else {
+				return ResultGen.genFailResult("缺少参数，删除失败。");
+			}
+		}
+		
+		// 删除物理文件
+		File file = new File(tp.getPath());
+		
+		if(file.exists()) {
+			while(!file.delete()){
+				System.gc();    //回收资源
+			}
+		}
+		
+		timelinePicService.delete(tp);
+		return ResultGen.genSuccessResult();
+	}
+	
+	/**
+	 * 获取相同MD5的数据
+	 * @return
+	 */
+	@RequestMapping("getEqualMd5")
+	public ResultObject getEqualMd5(){
+		List<TimelinePic> tpList = timelinePicService.getEqualMd5();
+		// List为空则是没有可去重的记录了
+		if(tpList.size() == 0) {
+			return ResultGen.genFailResult("99");
+		}
+		return ResultGen.genSuccessResult(tpList);
+	}
+	
+	/**
 	 * 获取图片库最近状态
 	 * @param timelinePic
 	 * @param request
@@ -127,7 +275,7 @@ public class ImportPicController {
 		return ResultGen.genSuccessResult("共清除了  " + deleteNum + "  条。");
 	}
 	
-	
+	// ==================================== 私有函数区   =========================================
 	
 	/**
 	 * 根据文件路径新建一个timelinePic对象，填充基本信息。
@@ -169,4 +317,5 @@ public class ImportPicController {
 		
 		return fileList;
 	}
+	
 }
