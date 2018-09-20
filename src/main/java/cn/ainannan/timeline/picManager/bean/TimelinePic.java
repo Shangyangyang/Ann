@@ -15,6 +15,8 @@ public class TimelinePic extends BaseBean<TimelinePic> {
 	private Long size;
 	private String MD5;
 	private String fingerPrint;
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date shotDate;
 	private String similarId;
 	private String state;

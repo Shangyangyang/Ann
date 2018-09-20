@@ -27,4 +27,11 @@ public interface TimelinePicMapper extends CrudDao<TimelinePic> {
 	 * @return
 	 */
 	List<TimelinePic> getEqualFingerPrint();
+	
+	/**
+	 * 获取拍摄时间为空的记录
+	 * @return
+	 */
+	TimelinePic getShotDateIsnull();
+	List<TimelinePic> getAllShotDateIsnull();
 }

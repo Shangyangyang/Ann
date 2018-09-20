@@ -1,7 +1,12 @@
 package cn.ainannan.timeline.picManager.controller;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +45,61 @@ public class ImportPicController {
 	public static Integer percent = 0;	// 图片新增进度统计
 	
 	/**
-	 * 
+	 * 后台计算拍摄日期并填充回数据库
+	 * @return
+	 */
+	@RequestMapping("executeShotDate")
+	public ResultObject executeShotDate(){
+		List<TimelinePic> tpList = timelinePicService.getAllShotDateIsnull();
+		int count = 0;
+		
+		for (TimelinePic tp : tpList) {
+			Date d = executeShotDate(tp.getFilename());
+			if(d != null) {
+				
+				count++;
+				
+				TimelinePic t = new TimelinePic();
+				t.setId(tp.getId());
+				t.setShotDate(d);
+				
+				timelinePicService.save(t);
+			}
+			
+		}
+		
+		return ResultGen.genSuccessResult("本次后台共计算了 " + count + " 条记录。");
+	}
+	
+	/**
+	 * 保存数据，有ID为修改、没有ID为新增。
+	 * @param timelinePic
+	 * @return
+	 */
+	@RequestMapping("save")
+	public ResultObject save(TimelinePic timelinePic){
+		timelinePicService.save(timelinePic);
+		return ResultGen.genSuccessResult();
+	}
+	
+	
+	
+	/**
+	 * 获取还没有填充拍摄日期的图片记录
+	 * @param tpList
+	 * @return
+	 */
+	@RequestMapping("getShotDateIsnull")
+	public ResultObject getShotDateIsnull(String tpList){
+		TimelinePic tp = timelinePicService.getShotDateIsnull();
+		
+		if(tp == null) return ResultGen.genFailResult("99");
+		
+		return ResultGen.genSuccessResult(tp);
+	}
+	
+	/**
+	 * 跳过这一组图片，并且把它们的shortId保存在对方的similarId中。
 	 * @param ids
 	 * @return
 	 */
@@ -316,6 +375,161 @@ public class ImportPicController {
 		}
 		
 		return fileList;
+	}
+	
+	/**
+	 * 根据文件名解析拍摄日期
+	 * @param str
+	 * @return
+	 */
+	private Date executeShotDate(String str) {
+		Date newDate = null;
+		String guessTime = null;
+		
+		if(str.indexOf("faceu_") == 0 && str.length() > 14){
+			String subStr = substr(str, 6, 14);
+			
+			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " " 
+				+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
+		}
+		
+		if(str.indexOf("微信图片_") == 0 && str.length() > 14){
+			String subStr = substr(str, 5, 14);
+			
+			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " " 
+				+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
+		}
+		
+		if(str.indexOf("QQ图片") == 0 && str.length() > 14){
+			String subStr = substr(str, 4, 14);
+			
+			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " " 
+				+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
+		}
+		
+		if(str.indexOf("IMG_") == 0 && str.length() > 15){
+			String subStr = substr(str, 4, 15);
+			String [] arr = subStr.split("_");
+			
+			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
+			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
+			
+			guessTime = dateStr + " " + timeStr;
+			
+		}
+		
+		if(str.indexOf("P") == 0 && str.length() > 13){
+			// 2016\P61006-110001-001.jpg
+			
+			String dateStr = "201" + substr(str, 1, 1) + "-" + substr(str, 2, 2) + "-" + substr(str, 4, 2);
+			
+			String timeStr = substr(str, 7, 2) + ":" + substr(str, 9, 2) + ":" + substr(str, 11, 2);
+			
+			guessTime = dateStr + " " + timeStr;
+			
+		}
+		
+		if(str.indexOf("B612咔叽_") == 0 && str.length() > 20){
+			String subStr = substr(str, 7, 15);
+			
+			String [] arr = subStr.split("_");
+			
+			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
+			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
+			
+			guessTime = dateStr + " " + timeStr;
+		}
+
+		if(str.indexOf("B612Kaji_") == 0 && str.length() > 20){
+			// B612Kaji_20180603_231306_600.jpg
+			String subStr = substr(str, 9, 15);
+			String [] arr = subStr.split("_");
+			
+			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
+			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
+			
+			guessTime = dateStr + " " + timeStr;
+			
+		}
+		
+		if(str.indexOf("mmexport") == 0 && str.length() > 20){
+			// mmexport1500993758999.jpg
+			String subStr = substr(str, 8, 13);
+			
+			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(subStr)));
+			
+		}
+		//wx_camera_1500028140900.jpg
+		if(str.indexOf("wx_camera_") == 0 && str.length() > 20){
+			// mmexport1500993758999.jpg
+			String subStr = substr(str, 10, 13);
+			
+			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(subStr)));
+			
+		}
+		// 2014-05-18 125400.jpg
+		if(findDate("^\\d{4}-\\d{2}-\\d{2}\\s\\d{6}", str)){
+			String subStr = substr(str, 0, 17);
+			guessTime = substr(subStr, 0, 13) + ":" + substr(subStr, 13, 2) + ":" + substr(subStr, 15, 2);
+		}
+		// 2014_01_15_09_53_29.jpg
+		if(findDate("^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}", str)){
+			String [] subStr = str.split("_");
+			
+			guessTime = subStr[0] + "-" + subStr[1] + "-" + subStr[2] + " " 
+					+ subStr[3] + ":" + subStr[4] + ":" + substr(subStr[5], 0, 2);
+		}
+		// 20120415.jpg
+		if(findDate("^\\d{8}\\.", str)){
+			guessTime = substr(str, 0, 4) + "-" + substr(str, 4, 2) + "-" + substr(str, 6, 2) + " 00:00:00";
+			
+		}
+		
+		
+		// 如果日期字符串不为空，表示命中了规则并生成了字符串，进行转换
+		if(guessTime != null && !"".equals(guessTime)) {
+			try {
+				newDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(guessTime);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return newDate;
+	}
+	
+	/**
+	 * 截取字符串，
+	 * @param str 原字符串
+	 * @param begin 开始位置
+	 * @param length 截取长度
+	 * @return
+	 */
+	private String substr(String str, int begin, int length) {
+		try {
+			
+			return str.substring(begin, begin + length);
+		} catch (Exception e) {
+			System.out.println("str:\t"+str);
+			System.out.println("begin:\t"+begin);
+			System.out.println("length:\t"+length);
+		}
+		
+		return null;
+		
+	}
+	
+	/**
+	 * 匹配指定格式，如果包含则返回true
+	 * @param str 
+	 * @return
+	 */
+	private boolean findDate(String input, String str) {
+		
+		Pattern p = Pattern.compile(input);
+		Matcher m = p.matcher(str);
+		
+		return m.find();
 	}
 	
 }

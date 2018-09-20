@@ -48,6 +48,31 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<!-- 获取拍摄日期为空的记录 -->
+	<select id="getShotDateIsnull" parameterType="String" resultType="timelinePic">
+		SELECT
+			<include refid="timelinePicColumns" />
+		FROM
+			timeline_pic a
+		WHERE
+			a.del_flag = '0'
+		AND a.shot_date IS NULL
+		ORDER BY a.create_date desc
+		LIMIT 1
+	</select>
+	
+	<!-- 获取全部拍摄日期为空的记录 -->
+	<select id="getAllShotDateIsnull" parameterType="String" resultType="timelinePic">
+		SELECT
+			<include refid="timelinePicColumns" />
+		FROM
+			timeline_pic a
+		WHERE
+			a.del_flag = '0'
+		AND a.shot_date IS NULL
+		ORDER BY a.create_date desc
+	</select>
+	
 	<select id="getEqualMd5" parameterType="String" resultType="timelinePic">
 		SELECT
 			<include refid="timelinePicColumns" />

@@ -33,4 +33,16 @@ public class TimelinePicService extends CrudService<TimelinePicMapper, TimelineP
 	public List<TimelinePic> getEqualFingerPrint(){
 		return dao.getEqualFingerPrint();
 	}
+	
+	/**
+	 * 获取拍摄时间为空的记录
+	 * @return
+	 */
+	public TimelinePic getShotDateIsnull() {
+		return dao.getShotDateIsnull();
+	}
+
+	public List<TimelinePic> getAllShotDateIsnull() {
+		return dao.getAllShotDateIsnull();
+	}
 }
