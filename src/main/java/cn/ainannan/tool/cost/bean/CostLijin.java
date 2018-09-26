@@ -15,7 +15,7 @@ import cn.ainannan.base.bean.BaseBean;
  * @author syy
  * @version 2018-08-31
  */
-public class CostLijin extends BaseBean<CostLijin> {
+public class CostLijin extends BaseBean {
 
 	private String name; // 姓名
 

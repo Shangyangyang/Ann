@@ -2,7 +2,7 @@ package cn.ainannan.tool.cost.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import cn.ainannan.base.dao.CrudDao;
+import cn.ainannan.base.dao.BaseDao;
 import cn.ainannan.tool.cost.bean.CostLijin;
 
 /**
@@ -11,6 +11,6 @@ import cn.ainannan.tool.cost.bean.CostLijin;
  * @version 2018-08-31
  */
 @Mapper
-public interface CostLijinMapper extends CrudDao<CostLijin> {
+public interface CostLijinMapper extends BaseDao<CostLijin> {
 		
 }

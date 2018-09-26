@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import cn.ainannan.base.bean.BaseBean;
 
 @Component
-public class Menu extends BaseBean<Menu> {
+public class Menu extends BaseBean {
 	private String parentId;
 	private String url;
 	private String name;

@@ -11,7 +11,7 @@ import cn.ainannan.base.bean.BaseBean;
 import cn.ainannan.commons.utils.StringUtils;
 
 @Component
-public class GenTable extends BaseBean<GenTable> {
+public class GenTable extends BaseBean {
 	
 	private String name; 	// 名称
 	private String comments;		// 描述

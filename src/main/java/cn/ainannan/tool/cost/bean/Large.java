@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import cn.ainannan.base.bean.BaseBean;
 
-public class Large extends BaseBean<Large> {
+public class Large extends BaseBean {
 	private Double money;
 	private String type;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

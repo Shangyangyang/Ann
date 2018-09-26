@@ -2,7 +2,7 @@ package cn.ainannan.tool.cost.bean;
 
 import cn.ainannan.base.bean.BaseBean;
 
-public class Car extends BaseBean<Car> {
+public class Car extends BaseBean {
 	private Double money;
 	private String type;
 	private String typeName;

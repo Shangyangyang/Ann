@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.ainannan.base.bean.BaseBean;
-import cn.ainannan.base.dao.CrudDao;
+import cn.ainannan.base.dao.BaseDao;
 
 /**
  * Service基类
  */
 @Service
-public abstract class CrudService<D extends CrudDao<T>, T extends BaseBean<T>> {
+public abstract class BaseService<D extends BaseDao<T>, T extends BaseBean> {
 	
 	/**
 	 * 持久层对象

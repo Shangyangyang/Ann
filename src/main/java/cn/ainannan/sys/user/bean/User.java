@@ -2,7 +2,7 @@ package cn.ainannan.sys.user.bean;
 
 import cn.ainannan.base.bean.BaseBean;
 
-public class User extends BaseBean<User> {
+public class User extends BaseBean {
 
 	private String userName;
 	private String password;

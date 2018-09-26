@@ -11,7 +11,7 @@ import cn.ainannan.sys.user.bean.User;
 
 
 @Component
-public abstract class BaseBean<T> {
+public abstract class BaseBean {
 	protected String id;
 	protected User createUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

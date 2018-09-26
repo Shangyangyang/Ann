@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import cn.ainannan.base.bean.BaseBean;
 
 @Component
-public class Dict extends BaseBean<Dict> {
+public class Dict extends BaseBean {
 	private String label;
 	private String value;
 	private String name;

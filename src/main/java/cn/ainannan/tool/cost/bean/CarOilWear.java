@@ -4,7 +4,7 @@ import java.util.Date;
 
 import cn.ainannan.base.bean.BaseBean;
 
-public class CarOilWear extends BaseBean<CarOilWear> {
+public class CarOilWear extends BaseBean {
 	private Double shengTotal;	// 总升数
 	private Date startTime;		// 计算开始时间
 	private Date endTime;		// 计算结束时间

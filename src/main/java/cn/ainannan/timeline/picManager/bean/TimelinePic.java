@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import cn.ainannan.base.bean.BaseBean;
 
-public class TimelinePic extends BaseBean<TimelinePic> {
+public class TimelinePic extends BaseBean {
 	private String shortId;
 	private String filename;
 	private String path;
@@ -27,6 +27,9 @@ public class TimelinePic extends BaseBean<TimelinePic> {
 	private Date lastShotDate;	// 最新拍摄日期
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date lastImportDate;	// 最近导入日期
+	
+	private String preSrc;	// 查询参数，以src进行模糊查询
+	private String timelineFlag;	// 不为空则进行与timeline表的exists查询
 	
 	public String getShortId() {
 		return shortId;
@@ -138,6 +141,22 @@ public class TimelinePic extends BaseBean<TimelinePic> {
 
 	public void setLastImportDate(Date lastImportDate) {
 		this.lastImportDate = lastImportDate;
+	}
+
+	public String getPreSrc() {
+		return preSrc;
+	}
+
+	public void setPreSrc(String preSrc) {
+		this.preSrc = preSrc;
+	}
+
+	public String getTimelineFlag() {
+		return timelineFlag;
+	}
+
+	public void setTimelineFlag(String timelineFlag) {
+		this.timelineFlag = timelineFlag;
 	}
 
 }

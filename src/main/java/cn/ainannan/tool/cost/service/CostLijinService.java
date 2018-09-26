@@ -3,7 +3,7 @@ package cn.ainannan.tool.cost.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.ainannan.base.service.CrudService;
+import cn.ainannan.base.service.BaseService;
 import cn.ainannan.tool.cost.bean.CostLijin;
 import cn.ainannan.tool.cost.mapper.CostLijinMapper;
 
@@ -14,6 +14,6 @@ import cn.ainannan.tool.cost.mapper.CostLijinMapper;
  */
 @Service
 @Transactional(readOnly = true)
-public class CostLijinService extends CrudService<CostLijinMapper, CostLijin> {
+public class CostLijinService extends BaseService<CostLijinMapper, CostLijin> {
 	
 }

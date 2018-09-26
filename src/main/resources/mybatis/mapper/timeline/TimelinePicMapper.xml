@@ -36,6 +36,12 @@
 		<if test="state != null and state != ''">
 			and a.state = #{state} 
 		</if>
+		<if test="preSrc != null and preSrc != ''">
+			and a.src like concat(#{preSrc}, '%')
+		</if>
+		<if test="timelineFlag != null and timelineFlag != ''">
+			and exists(select * from timeline b where a.id != b.pic_id)
+		</if>
 	</sql> 
 
 	<sql id="timelinePicJoins">

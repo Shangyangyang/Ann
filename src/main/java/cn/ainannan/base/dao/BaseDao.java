@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @param <T>
  */
 @Repository
-public interface CrudDao<T> {
+public interface BaseDao<T> {
 
 	/**
 	 * 获取单条数据
