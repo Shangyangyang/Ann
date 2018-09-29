@@ -36,11 +36,18 @@
 		<if test="state != null and state != ''">
 			and a.state = #{state} 
 		</if>
+		<if test="beginShotDate != null">
+			and a.shot_date &gt;= #{beginShotDate} 
+		</if>
+		<if test="endShotDate != null">
+			and a.shot_date &lt;= #{endShotDate} 
+		</if>
 		<if test="preSrc != null and preSrc != ''">
 			and a.src like concat(#{preSrc}, '%')
 		</if>
 		<if test="timelineFlag != null and timelineFlag != ''">
-			and exists(select * from timeline b where a.id != b.pic_id)
+			and  not EXISTS(select * from timeline b where a.id = b.pic_id)
+			AND NOT EXISTS (SELECT 0 FROM timeline_ignore c WHERE a.id = c.pic_id and c.type = #{timelineFlag})
 		</if>
 	</sql> 
 

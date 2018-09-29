@@ -20,7 +20,11 @@ public abstract class BaseBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date updateDate;
 	protected String delFlag;
-
+	
+	protected final String dbType = "mysql";
+	
+	protected String sqlOrderBy = "";
+	
 	public BaseBean() {
 
 	}

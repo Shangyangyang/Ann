@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelineMapper">
+    
+	<sql id="timelineColumns">
+		a.id AS "id",
+		a.pic_id AS "pic.id",
+		a.type AS "type",
+		a.label AS "label",
+		a.score AS "score",
+		a.reason AS "reason",
+		a.create_date AS "createDate",
+		a.create_user AS "createUser",
+		a.update_date AS "updateDate",
+		a.update_user AS "updateUser",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="timelineJoins">
+	</sql>
+    
+	<select id="get" resultType="Timeline">
+		SELECT 
+			<include refid="timelineColumns"/>
+		FROM timeline a
+		<include refid="timelineJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Timeline">
+		SELECT 
+			<include refid="timelineColumns"/>
+		FROM timeline a
+		<include refid="timelineJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pic != null and pic.id != ''">
+				AND a.pic_id = #{pic.id}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="label != null and label != ''">
+				AND a.label = #{label}
+			</if>
+			<if test="score != null and score != ''">
+				AND a.score = #{score}
+			</if>
+		</where>
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>		
+	</select>
+
+	<select id="findAllList" resultType="Timeline">
+		SELECT 
+			<include refid="timelineColumns"/>
+		FROM timeline a
+		<include refid="timelineJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO timeline(
+			id,
+			pic_id,
+			type,
+			label,
+			score,
+			reason,
+			create_date,
+			create_user,
+			update_date,
+			update_user,
+			del_flag
+		) VALUE(
+			#{id},
+			#{pic.id},
+			#{type},
+			#{label},
+			#{score},
+			#{reason},
+			#{createDate},
+			#{createUser.id},
+			#{updateDate},
+			#{updateUser.id},
+			#{delFlag}
+		)
+	</insert>
+		
+	<insert id="insertSkip">
+		INSERT INTO timeline_ignore(
+			pic_id,
+			type
+		) VALUE(
+			#{pic.id},
+			#{type}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE timeline	
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="pic.id != null">
+				pic_id = #{pic.id},
+			</if>	
+			<if test="type != null">
+				type = #{type},
+			</if>	
+			<if test="label != null">
+				label = #{label},
+			</if>	
+			<if test="score != null">
+				score = #{score},
+			</if>	
+			<if test="reason != null">
+				reason = #{reason},
+			</if>	
+			<if test="createUser != null">
+				create_user = #{createUser.id},
+			</if>	
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>	
+			<if test="updateUser != null">
+				update_user = #{updateUser.id}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">	
+		UPDATE timeline SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

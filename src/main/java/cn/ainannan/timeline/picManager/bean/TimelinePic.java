@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import cn.ainannan.base.bean.BaseBean;
+import cn.ainannan.commons.utils.DateUtil;
 
 public class TimelinePic extends BaseBean {
 	private String shortId;
@@ -30,6 +31,13 @@ public class TimelinePic extends BaseBean {
 	
 	private String preSrc;	// 查询参数，以src进行模糊查询
 	private String timelineFlag;	// 不为空则进行与timeline表的exists查询
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date beginShotDate;	// 起始拍摄日期
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endShotDate;	// 结束拍摄日期
+	
 	
 	public String getShortId() {
 		return shortId;
@@ -159,4 +167,19 @@ public class TimelinePic extends BaseBean {
 		this.timelineFlag = timelineFlag;
 	}
 
+	public Date getBeginShotDate() {
+		return beginShotDate;
+	}
+
+	public void setBeginShotDate(Date beginShotDate) {
+		this.beginShotDate = beginShotDate;
+	}
+
+	public Date getEndShotDate() {
+		return endShotDate;
+	}
+
+	public void setEndShotDate(Date endShotDate) {
+		this.endShotDate = endShotDate;
+	}
 }
