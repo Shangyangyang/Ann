@@ -102,7 +102,23 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.15</version>
 		</dependency>				
-		
+		<!-- https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor 
+		获取拍摄位置的jar包
+		-->
+		<dependency>
+		    <groupId>com.drewnoakes</groupId>
+		    <artifactId>metadata-extractor</artifactId>
+		    <version>2.11.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.lucee/xmpcore 
+		获取拍摄位置的jar包依赖包
+		-->
+		<dependency>
+		    <groupId>org.lucee</groupId>
+		    <artifactId>xmpcore</artifactId>
+		    <version>5.1.2</version>
+		</dependency>
+				
 	</dependencies>
 
 	<build>

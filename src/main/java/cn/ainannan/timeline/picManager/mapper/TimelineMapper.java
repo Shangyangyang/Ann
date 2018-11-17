@@ -13,4 +13,5 @@ import cn.ainannan.timeline.picManager.bean.Timeline;
 @Mapper
 public interface TimelineMapper extends BaseDao<Timeline> {
 	void insertSkip(Timeline timeline);
+	String getAllLabel();
 }

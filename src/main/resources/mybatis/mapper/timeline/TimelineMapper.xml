@@ -13,11 +13,17 @@
 		a.create_user AS "createUser",
 		a.update_date AS "updateDate",
 		a.update_user AS "updateUser",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		concat('http://ainannan.frpgz1.idcfengye.com/', pic.src) as "pic.src"
 	</sql>
-	
+		
 	<sql id="timelineJoins">
+		left join timeline_pic pic on pic.id = a.pic_id and pic.del_flag = '0'
 	</sql>
+    
+	<select id="getAllLabel" resultType="String">
+		select group_concat(label separator ',') from timeline where del_flag = '0'
+	</select>
     
 	<select id="get" resultType="Timeline">
 		SELECT 
@@ -26,7 +32,7 @@
 		<include refid="timelineJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+    	
 	<select id="findList" resultType="Timeline">
 		SELECT 
 			<include refid="timelineColumns"/>
@@ -41,7 +47,7 @@
 				AND a.type = #{type}
 			</if>
 			<if test="label != null and label != ''">
-				AND a.label = #{label}
+				AND a.label like concat('%',#{label},'%')
 			</if>
 			<if test="score != null and score != ''">
 				AND a.score = #{score}

@@ -30,7 +30,11 @@ public class TimelineController {
 	private TimelineService timelineService;
 	
 	@RequestMapping({ "", "list" })
-	public ResultObject list(Timeline timeline, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
+	public ResultObject list(Timeline timeline, 
+			@RequestParam(defaultValue = "1") Integer page, 
+			@RequestParam(defaultValue = "10") Integer size, 
+			HttpServletRequest request) {
+		System.out.println("执行");
 		PageHelper.startPage(page, size);
 		List<Timeline> list = timelineService.findList(timeline);
 		PageInfo pageInfo = new PageInfo(list);
@@ -42,7 +46,18 @@ public class TimelineController {
 		Timeline dest = timelineService.get(timeline);
 		return ResultGen.genSuccessResult(dest);
 	}
-
+	
+	/**
+	 * 获取所有的图片标签，并且是分类后的
+	 * @param timeline
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("getAllLabel")
+	public ResultObject getAllLabel(Timeline timeline, HttpServletRequest request) {
+		return ResultGen.genSuccessResult(timelineService.getAllLabel());
+	}
+	
 	@RequestMapping("save")
 	public ResultObject save(Timeline timeline, HttpServletRequest request) {
 		timelineService.save(timeline);
