@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -391,11 +387,29 @@ public class ImportPicController {
 		Date newDate = null;
 		String guessTime = null;
 		
+		if(str.indexOf("WuTa_") == 0 && str.length() > 19){
+			String subStrO = str.substring(5, 24);
+			
+			String [] arr = subStrO.split("_");
+			String date = arr[0];
+			String time = arr[1].replace("-", ":");
+			
+			guessTime = date + " " + time;
+			
+		}
+		
+		if(str.indexOf("MYXJ_") == 0 && str.length() > 14){
+			String subStr = substr(str, 5, 14);
+			
+			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " " 
+					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
+		}
+		
 		if(str.indexOf("faceu_") == 0 && str.length() > 14){
 			String subStr = substr(str, 6, 14);
 			
 			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " " 
-				+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
+					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
 		}
 		
 		if(str.indexOf("微信图片_") == 0 && str.length() > 14){
