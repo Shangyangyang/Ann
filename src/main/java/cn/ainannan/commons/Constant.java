@@ -11,4 +11,9 @@ public class Constant {
 	
 	
 	public static final String TIMELINE_PIC_STATE_0 = "0";
+	
+	// session属性名
+	// 登录用户
+	public static final String LOGIN_USER = "login_user";
+	
 }

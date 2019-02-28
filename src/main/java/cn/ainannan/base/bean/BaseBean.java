@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import cn.ainannan.sys.user.bean.User;
+import cn.ainannan.sys.bean.User;
 
 
 @Component

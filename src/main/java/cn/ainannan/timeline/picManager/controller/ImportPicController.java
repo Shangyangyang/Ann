@@ -27,9 +27,8 @@ import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.ImageUtils;
 import cn.ainannan.commons.utils.MD5Utils;
-import cn.ainannan.commons.utils.UuidUtils;
+import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
-
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
 
@@ -349,7 +348,7 @@ public class ImportPicController {
 		
 		TimelinePic tp = new TimelinePic();
 		
-		tp.setShortId(UuidUtils.generateShortUuid());
+		tp.setShortId(UUIDUtils.generateShortUuid());
 		tp.setFilename(FilenameUtils.getName(filePath));
 		tp.setPath(FilenameUtils.getFullPath(filePath));
 		tp.setSrc(filePath.replace(basePath, ""));

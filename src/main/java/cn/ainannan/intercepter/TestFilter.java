@@ -1,4 +1,4 @@
-package cn.ainannan.filter;
+package cn.ainannan.intercepter;
 
 import java.io.IOException;
 
@@ -27,14 +27,14 @@ public class TestFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		
+		/*
 		HttpSession session = request.getSession();
 		
 		// 未登录
 		if(session.getAttribute("user") == null) {
 			System.out.printf("未登录");
 		}
-		
+		*/
 		filterChain.doFilter(request, response);
 	}
 

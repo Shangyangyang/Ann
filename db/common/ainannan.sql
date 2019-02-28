@@ -3,6 +3,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 /* Drop Tables */
 
 DROP TABLE IF EXISTS timeline;
+DROP TABLE IF EXISTS timeline_label;
 DROP TABLE IF EXISTS timeline_pic;
 
 
@@ -24,6 +25,36 @@ CREATE TABLE timeline
 	score decimal(10,1) COMMENT '打分',
 	-- 简介
 	reason varchar(500) COMMENT '简介',
+	-- 创建时间
+	create_date datetime COMMENT '创建时间',
+	-- 创建人
+	create_user varchar(32) COMMENT '创建人',
+	-- 修改时间
+	update_date datetime COMMENT '修改时间',
+	-- 修改用户
+	update_user varchar(32) COMMENT '修改用户',
+	-- 1. 已删除
+	-- 0. 未删除
+	del_flag varchar(2) COMMENT '1. 已删除
+0. 未删除',
+	PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE timeline_label
+(
+	-- 主键
+	ID varchar(32) NOT NULL COMMENT '主键',
+	-- 标签名
+	NAME varchar(50) COMMENT '标签名',
+	-- 1地点2物品3表情4动作
+	TYPE varchar(4) COMMENT '1地点2物品3表情4动作',
+	-- 1雪碧2乐乐
+	BELONG varchar(4) COMMENT '1雪碧2乐乐',
+	-- 1已通过0未通过
+	STATUS varchar(2) COMMENT '1已通过0未通过',
+	-- 说明
+	REASON varchar(200) COMMENT '说明',
 	-- 创建时间
 	create_date datetime COMMENT '创建时间',
 	-- 创建人
