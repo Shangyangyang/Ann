@@ -42,9 +42,9 @@ public class LoginController {
 			return ResultGen.genFailResult("请填写密码");
 		}
 
-		if (!CaptchaController.check(session, reg)) {
+		/*if (!CaptchaController.check(session, reg)) {
 			return ResultGen.genFailResult("验证码错误");
-		}
+		}*/
 
 		// 查询并验证用户密码
 		User sysUser = getUserByUserName(userName);

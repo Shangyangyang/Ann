@@ -6,6 +6,7 @@
 		a.id AS "id",
 		a.pic_id AS "pic.id",
 		a.type AS "type",
+		a.label_id AS "labelId",
 		a.label AS "label",
 		a.score AS "score",
 		a.reason AS "reason",
@@ -63,6 +64,18 @@
 		</choose>		
 	</select>
 
+	<select id="findListByLabelNotNull" resultType="Timeline">
+		SELECT 
+			a.id,
+			a.label_id AS "labelId",
+			a.label AS "label"
+		FROM timeline a
+		where
+			a.del_flag = '0'
+			AND a.label IS NOT NULL
+			AND a.label_id IS NULL
+	</select>
+
 	<select id="findAllList" resultType="Timeline">
 		SELECT 
 			<include refid="timelineColumns"/>
@@ -86,6 +99,7 @@
 			id,
 			pic_id,
 			type,
+			label_id,
 			label,
 			score,
 			reason,
@@ -98,6 +112,7 @@
 			#{id},
 			#{pic.id},
 			#{type},
+			#{labelId},
 			#{label},
 			#{score},
 			#{reason},
@@ -122,28 +137,31 @@
 	<update id="update">
 		UPDATE timeline	
 		<trim prefix="SET" suffixOverrides=",">
-			<if test="pic.id != null">
+			<if test="pic != null and pic.id != null">
 				pic_id = #{pic.id},
 			</if>	
 			<if test="type != null">
 				type = #{type},
+			</if>		
+			<if test="labelId != null">
+				label_id = #{labelId},
 			</if>	
 			<if test="label != null">
 				label = #{label},
-			</if>	
+			</if>
 			<if test="score != null">
 				score = #{score},
 			</if>	
 			<if test="reason != null">
 				reason = #{reason},
 			</if>	
-			<if test="createUser != null">
+			<if test="createUser != null and createUser.id != null">
 				create_user = #{createUser.id},
 			</if>	
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>	
-			<if test="updateUser != null">
+			<if test="updateUser != null and updateUser.id != null">
 				update_user = #{updateUser.id}
 			</if>
 		</trim>

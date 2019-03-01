@@ -1,5 +1,7 @@
 package cn.ainannan.timeline.picManager.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import cn.ainannan.base.dao.BaseDao;
@@ -14,4 +16,5 @@ import cn.ainannan.timeline.picManager.bean.Timeline;
 public interface TimelineMapper extends BaseDao<Timeline> {
 	void insertSkip(Timeline timeline);
 	String getAllLabel();
+	List<Timeline> findListByLabelNotNull();
 }

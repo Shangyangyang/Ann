@@ -13,16 +13,21 @@ import cn.ainannan.base.bean.BaseBean;
 public class Timeline extends BaseBean {
 
 	private static final long serialVersionUID = 1L;
-
-	private TimelinePic pic; // 图片关联ID
-
-	private String type; // 1雪碧2乐乐
-
-	private String label; // 标签
-
-	private String score; // 打分
-
-	private String reason; // 简介
+	
+	/**
+	 * 图片类
+	 */
+	private TimelinePic pic; 
+	// 1雪碧2乐乐
+	private String type; 
+	// 标签主键
+	private String labelId; 
+	// 标签
+	private String label; 
+	// 打分
+	private String score; 
+	// 简介
+	private String reason; 
 
 	public Timeline() {
 	}
@@ -76,6 +81,14 @@ public class Timeline extends BaseBean {
 
 	public void setPic(TimelinePic pic) {
 		this.pic = pic;
+	}
+
+	public String getLabelId() {
+		return labelId;
+	}
+
+	public void setLabelId(String labelId) {
+		this.labelId = labelId;
 	}
 
 }

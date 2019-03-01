@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelineLabelMapper">
+    
+	<sql id="timelineLabelColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type AS "type",
+		a.belong AS "belong",
+		a.status AS "status",
+		a.reason AS "reason",
+		a.select_num AS "selectNum",
+		a.create_date AS "createDate",
+		a.create_user AS "createUser",
+		a.update_date AS "updateDate",
+		a.update_user AS "updateUser",
+		a.del_flag AS "delFlag",
+		dict_t.name as "typeName",
+		dict_b.name as "belongName"
+	</sql>
+		
+	<sql id="timelineLabelJoins">
+	left join sys_dict dict_t on dict_t.value = a.type and dict_t.label = 'timeline_label_type' and dict_t.del_flag = '0'
+	left join sys_dict dict_b on dict_b.value = a.belong and dict_b.label = 'timeline_label_belong' and dict_b.del_flag = '0'
+	</sql>
+
+	<select id="get" resultType="TimelineLabel">
+		SELECT 
+			<include refid="timelineLabelColumns"/>
+		from timeline_label a
+		<include refid="timelineLabelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+    	
+	<select id="findList" resultType="TimelineLabel">
+		SELECT 
+			<include refid="timelineLabelColumns"/>
+		from timeline_label a
+		<include refid="timelineLabelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name like concat('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="belong != null and belong != ''">
+				AND a.belong = #{belong}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="reason != null and reason != ''">
+				AND a.reason = #{reason}
+			</if>
+			<if test="selectNum != null and selectNum != ''">
+				AND a.select_num = #{selectNum}
+			</if>
+		</where>
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>		
+	</select>
+
+	<select id="findAllList" resultType="TimelineLabel">
+		SELECT 
+			<include refid="timelineLabelColumns"/>
+		from timeline_label a
+		<include refid="timelineLabelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO timeline_label(
+			id,
+			name,
+			type,
+			belong,
+			status,
+			reason,
+			select_num,
+			create_user,
+			create_date,
+			update_user,
+			update_date,
+			del_flag
+		) VALUE(
+			#{id},
+			#{name},
+			#{type},
+			#{belong},
+			#{status},
+			#{reason},
+			#{selectNum},
+			#{createUser.id},
+			#{createDate},
+			#{updateUser.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE timeline_label
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name},
+			</if>	
+			<if test="type != null">
+				type = #{type},
+			</if>	
+			<if test="belong != null">
+				belong = #{belong},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="reason != null">
+				reason = #{reason},
+			</if>
+			<if test="selectNum != null">
+				select_num = #{selectNum},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>	
+			<if test="updateUser != null">
+				update_user = #{updateUser.id}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">	
+		UPDATE timeline_label SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

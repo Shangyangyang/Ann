@@ -16,4 +16,13 @@ public class Constant {
 	// 登录用户
 	public static final String LOGIN_USER = "login_user";
 	
+	
+	// ================= 时光轴专区  =======================
+	public static final String LABEL_BELONG_XUEBI = "1";
+	public static final String LABEL_BELONG_LELE = "2";
+	
+	public static final String LABEL_STATUS_WEI_TG = "0";
+	public static final String LABEL_STATUS_YI_TG = "1";
+	
+	
 }
