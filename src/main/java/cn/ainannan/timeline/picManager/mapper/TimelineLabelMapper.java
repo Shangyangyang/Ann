@@ -12,4 +12,9 @@ import cn.ainannan.timeline.picManager.bean.TimelineLabel;
  */
 @Mapper
 public interface TimelineLabelMapper extends BaseDao<TimelineLabel> {
+	/**
+	 * 更新选择次数，自增一
+	 * @param timelineLabel
+	 */
+	void updateSelectNum(TimelineLabel timelineLabel);
 }

@@ -21,6 +21,9 @@ public class TimelineLabel extends BaseBean {
 	private String reason;
 	private Integer selectNum;
 
+	private String [] ids;
+	private String idstr;
+	
 	public String getName() {
 		return name;
 	}
@@ -87,5 +90,21 @@ public class TimelineLabel extends BaseBean {
 
 	public void setBelongName(String belongName) {
 		this.belongName = belongName;
+	}
+
+	public String[] getIds() {
+		return ids;
+	}
+
+	public void setIds(String[] ids) {
+		this.ids = ids;
+	}
+
+	public String getIdstr() {
+		return idstr;
+	}
+
+	public void setIdstr(String idstr) {
+		this.idstr = idstr;
 	}
 }

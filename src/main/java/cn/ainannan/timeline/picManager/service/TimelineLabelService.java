@@ -29,6 +29,15 @@ public class TimelineLabelService extends BaseService<TimelineLabelMapper, Timel
 	private TimelineMapper timelineMapper;
 	
 	
+	/**
+	 * 更新选择次数，自增一
+	 * @param timelineLabel
+	 */
+	@Transactional(readOnly = false)
+	public void updateSelectNum(TimelineLabel timelineLabel) {
+		dao.updateSelectNum(timelineLabel);
+	}
+	
 	@Transactional(readOnly = false)
 	public void save(TimelineLabel entity) {
 		if (entity.isNewRecord()){

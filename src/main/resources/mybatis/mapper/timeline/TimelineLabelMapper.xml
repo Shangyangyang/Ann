@@ -63,7 +63,7 @@
 				ORDER BY #{sqlOrderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.select_num DESC
 			</otherwise>
 		</choose>		
 	</select>
@@ -145,6 +145,18 @@
 			</if>
 		</trim>
 		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSelectNum">
+		<if test="ids != null and ids != ''">
+			UPDATE timeline_label SET 
+				select_num = select_num + 1
+			WHERE 
+			<foreach collection="ids" item="nd" separator="or">
+				id = #{nd}
+			</foreach>
+		</if>	
+		
 	</update>
 	
 	<update id="delete">	

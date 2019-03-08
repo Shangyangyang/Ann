@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,8 +55,33 @@ public class TimelineLabelController {
 		return ResultGen.genSuccessResult();
 	}
 	
+	@RequestMapping("updateSelectNum")
+	public ResultObject updateSelectNum(TimelineLabel timelineLabel, HttpServletRequest request) {
+		if(StringUtils.isBlank(timelineLabel.getIdstr())) {
+			return ResultGen.genFailResult("主键不能为空！");
+		}
+		
+		timelineLabel.setIds(timelineLabel.getIdstr().split(","));
+		
+		tlService.updateSelectNum(timelineLabel);
+		return ResultGen.genSuccessResult();
+	}
+	
 	@RequestMapping("save")
 	public ResultObject save(TimelineLabel timelineLabel, HttpServletRequest request) {
+		
+		// 新增标签的重复检查
+		if(timelineLabel.isNewRecord()) {
+			TimelineLabel tl = new TimelineLabel();
+			tl.setName(timelineLabel.getName());
+			
+			List<TimelineLabel> tlList = tlService.findList(tl);
+			
+			if(tlList.size() > 0) {
+				return ResultGen.genFailResult("标签名已存在！");
+			}
+		}
+		
 		tlService.save(timelineLabel);
 		return ResultGen.genSuccessResult(timelineLabel);
 	}
