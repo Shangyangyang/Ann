@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelineLabelQuickMapper">
+    
+	<sql id="timelineLabelQuickColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type AS "type",
+		a.belong AS "labels",
+		a.create_date AS "createDate",
+		a.create_user AS "createUser",
+		a.update_date AS "updateDate",
+		a.update_user AS "updateUser",
+		a.del_flag AS "delFlag"
+	</sql>
+		
+	<sql id="timelineLabelQuickJoins">
+	</sql>
+
+	<select id="get" resultType="timelineLabelQuick">
+		SELECT 
+			<include refid="timelineLabelQuickColumns"/>
+		from timeline_label_quick a
+		<include refid="timelineLabelQuickJoins"/>
+		WHERE a.id = #{id}
+	</select>
+    	
+	<select id="findList" resultType="timelineLabelQuick">
+		SELECT 
+			<include refid="timelineLabelQuickColumns"/>
+		from timeline_label_quick a
+		<include refid="timelineLabelQuickJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name like concat('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="labels != null and labels != ''">
+				AND a.labels = #{labels}
+			</if>
+		</where>
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>		
+	</select>
+
+	<select id="findAllList" resultType="timelineLabelQuick">
+		SELECT 
+			<include refid="timelineLabelQuickColumns"/>
+		from timeline_label_quick a
+		<include refid="timelineLabelQuickJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="sqlOrderBy != null and sqlOrderBy != ''">
+				ORDER BY #{sqlOrderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO timeline_label_quick(
+			id,
+			name,
+			type,
+			labels,
+			create_user,
+			create_date,
+			update_user,
+			update_date,
+			del_flag
+		) VALUE(
+			#{id},
+			#{name},
+			#{type},
+			#{labels},
+			#{createUser.id},
+			#{createDate},
+			#{updateUser.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE timeline_label_quick
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">
+				name = #{name},
+			</if>	
+			<if test="type != null">
+				type = #{type},
+			</if>	
+			<if test="labels != null">
+				labels = #{labels},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>	
+			<if test="updateUser != null">
+				update_user = #{updateUser.id}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">	
+		UPDATE timeline_label_quick SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
