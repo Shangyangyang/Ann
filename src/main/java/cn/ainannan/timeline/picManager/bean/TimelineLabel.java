@@ -20,6 +20,9 @@ public class TimelineLabel extends BaseBean {
 	private String status;
 	private String reason;
 	private Integer selectNum;
+	
+	private String fontcolor;
+	private String bgcolor;
 
 	private String [] ids;
 	private String idstr;
@@ -106,5 +109,21 @@ public class TimelineLabel extends BaseBean {
 
 	public void setIdstr(String idstr) {
 		this.idstr = idstr;
+	}
+
+	public String getFontcolor() {
+		return fontcolor;
+	}
+
+	public void setFontcolor(String fontcolor) {
+		this.fontcolor = fontcolor;
+	}
+
+	public String getBgcolor() {
+		return bgcolor;
+	}
+
+	public void setBgcolor(String bgcolor) {
+		this.bgcolor = bgcolor;
 	}
 }

@@ -4,6 +4,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS timeline;
 DROP TABLE IF EXISTS timeline_label;
+DROP TABLE IF EXISTS timeline_label_quick;
 DROP TABLE IF EXISTS timeline_pic;
 
 
@@ -55,6 +56,12 @@ CREATE TABLE timeline_label
 	STATUS varchar(2) COMMENT '1已通过0未通过',
 	-- 说明
 	REASON varchar(200) COMMENT '说明',
+	-- 选择次数
+	SELECT_NUM int COMMENT '选择次数',
+	-- 字体颜色
+	FONTCOLOR varchar(20) COMMENT '字体颜色',
+	-- 背影颜色
+	BGCOLOR varchar(20) COMMENT '背影颜色',
 	-- 创建时间
 	create_date datetime COMMENT '创建时间',
 	-- 创建人
@@ -68,6 +75,32 @@ CREATE TABLE timeline_label
 	del_flag varchar(2) COMMENT '1. 已删除
 0. 未删除',
 	PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE timeline_label_quick
+(
+	-- 主键
+	id varchar(32) NOT NULL COMMENT '主键',
+	-- 别名
+	name varchar(50) COMMENT '别名',
+	-- 标签组
+	labels varchar(200) COMMENT '标签组',
+	-- 1雪碧2乐乐
+	typd varchar(4) COMMENT '1雪碧2乐乐',
+	-- 创建时间
+	create_date datetime COMMENT '创建时间',
+	-- 创建人
+	create_user varchar(32) COMMENT '创建人',
+	-- 修改时间
+	update_date datetime COMMENT '修改时间',
+	-- 修改用户
+	update_user varchar(32) COMMENT '修改用户',
+	-- 1. 已删除
+	-- 0. 未删除
+	del_flag varchar(2) COMMENT '1. 已删除
+0. 未删除',
+	PRIMARY KEY (id)
 );
 
 
