@@ -15,6 +15,8 @@ public class TimelineLabelQuick extends BaseBean {
 	private String name;
 	private String labels;
 	private String type;
+	private String belong;
+	private Integer selectNum;
 
 	public String getName() {
 		return name;
@@ -42,6 +44,22 @@ public class TimelineLabelQuick extends BaseBean {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getBelong() {
+		return belong;
+	}
+
+	public void setBelong(String belong) {
+		this.belong = belong;
+	}
+
+	public Integer getSelectNum() {
+		return selectNum;
+	}
+
+	public void setSelectNum(Integer selectNum) {
+		this.selectNum = selectNum;
 	}
 
 }

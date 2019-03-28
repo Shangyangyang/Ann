@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.ainannan.base.service.BaseService;
-import cn.ainannan.timeline.picManager.bean.TimelineLabel;
-import cn.ainannan.timeline.picManager.mapper.TimelineLabelMapper;
+import cn.ainannan.timeline.picManager.bean.TimelineLabelQuick;
+import cn.ainannan.timeline.picManager.mapper.TimelineLabelQuickMapper;
 
 /**
  * 时光轴标签快速选择service
@@ -14,6 +14,6 @@ import cn.ainannan.timeline.picManager.mapper.TimelineLabelMapper;
  */
 @Service
 @Transactional(readOnly = true)
-public class TimelineLabelQuickService extends BaseService<TimelineLabelMapper, TimelineLabel> {
+public class TimelineLabelQuickService extends BaseService<TimelineLabelQuickMapper, TimelineLabelQuick> {
 	
 }

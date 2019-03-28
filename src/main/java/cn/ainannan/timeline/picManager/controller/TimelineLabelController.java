@@ -16,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.timeline.picManager.bean.TimelineLabel;
+import cn.ainannan.timeline.picManager.service.TimelineLabelQuickService;
 import cn.ainannan.timeline.picManager.service.TimelineLabelService;
 
 /**

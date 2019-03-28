@@ -5,8 +5,10 @@
 	<sql id="timelineLabelQuickColumns">
 		a.id AS "id",
 		a.name AS "name",
+		a.labels AS "labels",
 		a.type AS "type",
-		a.belong AS "labels",
+		a.belong AS "belong",
+		a.select_num AS "selectNum",
 		a.create_date AS "createDate",
 		a.create_user AS "createUser",
 		a.update_date AS "updateDate",
@@ -37,6 +39,9 @@
 			</if>
 			<if test="type != null and type != ''">
 				AND a.type = #{type}
+			</if>
+			<if test="belong != null and belong != ''">
+				AND a.belong = #{belong}
 			</if>
 			<if test="labels != null and labels != ''">
 				AND a.labels = #{labels}
@@ -74,8 +79,10 @@
 		INSERT INTO timeline_label_quick(
 			id,
 			name,
-			type,
 			labels,
+			type,
+			belong,
+			select_Num,
 			create_user,
 			create_date,
 			update_user,
@@ -84,8 +91,10 @@
 		) VALUE(
 			#{id},
 			#{name},
-			#{type},
 			#{labels},
+			#{type},
+			#{belong},
+			#{selectNum},
 			#{createUser.id},
 			#{createDate},
 			#{updateUser.id},
@@ -100,11 +109,17 @@
 			<if test="name != null">
 				name = #{name},
 			</if>	
-			<if test="type != null">
-				type = #{type},
+			<if test="belong != null">
+				belong = #{belong},
 			</if>	
 			<if test="labels != null">
 				labels = #{labels},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="selectNum != null">
+				select_Num = #{selectNum},
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
