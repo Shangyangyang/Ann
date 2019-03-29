@@ -14,10 +14,8 @@ import com.github.pagehelper.PageInfo;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.timeline.picManager.bean.TimelineLabel;
 import cn.ainannan.timeline.picManager.bean.TimelineLabelQuick;
 import cn.ainannan.timeline.picManager.service.TimelineLabelQuickService;
-import cn.ainannan.timeline.picManager.service.TimelineLabelService;
 
 /**
  * 时光轴Controller
@@ -27,9 +25,7 @@ import cn.ainannan.timeline.picManager.service.TimelineLabelService;
 @RestController
 @RequestMapping(value = "timeline/labelQuick")
 public class TimelineLabelQuickController {
-
-	@Autowired
-	private TimelineLabelService tlService;
+	
 	@Autowired
 	private TimelineLabelQuickService tlqService;
 	

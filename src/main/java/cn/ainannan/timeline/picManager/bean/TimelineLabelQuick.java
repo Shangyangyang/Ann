@@ -17,6 +17,9 @@ public class TimelineLabelQuick extends BaseBean {
 	private String type;
 	private String belong;
 	private Integer selectNum;
+	
+	// 选择次数自增标识位
+	private String selectRaise;	
 
 	public String getName() {
 		return name;
@@ -60,6 +63,14 @@ public class TimelineLabelQuick extends BaseBean {
 
 	public void setSelectNum(Integer selectNum) {
 		this.selectNum = selectNum;
+	}
+
+	public String getSelectRaise() {
+		return selectRaise;
+	}
+
+	public void setSelectRaise(String selectRaise) {
+		this.selectRaise = selectRaise;
 	}
 
 }

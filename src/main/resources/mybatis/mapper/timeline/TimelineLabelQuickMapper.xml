@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelineLabelQuickMapper">
-    
+<mapper
+	namespace="cn.ainannan.timeline.picManager.mapper.TimelineLabelQuickMapper">
+
 	<sql id="timelineLabelQuickColumns">
 		a.id AS "id",
 		a.name AS "name",
 		a.labels AS "labels",
-		a.type AS "type",
+		a.type
+		AS "type",
 		a.belong AS "belong",
 		a.select_num AS "selectNum",
 		a.create_date AS "createDate",
@@ -15,23 +17,23 @@
 		a.update_user AS "updateUser",
 		a.del_flag AS "delFlag"
 	</sql>
-		
+
 	<sql id="timelineLabelQuickJoins">
 	</sql>
 
 	<select id="get" resultType="timelineLabelQuick">
-		SELECT 
-			<include refid="timelineLabelQuickColumns"/>
+		SELECT
+		<include refid="timelineLabelQuickColumns" />
 		from timeline_label_quick a
-		<include refid="timelineLabelQuickJoins"/>
+		<include refid="timelineLabelQuickJoins" />
 		WHERE a.id = #{id}
 	</select>
-    	
+
 	<select id="findList" resultType="timelineLabelQuick">
-		SELECT 
-			<include refid="timelineLabelQuickColumns"/>
+		SELECT
+		<include refid="timelineLabelQuickColumns" />
 		from timeline_label_quick a
-		<include refid="timelineLabelQuickJoins"/>
+		<include refid="timelineLabelQuickJoins" />
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
@@ -54,17 +56,17 @@
 			<otherwise>
 				ORDER BY a.update_date DESC
 			</otherwise>
-		</choose>		
+		</choose>
 	</select>
 
 	<select id="findAllList" resultType="timelineLabelQuick">
-		SELECT 
-			<include refid="timelineLabelQuickColumns"/>
+		SELECT
+		<include refid="timelineLabelQuickColumns" />
 		from timeline_label_quick a
-		<include refid="timelineLabelQuickJoins"/>
+		<include refid="timelineLabelQuickJoins" />
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
+		</where>
 		<choose>
 			<when test="sqlOrderBy != null and sqlOrderBy != ''">
 				ORDER BY #{sqlOrderBy}
@@ -74,44 +76,44 @@
 			</otherwise>
 		</choose>
 	</select>
-		
+
 	<insert id="insert">
 		INSERT INTO timeline_label_quick(
-			id,
-			name,
-			labels,
-			type,
-			belong,
-			select_Num,
-			create_user,
-			create_date,
-			update_user,
-			update_date,
-			del_flag
+		id,
+		name,
+		labels,
+		type,
+		belong,
+		select_Num,
+		create_user,
+		create_date,
+		update_user,
+		update_date,
+		del_flag
 		) VALUE(
-			#{id},
-			#{name},
-			#{labels},
-			#{type},
-			#{belong},
-			#{selectNum},
-			#{createUser.id},
-			#{createDate},
-			#{updateUser.id},
-			#{updateDate},
-			#{delFlag}
+		#{id},
+		#{name},
+		#{labels},
+		#{type},
+		#{belong},
+		#{selectNum},
+		#{createUser.id},
+		#{createDate},
+		#{updateUser.id},
+		#{updateDate},
+		#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
 		UPDATE timeline_label_quick
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="name != null">
 				name = #{name},
-			</if>	
+			</if>
 			<if test="belong != null">
 				belong = #{belong},
-			</if>	
+			</if>
 			<if test="labels != null">
 				labels = #{labels},
 			</if>
@@ -123,18 +125,21 @@
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
-			</if>	
+			</if>
 			<if test="updateUser != null">
-				update_user = #{updateUser.id}
+				update_user = #{updateUser.id},
+			</if>
+			<if test="selectRaise != null and selectRaise != ''">
+				select_num = select_num + 1
 			</if>
 		</trim>
 		WHERE id = #{id}
 	</update>
-	
-	<update id="delete">	
-		UPDATE timeline_label_quick SET 
-			del_flag = #{DEL_FLAG_DELETE}
+
+	<update id="delete">
+		UPDATE timeline_label_quick SET
+		del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>
