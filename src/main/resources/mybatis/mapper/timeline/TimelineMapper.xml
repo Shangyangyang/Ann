@@ -15,7 +15,9 @@
 		a.update_date AS "updateDate",
 		a.update_user AS "updateUser",
 		a.del_flag AS "delFlag",
-		concat('http://ainannan.frpgz1.idcfengye.com/', pic.src) as "pic.src"
+		pic.src as "pic.src",
+		pic.shot_date as "pic.shotDate"
+		<!-- concat('http://ainannan.frpgz1.idcfengye.com/', pic.src) as "pic.src" -->
 	</sql>
 		
 	<sql id="timelineJoins">

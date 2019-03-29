@@ -34,7 +34,6 @@ public class TimelineController {
 			@RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "10") Integer size, 
 			HttpServletRequest request) {
-		System.out.println("执行");
 		PageHelper.startPage(page, size);
 		List<Timeline> list = timelineService.findList(timeline);
 		PageInfo pageInfo = new PageInfo(list);
