@@ -45,4 +45,16 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	public List<TimelinePic> getAllShotDateIsnull() {
 		return dao.getAllShotDateIsnull();
 	}
+
+	public List<TimelinePic> findListFor1000(TimelinePic tp) {
+		return dao.findListFor1000(tp);
+	}
+
+	/**
+	 * 以list的形式更新数据
+	 * @param savePic
+	 */
+	public void saveByList(TimelinePic savePic) {
+		dao.saveByList(savePic);
+	}
 }

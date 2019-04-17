@@ -34,4 +34,13 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	 */
 	TimelinePic getShotDateIsnull();
 	List<TimelinePic> getAllShotDateIsnull();
+	
+	/**
+	 * 根据指定条件查询指定条数的记录
+	 * @param tp
+	 * @return
+	 */
+	List<TimelinePic> findListFor1000(TimelinePic tp);
+
+	void saveByList(TimelinePic savePic);
 }

@@ -38,7 +38,7 @@ public class CarController {
 
 		return ResultGen.genSuccessResult(pageInfo);
 	}
-
+	
 	@RequestMapping("export")
 	public void export(Car car, HttpServletResponse response) {
 

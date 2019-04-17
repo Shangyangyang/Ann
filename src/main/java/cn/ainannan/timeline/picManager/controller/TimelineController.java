@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,10 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.timeline.picManager.bean.Timeline;
+import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import cn.ainannan.timeline.picManager.service.TimelinePicService;
 import cn.ainannan.timeline.picManager.service.TimelineService;
 
 /**
@@ -28,6 +32,8 @@ public class TimelineController {
 
 	@Autowired
 	private TimelineService timelineService;
+	@Autowired
+	private TimelinePicService tpService;
 	
 	@RequestMapping({ "", "list" })
 	public ResultObject list(Timeline timeline, 
@@ -38,6 +44,36 @@ public class TimelineController {
 		List<Timeline> list = timelineService.findList(timeline);
 		PageInfo pageInfo = new PageInfo(list);
 		return ResultGen.genSuccessResult(pageInfo);
+	}
+
+	@RequestMapping("findListByTimeType")
+	public ResultObject findListByTimeType(Timeline timeline, HttpServletRequest request) {
+	
+		if(StringUtils.isBlank(timeline.getTimeType()))
+			return ResultGen.genFailResult("timeType 不能为空");
+		
+		List<Timeline> tList = timelineService.findListByTimeType(timeline);
+		
+		for (Timeline t : tList) {
+			
+			List<TimelinePic> tpList = Lists.newArrayList();
+			TimelinePic tpQuery = new TimelinePic();
+			
+			if("1".equals(timeline.getTimeType())) {
+				tpQuery.setShotDateL(t.getYear());
+			} else if("2".equals(timeline.getTimeType())) {
+				tpQuery.setShotDateL(t.getMonth());
+			}
+			
+			tpQuery.setLimitNum(0);
+	
+			tpList = tpService.findList(tpQuery);
+			
+			t.setPicList(tpList);
+			t.setTimeType(timeline.getTimeType());
+		}
+		
+		return ResultGen.genSuccessResult(tList);
 	}
 
 	@RequestMapping("get")

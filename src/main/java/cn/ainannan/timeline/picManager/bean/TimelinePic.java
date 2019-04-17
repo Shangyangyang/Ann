@@ -1,17 +1,18 @@
 package cn.ainannan.timeline.picManager.bean;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import cn.ainannan.base.bean.BaseBean;
-import cn.ainannan.commons.utils.DateUtil;
 
 public class TimelinePic extends BaseBean {
 	private String shortId;
 	private String filename;
 	private String path;
 	private String src;
+	private String srcThumbnail;
 	private String suffix;
 	private Long size;
 	private String MD5;
@@ -37,6 +38,13 @@ public class TimelinePic extends BaseBean {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date endShotDate;	// 结束拍摄日期
+	
+	// 查询参数
+	private String shotDateL;	// Like查询拍摄日期
+	private Integer limitNum;	// 查询页数
+	private String thumbnailFlag;	// 0：srcThumbnail为空
+	
+	private List<TimelinePic> picList;
 	
 	
 	public String getShortId() {
@@ -182,4 +190,46 @@ public class TimelinePic extends BaseBean {
 	public void setEndShotDate(Date endShotDate) {
 		this.endShotDate = endShotDate;
 	}
+
+	public String getShotDateL() {
+		return shotDateL;
+	}
+
+	public void setShotDateL(String shotDateL) {
+		this.shotDateL = shotDateL;
+	}
+
+	public Integer getLimitNum() {
+		return limitNum;
+	}
+
+	public void setLimitNum(Integer limitNum) {
+		this.limitNum = limitNum;
+	}
+
+	public String getSrcThumbnail() {
+		return srcThumbnail;
+	}
+
+	public void setSrcThumbnail(String srcThumbnail) {
+		this.srcThumbnail = srcThumbnail;
+	}
+
+	public String getThumbnailFlag() {
+		return thumbnailFlag;
+	}
+
+	public void setThumbnailFlag(String thumbnailFlag) {
+		this.thumbnailFlag = thumbnailFlag;
+	}
+
+	public List<TimelinePic> getPicList() {
+		return picList;
+	}
+
+	public void setPicList(List<TimelinePic> picList) {
+		this.picList = picList;
+	}
+
+	
 }

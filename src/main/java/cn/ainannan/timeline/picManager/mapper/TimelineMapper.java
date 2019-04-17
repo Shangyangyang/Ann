@@ -17,4 +17,9 @@ public interface TimelineMapper extends BaseDao<Timeline> {
 	void insertSkip(Timeline timeline);
 	String getAllLabel();
 	List<Timeline> findListByLabelNotNull();
+	/**
+	 * 根据时间类型查询列表
+	 * @return
+	 */
+	List<Timeline> findListByTimeType(Timeline timeline);
 }

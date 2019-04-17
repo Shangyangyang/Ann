@@ -1,5 +1,7 @@
 package cn.ainannan.timeline.picManager.bean;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import cn.ainannan.base.bean.BaseBean;
@@ -28,6 +30,16 @@ public class Timeline extends BaseBean {
 	private String score; 
 	// 简介
 	private String reason; 
+	
+	// 时光轴查询
+	private String timeType;	// 1年2月
+	private String year;	// 年
+	private String month;	// 月
+	private Integer count;	// 总数
+	private String shotDateL;	// Like查询拍摄日期
+
+	private List<TimelinePic> picList;	// 图片集合
+	
 
 	public Timeline() {
 	}
@@ -89,6 +101,54 @@ public class Timeline extends BaseBean {
 
 	public void setLabelId(String labelId) {
 		this.labelId = labelId;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public List<TimelinePic> getPicList() {
+		return picList;
+	}
+
+	public void setPicList(List<TimelinePic> picList) {
+		this.picList = picList;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	public String getTimeType() {
+		return timeType;
+	}
+
+	public void setTimeType(String timeType) {
+		this.timeType = timeType;
+	}
+
+	public String getShotDateL() {
+		return shotDateL;
+	}
+
+	public void setShotDateL(String shotDateL) {
+		this.shotDateL = shotDateL;
 	}
 
 }

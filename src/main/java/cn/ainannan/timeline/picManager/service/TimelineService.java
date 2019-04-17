@@ -1,6 +1,7 @@
 package cn.ainannan.timeline.picManager.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,8 +21,16 @@ import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
 @Service
 @Transactional(readOnly = true)
 public class TimelineService extends BaseService<TimelineMapper, Timeline> {
-
-	@Transactional(readOnly = false)
+	
+	/**
+	 * 根据时间类型查询列表
+	 * @return
+	 */
+	public List<Timeline> findListByTimeType(Timeline timeline){
+		return dao.findListByTimeType(timeline);
+	}
+	
+	
 	public void saveSkip(Timeline timeline) {
 		dao.insertSkip(timeline);
 	}

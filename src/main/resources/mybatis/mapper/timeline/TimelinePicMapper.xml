@@ -8,6 +8,7 @@
 		a.filename as "filename",
 		a.path as "path",
 		a.src as "src",
+		a.src_thumbnail as srcThumbnail,
 		a.suffix as "suffix",
 		a.size as "size",
 		a.MD5 as "MD5",
@@ -33,9 +34,6 @@
 		<if test="state != null and state != ''">
 			and a.state = #{state} 
 		</if>
-		<if test="state != null and state != ''">
-			and a.state = #{state} 
-		</if>
 		<if test="beginShotDate != null">
 			and a.shot_date &gt;= #{beginShotDate} 
 		</if>
@@ -45,9 +43,15 @@
 		<if test="preSrc != null and preSrc != ''">
 			and a.src like concat(#{preSrc}, '%')
 		</if>
+		<if test="shotDateL != null and shotDateL != ''">
+			and a.shot_date like concat(#{shotDateL}, '%')
+		</if>
 		<if test="timelineFlag != null and timelineFlag != ''">
 			and  not EXISTS(select * from timeline b where a.id = b.pic_id)
 			AND NOT EXISTS (SELECT 0 FROM timeline_ignore c WHERE a.id = c.pic_id and c.type = #{timelineFlag})
+		</if>
+		<if test="thumbnailFlag != null and thumbnailFlag != '' and thumbnailFlag == 0">
+			and src_thumbnail is null
 		</if>
 	</sql> 
 
@@ -174,11 +178,28 @@
 			<include refid="timelinePic_where" />
 		</where>
 		order by a.create_date desc
+		<if test="limitNum != null">
+			limit #{limitNum}, 3
+		</if>
+	</select>
+
+	<select id="findListFor1000" parameterType="timelinePic" resultType="timelinePic">
+		select 
+		<include refid="timelinePicColumns" />
+		from timeline_pic a 
+		<include refid="timelinePicJoins" />
+		<where>
+			<include refid="timelinePic_where" />
+		</where>
+		order by a.create_date desc
+		<if test="limitNum != null">
+			limit #{limitNum}
+		</if>
 	</select>
 
 	<insert id="insert" parameterType="timelinePic">
-		insert into timeline_pic(id, short_id, filename, path, src, suffix, size, MD5, finger_print, shot_date, similar_id, state, create_date, create_user, update_date, update_user, del_flag)
-		value(#{id}, #{shortId}, #{filename}, #{path}, #{src}, #{suffix}, #{size}, #{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+		insert into timeline_pic(id, short_id, filename, path, src, src_thumbnail, suffix, size, MD5, finger_print, shot_date, similar_id, state, create_date, create_user, update_date, update_user, del_flag)
+		value(#{id}, #{shortId}, #{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size}, #{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
 	</insert>
 
 	<update id="update">
@@ -195,6 +216,9 @@
 			</if>
 			<if test="src != null">
 				src = #{src},
+			</if>
+			<if test="srcThumbnail != null and srcThumbnail != ''">
+				src_thumbnail = #{srcThumbnail},
 			</if>
 			<if test="suffix != null">
 				suffix = #{suffix},
@@ -231,6 +255,63 @@
 			</if>
 		</trim>
 		WHERE id = #{id}
+	</update>
+	
+	<update id="saveByList">
+		<foreach collection="picList" item="entity" separator=";">
+			update timeline_pic
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="entity.shortId != null">
+					short_id = #{entity.shortId},
+				</if>
+				<if test="entity.filename != null">
+					filename = #{entity.filename},
+				</if>
+				<if test="entity.path != null">
+					path = #{entity.path},
+				</if>
+				<if test="entity.src != null">
+					src = #{entity.src},
+				</if>
+				<if test="entity.srcThumbnail != null and srcThumbnail != ''">
+					src_thumbnail = #{entity.srcThumbnail},
+				</if>
+				<if test="entity.suffix != null">
+					suffix = #{entity.suffix},
+				</if>
+				<if test="entity.size != null">
+					size = #{entity.size},
+				</if>
+				<if test="entity.MD5 != null">
+					MD5 = #{entity.MD5},
+				</if>
+				<if test="entity.fingerPrint != null">
+					finger_print = #{entity.fingerPrint},
+				</if>
+				<if test="entity.shotDate != null">
+					shot_date = #{entity.shotDate},
+				</if>
+				<if test="entity.similarId != null">
+					similar_id = #{entity.similarId},
+				</if>
+				<if test="entity.state != null">
+					state = #{entity.state},
+				</if>
+				<if test="entity.createDate != null">
+					create_date = #{entity.createDate},
+				</if>
+				<if test="entity.createUser != null and createUser.id != null and '' != createUser.id">
+					create_user = #{entity.createUser.id},
+				</if>
+				<if test="entity.updateDate != null">
+					update_date = #{entity.updateDate},
+				</if>
+				<if test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
+					update_user = #{entity.updateUser.id},
+				</if>
+			</trim>
+			where id = #{entity.id}
+		</foreach>
 	</update>
 
 	<update id="delete" parameterType="String">
