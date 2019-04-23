@@ -2,12 +2,8 @@ package cn.ainannan.timeline.picManager.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,12 +23,9 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
-import cn.ainannan.commons.utils.ImageUtils;
-import cn.ainannan.commons.utils.MD5Utils;
-import cn.ainannan.commons.utils.UUIDUtils;
-import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
 import cn.ainannan.sys.utils.ImageUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import cn.ainannan.timeline.picManager.service.ImportPicService;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
 
 @RestController
@@ -42,11 +35,10 @@ public class ImportPicController {
 	@Value("${myPic-basePath}")
 	private String basePath;
 	
-	private static final int IMG_THUMBNAIL_SIZE = 300;
-	private static final String IMG_THUMBNAIL_ROOT_SRC = "thumbnail/";
-
 	@Autowired
 	private TimelinePicService timelinePicService;
+	@Autowired
+	private ImportPicService importPicService;
 
 	public static Integer percent = 0; // 图片新增进度统计
 
@@ -167,18 +159,24 @@ public class ImportPicController {
 	}
 
 	/**
-	 * 添加照片到数据中
+	 * 通过添加照片到数据中
 	 * 
 	 * @param timelinePic
 	 * @return
 	 */
 	@RequestMapping("addPic")
 	public ResultObject addPic(TimelinePic timelinePic) {
+		String count = importPicService.addPic();
+		return ResultGen.genSuccessResult(count);
+	}
+	
+	@RequestMapping("addPic2")
+	public ResultObject addPic2(TimelinePic timelinePic) {
 		int addNum = 0; // 新增图片计数器
 		List<String> fileList = getFileList();
-
+		
 		int i = 0; // 进度统计-当前进度
-
+		
 		for (String str : fileList) {
 			// 先去数据库查询对比是否已经添加
 			timelinePic.setFilename(FilenameUtils.getName(str));
@@ -189,16 +187,16 @@ public class ImportPicController {
 			// 数据库中已经存在同路径同名的文件
 			if (resultList.size() > 0)
 				continue;
-
+			
 			// 增加到数据库的操作
-			timelinePicService.save(getTimelinePic(str));
-
+			timelinePicService.save(importPicService.getTimelinePic(str));
+			
 			addNum++; // 新增图片数据增加
-
+			
 		}
-
+		
 		percent = 0;
-
+		
 		return ResultGen.genSuccessResult("新增完成，本次共添加了 " + addNum + " 张照片！");
 	}
 
@@ -294,8 +292,8 @@ public class ImportPicController {
 				System.out.println(totalNum--);
 				// 组装源地址与目标地址
 				String sourcePath = t.getPath() + t.getFilename();
-				String targetPath = basePath + IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
-				String targetPath2 = IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
+				String targetPath = basePath + Constant.IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
+				String targetPath2 = Constant.IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
 				
 				// 判断目标在不在，不在的话先创建
 				File file = new File(new File(targetPath).getParent());
@@ -311,7 +309,7 @@ public class ImportPicController {
 				}
 				
 				// 再缩小图片
-				ImageUtil.operateByMaxSize(targetPath, targetPath, IMG_THUMBNAIL_SIZE, IMG_THUMBNAIL_SIZE);
+				ImageUtil.operateByMaxSize(targetPath, targetPath, Constant.IMG_THUMBNAIL_SIZE, Constant.IMG_THUMBNAIL_SIZE);
 				
 				TimelinePic saveT = new TimelinePic();
 				saveT.setId(t.getId());
@@ -401,7 +399,7 @@ public class ImportPicController {
 		int count = 0;
 
 		for (TimelinePic tp : tpList) {
-			Date d = executeShotDate(tp.getFilename());
+			Date d = importPicService.executeShotDate(tp.getFilename());
 			if (d != null) {
 
 				count++;
@@ -419,224 +417,18 @@ public class ImportPicController {
 	}
 
 	/**
-	 * 根据文件路径新建一个timelinePic对象，填充基本信息。
-	 * 
-	 * @param filePath
-	 * @return
-	 */
-	private TimelinePic getTimelinePic(String filePath) {
-
-		File file = new File(filePath);
-		if (!file.exists())
-			return null;
-
-		TimelinePic tp = new TimelinePic();
-
-		tp.setShortId(UUIDUtils.generateShortUuid());
-		tp.setFilename(FilenameUtils.getName(filePath));
-		tp.setPath(FilenameUtils.getFullPath(filePath));
-		tp.setSrc(filePath.replace(basePath, ""));
-		tp.setSuffix(FilenameUtils.getExtension(filePath));
-		tp.setSize(file.length());
-		tp.setMD5(MD5Utils.getFileMD5(file));
-		tp.setFingerPrint(FingerPrintUtils.produceFingerPrint(filePath));
-		tp.setShotDate(ImageUtils.getOriginalDate(filePath));
-		tp.setState(Constant.TIMELINE_PIC_STATE_0);
-
-		return tp;
-	}
-
-	/**
 	 * 获取图片列表
 	 * 
 	 * @return
 	 */
 	private List<String> getFileList() {
 		List<String> fileList = Lists.newArrayList();
-
+		
 		for (int i = 0; i < Constant.picFiles.length; i++) {
 			FileUtils.addList(basePath + Constant.picFiles[i], fileList);
 		}
-
+		
 		return fileList;
-	}
-
-	/**
-	 * 根据文件名解析拍摄日期
-	 * 
-	 * @param str
-	 * @return
-	 */
-	private Date executeShotDate(String str) {
-		Date newDate = null;
-		String guessTime = null;
-
-		if (str.indexOf("WuTa_") == 0 && str.length() > 19) {
-			String subStrO = str.substring(5, 24);
-
-			String[] arr = subStrO.split("_");
-			String date = arr[0];
-			String time = arr[1].replace("-", ":");
-
-			guessTime = date + " " + time;
-
-		}
-
-		if (str.indexOf("MYXJ_") == 0 && str.length() > 14) {
-			String subStr = substr(str, 5, 14);
-
-			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " "
-					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
-		}
-
-		if (str.indexOf("faceu_") == 0 && str.length() > 14) {
-			String subStr = substr(str, 6, 14);
-
-			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " "
-					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
-		}
-
-		if (str.indexOf("微信图片_") == 0 && str.length() > 14) {
-			String subStr = substr(str, 5, 14);
-
-			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " "
-					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
-		}
-
-		if (str.indexOf("QQ图片") == 0 && str.length() > 14) {
-			String subStr = substr(str, 4, 14);
-
-			guessTime = substr(subStr, 0, 4) + "-" + substr(subStr, 4, 2) + "-" + substr(subStr, 6, 2) + " "
-					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
-		}
-
-		if (str.indexOf("IMG_") == 0 && str.length() > 15) {
-			String subStr = substr(str, 4, 15);
-			String[] arr = subStr.split("_");
-
-			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
-			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
-
-			guessTime = dateStr + " " + timeStr;
-
-		}
-
-		if (str.indexOf("P") == 0 && str.length() > 13) {
-			// 2016\P61006-110001-001.jpg
-
-			String dateStr = "201" + substr(str, 1, 1) + "-" + substr(str, 2, 2) + "-" + substr(str, 4, 2);
-
-			String timeStr = substr(str, 7, 2) + ":" + substr(str, 9, 2) + ":" + substr(str, 11, 2);
-
-			guessTime = dateStr + " " + timeStr;
-
-		}
-
-		if (str.indexOf("B612咔叽_") == 0 && str.length() > 20) {
-			String subStr = substr(str, 7, 15);
-
-			String[] arr = subStr.split("_");
-
-			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
-			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
-
-			guessTime = dateStr + " " + timeStr;
-		}
-
-		if (str.indexOf("B612Kaji_") == 0 && str.length() > 20) {
-			// B612Kaji_20180603_231306_600.jpg
-			String subStr = substr(str, 9, 15);
-			String[] arr = subStr.split("_");
-
-			String dateStr = substr(arr[0], 0, 4) + "-" + substr(arr[0], 4, 2) + "-" + substr(arr[0], 6, 2);
-			String timeStr = substr(arr[1], 0, 2) + ":" + substr(arr[1], 2, 2) + ":" + substr(arr[1], 4, 2);
-
-			guessTime = dateStr + " " + timeStr;
-
-		}
-
-		if (str.indexOf("mmexport") == 0 && str.length() > 20) {
-			// mmexport1500993758999.jpg
-			String subStr = substr(str, 8, 13);
-
-			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(subStr)));
-
-		}
-		// wx_camera_1500028140900.jpg
-		if (str.indexOf("wx_camera_") == 0 && str.length() > 20) {
-			// mmexport1500993758999.jpg
-			String subStr = substr(str, 10, 13);
-
-			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(subStr)));
-
-		}
-		// 2014-05-18 125400.jpg
-		if (findDate("^\\d{4}-\\d{2}-\\d{2}\\s\\d{6}", str)) {
-			String subStr = substr(str, 0, 17);
-			guessTime = substr(subStr, 0, 13) + ":" + substr(subStr, 13, 2) + ":" + substr(subStr, 15, 2);
-		}
-		// 2014_01_15_09_53_29.jpg
-		if (findDate("^\\d{4}_\\d{2}_\\d{2}_\\d{2}_\\d{2}_\\d{2}", str)) {
-			String[] subStr = str.split("_");
-
-			guessTime = subStr[0] + "-" + subStr[1] + "-" + subStr[2] + " " + subStr[3] + ":" + subStr[4] + ":"
-					+ substr(subStr[5], 0, 2);
-		}
-		// 20120415.jpg
-		if (findDate("^\\d{8}\\.", str)) {
-			guessTime = substr(str, 0, 4) + "-" + substr(str, 4, 2) + "-" + substr(str, 6, 2) + " 00:00:00";
-
-		}
-
-		// 如果日期字符串不为空，表示命中了规则并生成了字符串，进行转换
-		if (guessTime != null && !"".equals(guessTime)) {
-			try {
-				newDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(guessTime);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return newDate;
-	}
-
-	/**
-	 * 截取字符串，
-	 * 
-	 * @param str
-	 *            原字符串
-	 * @param begin
-	 *            开始位置
-	 * @param length
-	 *            截取长度
-	 * @return
-	 */
-	private String substr(String str, int begin, int length) {
-		try {
-
-			return str.substring(begin, begin + length);
-		} catch (Exception e) {
-			System.out.println("str:\t" + str);
-			System.out.println("begin:\t" + begin);
-			System.out.println("length:\t" + length);
-		}
-
-		return null;
-
-	}
-
-	/**
-	 * 匹配指定格式，如果包含则返回true
-	 * 
-	 * @param str
-	 * @return
-	 */
-	private boolean findDate(String input, String str) {
-
-		Pattern p = Pattern.compile(input);
-		Matcher m = p.matcher(str);
-
-		return m.find();
 	}
 
 }

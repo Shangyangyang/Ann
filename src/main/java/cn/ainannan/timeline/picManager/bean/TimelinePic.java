@@ -231,5 +231,16 @@ public class TimelinePic extends BaseBean {
 		this.picList = picList;
 	}
 
+	@Override
+	public String toString() {
+		return "TimelinePic [shortId=" + shortId + ", filename=" + filename + ", path=" + path + ", src=" + src
+				+ ", srcThumbnail=" + srcThumbnail + ", suffix=" + suffix + ", size=" + size + ", MD5=" + MD5
+				+ ", fingerPrint=" + fingerPrint + ", shotDate=" + shotDate + ", similarId=" + similarId + ", state="
+				+ state + ", lastTotal=" + lastTotal + ", lastShotDate=" + lastShotDate + ", lastImportDate="
+				+ lastImportDate + ", preSrc=" + preSrc + ", timelineFlag=" + timelineFlag + ", beginShotDate="
+				+ beginShotDate + ", endShotDate=" + endShotDate + ", shotDateL=" + shotDateL + ", limitNum=" + limitNum
+				+ ", thumbnailFlag=" + thumbnailFlag + ", picList=" + picList + "]";
+	}
+
 	
 }

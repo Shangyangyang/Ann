@@ -9,9 +9,15 @@ public class Constant {
 			"个人证件", "雪碧"
 	};
 	
-	
+	// 未筛选
+	public static final String TIMELINE_PIC_WEISHAIXUAN = "未筛选";
+	// 图片状态
 	public static final String TIMELINE_PIC_STATE_0 = "0";
-	
+	// 缩略图尺寸
+	public static final int IMG_THUMBNAIL_SIZE = 300;
+	// 缩略图文件夹名
+	public static final String IMG_THUMBNAIL_ROOT_SRC = "thumbnail/";
+
 	// session属性名
 	// 登录用户
 	public static final String LOGIN_USER = "login_user";

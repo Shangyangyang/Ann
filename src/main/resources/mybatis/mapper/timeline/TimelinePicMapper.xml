@@ -202,6 +202,51 @@
 		value(#{id}, #{shortId}, #{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size}, #{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
 	</insert>
 
+	<insert id="insertByList" parameterType="java.util.List">
+		INSERT INTO timeline_pic(
+		id,
+		short_id,
+		filename,
+		path,
+		src,
+		src_thumbnail,
+		suffix,
+		size,
+		MD5,
+		finger_print,
+		shot_date,
+		similar_id,
+		state,
+		create_date,
+		create_user,
+		update_date,
+		update_user,
+		del_flag
+		)
+		<foreach collection="list" item="entity" separator=" union all ">
+			SELECT
+			#{entity.id},
+			#{entity.shortId},
+			#{entity.filename},
+			#{entity.path},
+			#{entity.src},
+			#{entity.srcThumbnail},
+			#{entity.suffix},
+			#{entity.size},
+			#{entity.MD5},
+			#{entity.fingerPrint},
+			#{entity.shotDate},
+			#{entity.similarId},
+			#{entity.state},
+			#{entity.createDate},
+			#{entity.createUser.id},
+			#{entity.updateDate},
+			#{entity.updateUser.id},
+			#{entity.delFlag}
+			
+		</foreach>
+	</insert>
+
 	<update id="update">
 		update timeline_pic
 		<trim prefix="SET" suffixOverrides=",">

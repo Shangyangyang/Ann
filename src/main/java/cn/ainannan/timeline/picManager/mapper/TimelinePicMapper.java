@@ -43,4 +43,10 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	List<TimelinePic> findListFor1000(TimelinePic tp);
 
 	void saveByList(TimelinePic savePic);
+	
+	/**
+	 * 批量插入，参数为list
+	 * @param list
+	 */
+	void insertByList(List<TimelinePic> list);
 }

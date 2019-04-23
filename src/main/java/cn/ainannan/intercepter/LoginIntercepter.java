@@ -1,12 +1,9 @@
 package cn.ainannan.intercepter;
 
-import java.lang.reflect.Method;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,9 +24,9 @@ public class LoginIntercepter implements HandlerInterceptor {
             return true;
         }
 
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        // HandlerMethod handlerMethod = (HandlerMethod) handler;
         //获取请求方法
-        Method method = handlerMethod.getMethod();
+        // Method method = handlerMethod.getMethod();
         //请求的url
         String url = request.getRequestURI().substring(request.getContextPath().length()); 
 		
@@ -71,15 +68,11 @@ public class LoginIntercepter implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 }
