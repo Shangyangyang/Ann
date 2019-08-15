@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
@@ -28,14 +29,35 @@ public class CarController {
 	@Autowired
 	private CarService carService;
 
+	@RequestMapping("list2")
+	public ResultObject list2(Car car, HttpServletRequest request) {
+		
+		List<Car> carList = Lists.newArrayList();
+		Car c = new Car();
+		
+		c.setMoney(1D);
+		c.setType("副标题");
+		c.setReason("内容123456789123456789");
+		carList.add(c);
+		
+		c = new Car();
+		c.setMoney(2D);
+		c.setType("副23标32题23");
+		c.setReason("sf asf sdafsadfsdfdsfsdfsd");
+		carList.add(c);
+		
+		return ResultGen.genSuccessResult(carList);
+	}
+	
+	
 	@RequestMapping({ "", "list" })
 	public ResultObject list(Car car, @RequestParam(defaultValue = "1") Integer page,
-			@RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
-
+			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+		PageHelper.startPage(page, size); 
+		
 		List<Car> list = carService.findList(car);
 		PageInfo<Car> pageInfo = new PageInfo<Car>(list);
-
+		
 		return ResultGen.genSuccessResult(pageInfo);
 	}
 	

@@ -16,6 +16,7 @@
 		a.update_user AS "updateUser",
 		a.del_flag AS "delFlag",
 		pic.src as "pic.src",
+		pic.src_thumbnail as "pic.srcThumbnail",
 		<!-- concat('http://ainannan.frpgz1.idcfengye.com/', pic.src) as "pic.src", -->
 		pic.shot_date as "pic.shotDate"
 	</sql>
@@ -34,6 +35,14 @@
 		FROM timeline a
 		<include refid="timelineJoins"/>
 		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getTimelineInfo" resultType="TimelineTongji">
+		SELECT count(1) as 'weiShaixuan', t.yishaixuan FROM `timeline_pic` a 
+		LEFT JOIN (select count(1) as 'yiShaixuan' from timeline t where t.del_flag = '0') t on 1=1
+		where a.id not in(
+			select pic_id from timeline where del_flag = '0'
+		) and a.del_flag = '0' and a.path like '%雪碧%'
 	</select>
     
     <!-- 根据时间类型查询列表 -->

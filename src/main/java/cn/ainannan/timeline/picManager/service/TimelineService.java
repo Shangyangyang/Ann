@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.timeline.picManager.bean.Timeline;
+import cn.ainannan.timeline.picManager.bean.TimelineTongji;
 import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
 
 /**
@@ -21,6 +22,13 @@ import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
 @Service
 @Transactional(readOnly = true)
 public class TimelineService extends BaseService<TimelineMapper, Timeline> {
+	/**
+	 * 获取时光轴已筛选未筛选的
+	 * @return 统计对象
+	 */
+	public TimelineTongji getTimelineInfo() {
+		return dao.getTimelineInfo();
+	}
 	
 	/**
 	 * 根据时间类型查询列表

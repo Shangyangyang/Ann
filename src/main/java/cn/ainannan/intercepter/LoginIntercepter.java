@@ -61,6 +61,9 @@ public class LoginIntercepter implements HandlerInterceptor {
         // 系统登录类
         if (url.startsWith("/sys/login")) return true;
         if (url.startsWith("/sys/login/login")) return true;
+        
+        // uniapp测试
+        if (url.startsWith("/cost/car")) return true;
 		
 		return false;
 	}

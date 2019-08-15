@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import cn.ainannan.base.dao.BaseDao;
 import cn.ainannan.timeline.picManager.bean.Timeline;
+import cn.ainannan.timeline.picManager.bean.TimelineTongji;
 
 /**
  * 时光轴DAO
@@ -22,4 +23,10 @@ public interface TimelineMapper extends BaseDao<Timeline> {
 	 * @return
 	 */
 	List<Timeline> findListByTimeType(Timeline timeline);
+	
+	/**
+	 * 获取时光轴已筛选未筛选的
+	 * @return 统计对象
+	 */
+	TimelineTongji getTimelineInfo();
 }

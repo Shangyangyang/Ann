@@ -46,7 +46,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			
 			// 获取拍摄日期，如果没有的话，则根据文件名进行解析拍摄日期
 			Date d = ImageUtils.getOriginalDate(sourceStr);
-			if(d == null) d = this.executeShotDate(sourceStr);
+			if(d == null) d = this.executeShotDate(sourceFile.getName());
 			
 			/*
 			 * 思路分析
@@ -56,7 +56,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			 * 4. 生成缩略图，
 			 * 5. 保存数据库
 			 */
-			
+						
 			String prePath = null;
 			
 			if(d != null) {
@@ -94,6 +94,11 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			// 如果不为空，则预新增
 			if(tp != null) {
 				tp.setSrcThumbnail(Constant.IMG_THUMBNAIL_ROOT_SRC + prePath + rootPath);
+				
+				if(tp.getShotDate() == null) {
+					tp.setShotDate(this.executeShotDate(sourceFile.getName()));
+				}
+				
 				tp.preInsert();
 				tpList.add(tp);
 				
@@ -105,8 +110,10 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			
 		}// 退出for file list循环
 		
+		if(tpList.size() > 0) {
+			dao.insertByList(tpList);
+		}
 		// 保存list
-		dao.insertByList(tpList);
 		int shengyu = fileList.size() - addNum < 0 ? 0 : fileList.size() - addNum;
 		return "本次新增了 " + addNum + " 条，还剩 " + shengyu + " 条未处理。" ;
 	}

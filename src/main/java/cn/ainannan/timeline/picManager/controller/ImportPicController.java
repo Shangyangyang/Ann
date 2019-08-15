@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -338,20 +339,29 @@ public class ImportPicController {
 	@RequestMapping("delete")
 	public ResultObject delete(TimelinePic tp) {
 		// 先删除物理文件，先获取前端传递过来的path，如果为空，则通过Id获取数据库里的记录
-		if (tp.getPath() == null || "".equals(tp.getPath())) {
-			if (tp.getId() != null && !"".equals(tp.getId())) {
+		if (StringUtils.isBlank(tp.getPath())) {
+			if (StringUtils.isNotBlank(tp.getId())) {
 				TimelinePic result = timelinePicService.get(tp.getId());
 				tp.setPath(result.getPath() + result.getFilename());
 			} else {
 				return ResultGen.genFailResult("缺少参数，删除失败。");
 			}
 		}
-
+		
+		String thumbnailSrc = "H:\\尚羊羊\\图片\\个人相册" + "\\thumbnail" + tp.getPath().replace("H:\\尚羊羊\\图片\\个人相册", "");
+		System.out.println(thumbnailSrc);
+		
 		// 删除物理文件
 		File file = new File(tp.getPath());
+		File thumbnailFile = new File(thumbnailSrc);
 
 		if (file.exists()) {
 			while (!file.delete()) {
+				System.gc(); // 回收资源
+			}
+		}
+		if (thumbnailFile.exists()) {
+			while (!thumbnailFile.delete()) {
 				System.gc(); // 回收资源
 			}
 		}

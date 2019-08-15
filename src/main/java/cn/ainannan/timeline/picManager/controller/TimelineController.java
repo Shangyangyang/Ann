@@ -18,6 +18,7 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.timeline.picManager.bean.Timeline;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import cn.ainannan.timeline.picManager.bean.TimelineTongji;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
 import cn.ainannan.timeline.picManager.service.TimelineService;
 
@@ -79,6 +80,16 @@ public class TimelineController {
 	@RequestMapping("get")
 	public ResultObject get(Timeline timeline, HttpServletRequest request) {
 		Timeline dest = timelineService.get(timeline);
+		return ResultGen.genSuccessResult(dest);
+	}
+
+	/**
+	 * 获取时光轴已筛选未筛选的
+	 * @return 统计对象
+	 */
+	@RequestMapping("getTimelineInfo")
+	public ResultObject getTimelineInfo(Timeline timeline, HttpServletRequest request) {
+		TimelineTongji dest = timelineService.getTimelineInfo();
 		return ResultGen.genSuccessResult(dest);
 	}
 	
