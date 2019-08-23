@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	
 	private static final int MAX_ADD_PIC_NUM = 50;
 	
-	public String addPic() {
+	public String addPic() throws IOException {
 		int addNum = 0; // 新增图片计数器
 		// 获取未筛选文件夹中的图片
 		List<String> fileList = getFileList();
@@ -332,8 +333,9 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	 * 
 	 * @param filePath
 	 * @return
+	 * @throws IOException 
 	 */
-	public TimelinePic getTimelinePic(String filePath) {
+	public TimelinePic getTimelinePic(String filePath) throws IOException {
 
 		File file = new File(filePath);
 		if (!file.exists())
@@ -353,6 +355,6 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		tp.setState(Constant.TIMELINE_PIC_STATE_0);
 
 		return tp;
-	}
+	}	
 
 }

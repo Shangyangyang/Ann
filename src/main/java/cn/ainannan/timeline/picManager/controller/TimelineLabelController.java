@@ -16,7 +16,6 @@ import com.github.pagehelper.PageInfo;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.timeline.picManager.bean.TimelineLabel;
-import cn.ainannan.timeline.picManager.service.TimelineLabelQuickService;
 import cn.ainannan.timeline.picManager.service.TimelineLabelService;
 
 /**
@@ -41,6 +40,15 @@ public class TimelineLabelController {
 		List<TimelineLabel> list = tlService.findList(timelineLabel);
 		PageInfo pageInfo = new PageInfo(list);
 		return ResultGen.genSuccessResult(pageInfo);
+	}
+	
+	
+	@RequestMapping("list2")
+	public ResultObject list2(TimelineLabel timelineLabel, HttpServletRequest request) {
+		
+		List<TimelineLabel> list = tlService.findList(timelineLabel);
+		
+		return ResultGen.genSuccessResult(list);
 	}
 	
 	/**

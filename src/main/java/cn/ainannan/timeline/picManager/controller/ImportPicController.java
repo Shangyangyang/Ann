@@ -43,6 +43,14 @@ public class ImportPicController {
 
 	public static Integer percent = 0; // 图片新增进度统计
 
+	@RequestMapping("getSimilarImgList")
+	public ResultObject getSimilarImgList(TimelinePic timelinePic) {
+		
+		List<TimelinePic> list = timelinePicService.getSimilarImgList(timelinePic);
+		
+		return ResultGen.genSuccessResult(list);
+	}
+	
 	@RequestMapping({ "", "list" })
 	public ResultObject list(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page,
 			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
@@ -164,15 +172,16 @@ public class ImportPicController {
 	 * 
 	 * @param timelinePic
 	 * @return
+	 * @throws IOException 
 	 */
 	@RequestMapping("addPic")
-	public ResultObject addPic(TimelinePic timelinePic) {
+	public ResultObject addPic(TimelinePic timelinePic) throws IOException {
 		String count = importPicService.addPic();
 		return ResultGen.genSuccessResult(count);
 	}
 	
 	@RequestMapping("addPic2")
-	public ResultObject addPic2(TimelinePic timelinePic) {
+	public ResultObject addPic2(TimelinePic timelinePic) throws IOException {
 		int addNum = 0; // 新增图片计数器
 		List<String> fileList = getFileList();
 		
@@ -271,7 +280,7 @@ public class ImportPicController {
 	 * 生成缩略库并保存到相应的路径去
 	 * 运行一次生成1000张
 	 */
-	@Scheduled(cron = "0 */2 * * * ?")
+	// @Scheduled(cron = "0 */2 * * * ?")
 	@RequestMapping("genThumbnail")
 	public ResultObject genThumbnail(TimelinePic tp) {
 		
@@ -425,6 +434,9 @@ public class ImportPicController {
 
 		return ResultGen.genSuccessResult("本次后台共计算了 " + count + " 条记录。");
 	}
+	
+	
+	
 
 	/**
 	 * 获取图片列表

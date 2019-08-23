@@ -22,6 +22,7 @@ public class TimelinePic extends BaseBean {
 	private Date shotDate;
 	private String similarId;
 	private String state;
+	private String belong; // 归属1雪碧2乐乐
 	
 	// 三个统计字段
 	private String lastTotal;	// 最新总数
@@ -240,6 +241,14 @@ public class TimelinePic extends BaseBean {
 				+ lastImportDate + ", preSrc=" + preSrc + ", timelineFlag=" + timelineFlag + ", beginShotDate="
 				+ beginShotDate + ", endShotDate=" + endShotDate + ", shotDateL=" + shotDateL + ", limitNum=" + limitNum
 				+ ", thumbnailFlag=" + thumbnailFlag + ", picList=" + picList + "]";
+	}
+
+	public String getBelong() {
+		return belong;
+	}
+
+	public void setBelong(String belong) {
+		this.belong = belong;
 	}
 
 	

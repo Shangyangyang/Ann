@@ -35,8 +35,9 @@ public class TupianXiangsidu {
 	 * 生成图片指纹
 	 * @param filename 文件名
 	 * @return 图片指纹
+	 * @throws IOException 
 	 */
-	public static String produceFingerPrint(String filename) {
+	public static String produceFingerPrint(String filename) throws IOException {
 		BufferedImage source = ImageHelper.readPNGImage(filename);// 读取文件
 
 		int width = 8;

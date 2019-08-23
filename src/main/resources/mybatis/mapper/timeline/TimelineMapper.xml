@@ -85,6 +85,9 @@
 			<if test="type != null and type != ''">
 				AND a.type = #{type}
 			</if>
+			<if test="labelId != null and labelId != ''">
+				AND a.label_id like concat('%',#{labelId},'%')
+			</if>
 			<if test="label != null and label != ''">
 				AND a.label like concat('%',#{label},'%')
 			</if>

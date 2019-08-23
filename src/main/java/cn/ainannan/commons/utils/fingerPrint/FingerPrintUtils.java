@@ -1,25 +1,35 @@
 package cn.ainannan.commons.utils.fingerPrint;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class FingerPrintUtils {
+	
+	public static void main(String[] args) throws IOException {
+		System.out.println(produceFingerPrint("F://test2.jpg"));
+		System.out.println(produceFingerPrint("F://IMG_20180125_170705.jpg"));
+		System.out.println(produceFingerPrint("H:\\尚羊羊\\图片\\个人相册\\2015\\P51003-173139.jpg"));
+		System.out.println(produceFingerPrint("H:\\尚羊羊\\图片\\个人相册\\2016\\P60611-151816.jpg"));
+	}
+	
 	/**
 	 * 生成图片指纹
 	 * 
 	 * @param filename
 	 *            文件名
 	 * @return 图片指纹
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	public static String produceFingerPrint(String filename){
+	public static String produceFingerPrint(String filename) throws IOException{
 		BufferedImage source = ImageHelper.readPNGImage(filename);// 读取文件
 
 		if(null == source){
 			return null;
 		}
 		
-		int width = 8;
-		int height = 8;
+		int width = 32;
+		int height = 32;
 
 		// 第一步，缩小尺寸。
 		// 将图片缩小到8x8的尺寸，总共64个像素。这一步的作用是去除图片的细节，只保留结构、明暗等基本信息，摒弃不同尺寸、比例带来的图片差异。

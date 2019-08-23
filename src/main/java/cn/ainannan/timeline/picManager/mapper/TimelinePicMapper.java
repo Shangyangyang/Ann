@@ -49,4 +49,8 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	 * @param list
 	 */
 	void insertByList(List<TimelinePic> list);
+
+	List<TimelinePic> findTempList();
+
+	List<TimelinePic> getFingerPrintList();
 }

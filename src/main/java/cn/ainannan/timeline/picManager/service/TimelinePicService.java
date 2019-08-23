@@ -1,10 +1,14 @@
 package cn.ainannan.timeline.picManager.service;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import cn.ainannan.base.service.BaseService;
+import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 
@@ -57,4 +61,37 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	public void saveByList(TimelinePic savePic) {
 		dao.saveByList(savePic);
 	}
+
+	/**
+	 * 获取指定图片相似的图片的集合
+	 * @param timelinePic
+	 * @return
+	 */
+	public List<TimelinePic> getSimilarImgList(TimelinePic timelinePic) {
+		TimelinePic thisPic = dao.get(timelinePic.getId());
+		
+		List<TimelinePic> list = dao.getFingerPrintList();
+		
+		List<TimelinePic> resultList = list.stream().filter(item -> 
+			StringUtils.getSimilarityRatio(thisPic.getFingerPrint(), item.getFingerPrint()) > 88F && !thisPic.getId().equals(item.getId()))
+			.collect(Collectors.toList());
+		
+		System.out.println("thisFinger: " + thisPic.getFingerPrint());
+		
+		resultList.stream().forEach(item -> {
+			System.out.println(item.getFingerPrint());
+		});
+		
+		return resultList;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

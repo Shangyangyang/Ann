@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.ainannan.timeline.picManager.mapper.TimelinePicMapper">
-	
+<mapper
+	namespace="cn.ainannan.timeline.picManager.mapper.TimelinePicMapper">
+
 	<sql id="timelinePicColumns">
 		a.id as "id",
 		a.short_id as "shortId",
-		a.filename as "filename",
+		a.filename as
+		"filename",
 		a.path as "path",
 		a.src as "src",
-		a.src_thumbnail as srcThumbnail,
+		a.src_thumbnail as
+		srcThumbnail,
 		a.suffix as "suffix",
 		a.size as "size",
 		a.MD5 as "MD5",
@@ -16,6 +19,7 @@
 		a.shot_date as "shotDate",
 		a.similar_id as "similarId",
 		a.state as "state",
+		a.belong as "belong",
 		a.create_date as "createDate",
 		a.create_user as "createUser.id",
 		a.update_date as "updateDate",
@@ -29,16 +33,19 @@
 			and a.filename = #{filename}
 		</if>
 		<if test="path != null and path != ''">
-			and a.path = #{path} 
+			and a.path = #{path}
 		</if>
 		<if test="state != null and state != ''">
-			and a.state = #{state} 
+			and a.state = #{state}
+		</if>
+		<if test="belong != null and belong != ''">
+			and a.belong = #{belong}
 		</if>
 		<if test="beginShotDate != null">
-			and a.shot_date &gt;= #{beginShotDate} 
+			and a.shot_date &gt;= #{beginShotDate}
 		</if>
 		<if test="endShotDate != null">
-			and a.shot_date &lt;= #{endShotDate} 
+			and a.shot_date &lt;= #{endShotDate}
 		</if>
 		<if test="preSrc != null and preSrc != ''">
 			and a.src like concat(#{preSrc}, '%')
@@ -47,13 +54,16 @@
 			and a.shot_date like concat(#{shotDateL}, '%')
 		</if>
 		<if test="timelineFlag != null and timelineFlag != ''">
-			and  not EXISTS(select * from timeline b where a.id = b.pic_id)
-			AND NOT EXISTS (SELECT 0 FROM timeline_ignore c WHERE a.id = c.pic_id and c.type = #{timelineFlag})
+			and not EXISTS(select * from timeline b where a.id =
+			b.pic_id)
+			AND NOT EXISTS (SELECT 0 FROM timeline_ignore c WHERE a.id =
+			c.pic_id and c.type = #{timelineFlag})
 		</if>
-		<if test="thumbnailFlag != null and thumbnailFlag != '' and thumbnailFlag == 0">
+		<if
+			test="thumbnailFlag != null and thumbnailFlag != '' and thumbnailFlag == 0">
 			and src_thumbnail is null
 		</if>
-	</sql> 
+	</sql>
 
 	<sql id="timelinePicJoins">
 	</sql>
@@ -61,118 +71,123 @@
 	<select id="get" parameterType="String" resultType="timelinePic">
 		select
 		<include refid="timelinePicColumns" />
-		from timeline_pic a 
+		from timeline_pic a
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<!-- 获取拍摄日期为空的记录 -->
-	<select id="getShotDateIsnull" parameterType="String" resultType="timelinePic">
+	<select id="getShotDateIsnull" parameterType="String"
+		resultType="timelinePic">
 		SELECT
-			<include refid="timelinePicColumns" />
+		<include refid="timelinePicColumns" />
 		FROM
-			timeline_pic a
+		timeline_pic a
 		WHERE
-			a.del_flag = '0'
+		a.del_flag = '0'
 		AND a.shot_date IS NULL
 		ORDER BY a.create_date desc
 		LIMIT 1
 	</select>
-	
+
 	<!-- 获取全部拍摄日期为空的记录 -->
-	<select id="getAllShotDateIsnull" parameterType="String" resultType="timelinePic">
+	<select id="getAllShotDateIsnull" parameterType="String"
+		resultType="timelinePic">
 		SELECT
-			<include refid="timelinePicColumns" />
+		<include refid="timelinePicColumns" />
 		FROM
-			timeline_pic a
+		timeline_pic a
 		WHERE
-			a.del_flag = '0'
+		a.del_flag = '0'
 		AND a.shot_date IS NULL
 		ORDER BY a.create_date desc
 	</select>
-	
-	<select id="getEqualMd5" parameterType="String" resultType="timelinePic">
+
+	<select id="getEqualMd5" parameterType="String"
+		resultType="timelinePic">
 		SELECT
-			<include refid="timelinePicColumns" />
+		<include refid="timelinePicColumns" />
 		FROM
-			timeline_pic a
+		timeline_pic a
 		WHERE
-			a.md5 = (
-				SELECT
-					md5
-				FROM
-					timeline_pic
-				WHERE
-					del_flag = '0'
-				GROUP BY
-					md5
-				HAVING
-					count(md5) > 1
-				LIMIT 1
-			)
+		a.md5 = (
+		SELECT
+		md5
+		FROM
+		timeline_pic
+		WHERE
+		del_flag = '0'
+		GROUP BY
+		md5
+		HAVING
+		count(md5) > 1
+		LIMIT 1
+		)
 		order by a.src asc
 	</select>
-	
-	<select id="getEqualFingerPrint" parameterType="String" resultType="timelinePic">
+
+	<select id="getEqualFingerPrint" parameterType="String"
+		resultType="timelinePic">
 		SELECT
-			<include refid="timelinePicColumns" />
+		<include refid="timelinePicColumns" />
 		FROM
-			timeline_pic a
+		timeline_pic a
 		WHERE
-			a.del_flag = '0'
+		a.del_flag = '0'
 		AND EXISTS (
-			SELECT
-				c.finger_print
-			FROM
-				(
-					SELECT
-						b.finger_print
-					FROM
-						timeline_pic b
-					WHERE
-						b.del_flag = '0'
-					GROUP BY
-						b.finger_print
-					HAVING
-						count(b.finger_print) > 1
-				) c
-			WHERE
-				c.finger_print = a.finger_print
+		SELECT
+		c.finger_print
+		FROM
+		(
+		SELECT
+		b.finger_print
+		FROM
+		timeline_pic b
+		WHERE
+		b.del_flag = '0'
+		GROUP BY
+		b.finger_print
+		HAVING
+		count(b.finger_print) > 1
+		) c
+		WHERE
+		c.finger_print = a.finger_print
 		)
 		ORDER BY
-			a.create_date DESC
-	</select>
-	
-	<select id="getLastStatus" resultType="timelinePic">
-		SELECT
-			count(1) AS lastTotal,
-			b.lastShotDate,
-			c.lastImportDate
-		FROM
-			timeline_pic a
-		LEFT JOIN (
-			SELECT
-				max(shot_date) as lastShotDate
-			FROM
-				timeline_pic
-			WHERE
-				del_flag = '0'
-		) b ON 1 = 1
-		left join (
-			SELECT
-				max(create_date) as lastImportDate
-			FROM
-				timeline_pic
-			WHERE
-				del_flag = '0'
-		) c on 1=1
-		WHERE
-			a.del_flag = '0'
+		a.create_date DESC
 	</select>
 
-	<select id="findList" parameterType="timelinePic" resultType="timelinePic">
+	<select id="getLastStatus" resultType="timelinePic">
+		SELECT
+		count(1) AS lastTotal,
+		b.lastShotDate,
+		c.lastImportDate
+		FROM
+		timeline_pic a
+		LEFT JOIN (
+		SELECT
+		max(shot_date) as lastShotDate
+		FROM
+		timeline_pic
+		WHERE
+		del_flag = '0'
+		) b ON 1 = 1
+		left join (
+		SELECT
+		max(create_date) as lastImportDate
+		FROM
+		timeline_pic
+		WHERE
+		del_flag = '0'
+		) c on 1=1
+		WHERE
+		a.del_flag = '0'
+	</select>
+
+	<select id="findList" parameterType="timelinePic"
+		resultType="timelinePic">
 		select
 		<include refid="timelinePicColumns" />
-		from timeline_pic a 
+		from timeline_pic a
 		<include refid="timelinePicJoins" />
 		<where>
 			<include refid="timelinePic_where" />
@@ -183,10 +198,37 @@
 		</if>
 	</select>
 
-	<select id="findListFor1000" parameterType="timelinePic" resultType="timelinePic">
-		select 
+	<select id="findTempList" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+			id,
+			filename,
+			path,
+			src
+		FROM
+			timeline_pic
+		WHERE
+			del_flag = '0' and 
+			LENGTH(finger_print) = 16
+		LIMIT 0, 50
+		
+	</select>
+
+	<select id="getFingerPrintList" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+			id,
+			src,
+			finger_print as "fingerPrint"
+		FROM
+			timeline_pic
+		where del_flag = '0' and finger_print is not null
+		
+	</select>
+
+	<select id="findListFor1000" parameterType="timelinePic"
+		resultType="timelinePic">
+		select
 		<include refid="timelinePicColumns" />
-		from timeline_pic a 
+		from timeline_pic a
 		<include refid="timelinePicJoins" />
 		<where>
 			<include refid="timelinePic_where" />
@@ -198,8 +240,15 @@
 	</select>
 
 	<insert id="insert" parameterType="timelinePic">
-		insert into timeline_pic(id, short_id, filename, path, src, src_thumbnail, suffix, size, MD5, finger_print, shot_date, similar_id, state, create_date, create_user, update_date, update_user, del_flag)
-		value(#{id}, #{shortId}, #{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size}, #{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+		insert into timeline_pic(id,
+		short_id, filename, path, src, src_thumbnail, suffix, size, MD5,
+		finger_print, shot_date, similar_id, state, belong, create_date, create_user,
+		update_date, update_user, del_flag)
+		value(#{id}, #{shortId},
+		#{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size},
+		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{belong}
+		#{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},
+		#{DEL_FLAG_NORMAL})
 	</insert>
 
 	<insert id="insertByList" parameterType="java.util.List">
@@ -217,13 +266,15 @@
 		shot_date,
 		similar_id,
 		state,
+		belong,
 		create_date,
 		create_user,
 		update_date,
 		update_user,
 		del_flag
 		)
-		<foreach collection="list" item="entity" separator=" union all ">
+		<foreach collection="list" item="entity"
+			separator=" union all ">
 			SELECT
 			#{entity.id},
 			#{entity.shortId},
@@ -238,12 +289,13 @@
 			#{entity.shotDate},
 			#{entity.similarId},
 			#{entity.state},
+			#{entity.belong},
 			#{entity.createDate},
 			#{entity.createUser.id},
 			#{entity.updateDate},
 			#{entity.updateUser.id},
 			#{entity.delFlag}
-			
+
 		</foreach>
 	</insert>
 
@@ -286,22 +338,27 @@
 			<if test="state != null">
 				state = #{state},
 			</if>
+			<if test="belong != null">
+				belong = #{belong},
+			</if>
 			<if test="createDate != null">
 				create_date = #{createDate},
 			</if>
-			<if test="createUser != null and createUser.id != null and '' != createUser.id">
+			<if
+				test="createUser != null and createUser.id != null and '' != createUser.id">
 				create_user = #{createUser.id},
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
-			<if test="updateUser != null and updateUser.id != null and '' != updateUser.id">
+			<if
+				test="updateUser != null and updateUser.id != null and '' != updateUser.id">
 				update_user = #{updateUser.id},
 			</if>
 		</trim>
 		WHERE id = #{id}
 	</update>
-	
+
 	<update id="saveByList">
 		<foreach collection="picList" item="entity" separator=";">
 			update timeline_pic
@@ -342,16 +399,21 @@
 				<if test="entity.state != null">
 					state = #{entity.state},
 				</if>
+				<if test="entity.belong != null">
+					belong = #{entity.belong},
+				</if>
 				<if test="entity.createDate != null">
 					create_date = #{entity.createDate},
 				</if>
-				<if test="entity.createUser != null and createUser.id != null and '' != createUser.id">
+				<if
+					test="entity.createUser != null and createUser.id != null and '' != createUser.id">
 					create_user = #{entity.createUser.id},
 				</if>
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},
 				</if>
-				<if test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
+				<if
+					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
 					update_user = #{entity.updateUser.id},
 				</if>
 			</trim>
@@ -360,13 +422,14 @@
 	</update>
 
 	<update id="delete" parameterType="String">
-		UPDATE timeline_pic SET 
-			del_flag = #{DEL_FLAG_DELETE}
+		UPDATE timeline_pic SET
+		del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 
 	<delete id="deleteByEntity" parameterType="timelinePic">
-		delete from timeline_pic where id = #{id}
+		delete from
+		timeline_pic where id = #{id}
 	</delete>
 
 </mapper>
