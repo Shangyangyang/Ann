@@ -131,6 +131,12 @@
 			<scope>test</scope>
 			<version>4.12</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.47</version>
+		</dependency>
 
 		<!-- esay poi -->
 		<dependency>
@@ -155,7 +161,8 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.8</version>
 		</dependency>
-
+		
+				
 	</dependencies>
 
 	<build>

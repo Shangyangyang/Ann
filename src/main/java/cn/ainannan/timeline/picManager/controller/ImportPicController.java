@@ -48,7 +48,15 @@ public class ImportPicController {
 		
 		List<TimelinePic> list = timelinePicService.getSimilarImgList(timelinePic);
 		
-		return ResultGen.genSuccessResult(list);
+		return ResultGen.genSuccessResult(list); 
+	}
+	
+	@RequestMapping("getTest")
+	public ResultObject getTest(TimelinePic timelinePic) {
+		
+		TimelinePic list = timelinePicService.get(timelinePic);
+		
+		return ResultGen.genSuccessResult(list); 
 	}
 	
 	@RequestMapping({ "", "list" })

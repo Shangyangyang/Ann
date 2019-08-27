@@ -70,7 +70,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	public List<TimelinePic> getSimilarImgList(TimelinePic timelinePic) {
 		TimelinePic thisPic = dao.get(timelinePic.getId());
 		
-		List<TimelinePic> list = dao.getFingerPrintList();
+		List<TimelinePic> list = dao.getFingerPrintList(timelinePic);
 		
 		List<TimelinePic> resultList = list.stream().filter(item -> 
 			StringUtils.getSimilarityRatio(thisPic.getFingerPrint(), item.getFingerPrint()) > 88F && !thisPic.getId().equals(item.getId()))
@@ -83,6 +83,10 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 		});
 		
 		return resultList;
+	}
+
+	public List<TimelinePic> getFingerPrintList(TimelinePic queryPic) {
+		return dao.getFingerPrintList(queryPic);
 	}
 	
 	

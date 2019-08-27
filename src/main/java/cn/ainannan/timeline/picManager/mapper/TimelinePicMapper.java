@@ -52,5 +52,5 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 
 	List<TimelinePic> findTempList();
 
-	List<TimelinePic> getFingerPrintList();
+	List<TimelinePic> getFingerPrintList(TimelinePic tp);
 }

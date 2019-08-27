@@ -43,6 +43,7 @@ public class TimelinePic extends BaseBean {
 	// 查询参数
 	private String shotDateL;	// Like查询拍摄日期
 	private Integer limitNum;	// 查询页数
+	private Integer limitCount;	// 查询条数
 	private String thumbnailFlag;	// 0：srcThumbnail为空
 	
 	private List<TimelinePic> picList;
@@ -249,6 +250,14 @@ public class TimelinePic extends BaseBean {
 
 	public void setBelong(String belong) {
 		this.belong = belong;
+	}
+
+	public Integer getLimitCount() {
+		return limitCount;
+	}
+
+	public void setLimitCount(Integer limitCount) {
+		this.limitCount = limitCount;
 	}
 
 	
