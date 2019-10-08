@@ -4,9 +4,11 @@ package cn.ainannan.timeline.picManager.mapper;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.ainannan.base.dao.BaseDao;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import cn.ainannan.timeline.picManager.bean.TimelineSimilar;
 
 @Repository
 public interface TimelinePicMapper extends BaseDao<TimelinePic> {
@@ -42,15 +44,17 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	 */
 	List<TimelinePic> findListFor1000(TimelinePic tp);
 
-	void saveByList(TimelinePic savePic);
+	List<TimelinePic> getFingerPrintList(TimelinePic tp);
+	List<TimelinePic> findTempList();
+	// 循环比对finger的列表
+	List<TimelinePic> findTempList2();
 	
 	/**
 	 * 批量插入，参数为list
 	 * @param list
 	 */
 	void insertByList(List<TimelinePic> list);
+	void saveByList(TimelinePic savePic);
 
-	List<TimelinePic> findTempList();
-
-	List<TimelinePic> getFingerPrintList(TimelinePic tp);
+	void updateByList(List<TimelinePic> list);
 }

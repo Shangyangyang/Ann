@@ -10,14 +10,14 @@
 		"filename",
 		a.path as "path",
 		a.src as "src",
-		a.src_thumbnail as
-		srcThumbnail,
+		a.src_thumbnail as srcThumbnail,
 		a.suffix as "suffix",
 		a.size as "size",
 		a.MD5 as "MD5",
 		a.finger_print as "fingerPrint",
 		a.shot_date as "shotDate",
 		a.similar_id as "similarId",
+		a.similar_status as "similarStatus",
 		a.state as "state",
 		a.belong as "belong",
 		a.create_date as "createDate",
@@ -43,6 +43,12 @@
 		</if>
 		<if test="state != null and state != ''">
 			and a.state = #{state}
+		</if>
+		<if test="similarId != null and similarId != ''">
+			and a.similar_Id = #{similarId}
+		</if>
+		<if test="similarStatus != null">
+			and a.similar_Status = #{similarStatus}
 		</if>
 		<if test="belong != null and belong != ''">
 			and a.belong = #{belong}
@@ -219,6 +225,17 @@
 		
 	</select>
 
+	<select id="findTempList2" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+			id,
+			short_id as "shortId",
+			finger_print as "fingerPrint"
+		FROM
+			timeline_pic
+		WHERE
+			del_flag = '0'
+	</select>
+
 	<select id="getFingerPrintList" parameterType="timelinePic" resultType="timelinePic">
 		SELECT
 			id,
@@ -251,11 +268,11 @@
 	<insert id="insert" parameterType="timelinePic">
 		insert into timeline_pic(id,
 		short_id, filename, path, src, src_thumbnail, suffix, size, MD5,
-		finger_print, shot_date, similar_id, state, belong, create_date, create_user,
+		finger_print, shot_date, similar_id, similar_status, state, belong, create_date, create_user,
 		update_date, update_user, del_flag)
 		value(#{id}, #{shortId},
 		#{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size},
-		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{state}, #{belong}
+		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{similarStatus}, #{state}, #{belong}
 		#{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},
 		#{DEL_FLAG_NORMAL})
 	</insert>
@@ -274,6 +291,7 @@
 		finger_print,
 		shot_date,
 		similar_id,
+		similar_status,
 		state,
 		belong,
 		create_date,
@@ -297,6 +315,7 @@
 			#{entity.fingerPrint},
 			#{entity.shotDate},
 			#{entity.similarId},
+			#{entity.similarStatus},
 			#{entity.state},
 			#{entity.belong},
 			#{entity.createDate},
@@ -343,6 +362,9 @@
 			</if>
 			<if test="similarId != null">
 				similar_id = #{similarId},
+			</if>
+			<if test="similarStatus != null">
+				similar_status = #{similarStatus},
 			</if>
 			<if test="state != null">
 				state = #{state},
@@ -404,6 +426,74 @@
 				</if>
 				<if test="entity.similarId != null">
 					similar_id = #{entity.similarId},
+				</if>
+				<if test="entity.similarStatus != null">
+					similar_status = #{entity.similarStatus},
+				</if>
+				<if test="entity.state != null">
+					state = #{entity.state},
+				</if>
+				<if test="entity.belong != null">
+					belong = #{entity.belong},
+				</if>
+				<if test="entity.createDate != null">
+					create_date = #{entity.createDate},
+				</if>
+				<if
+					test="entity.createUser != null and createUser.id != null and '' != createUser.id">
+					create_user = #{entity.createUser.id},
+				</if>
+				<if test="entity.updateDate != null">
+					update_date = #{entity.updateDate},
+				</if>
+				<if
+					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
+					update_user = #{entity.updateUser.id},
+				</if>
+			</trim>
+			where id = #{entity.id}
+		</foreach>
+	</update>
+	
+	<update id="updateByList">
+		<foreach collection="list" item="entity" separator=";">
+			update timeline_pic
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="entity.shortId != null">
+					short_id = #{entity.shortId},
+				</if>
+				<if test="entity.filename != null">
+					filename = #{entity.filename},
+				</if>
+				<if test="entity.path != null">
+					path = #{entity.path},
+				</if>
+				<if test="entity.src != null">
+					src = #{entity.src},
+				</if>
+				<if test="entity.srcThumbnail != null and srcThumbnail != ''">
+					src_thumbnail = #{entity.srcThumbnail},
+				</if>
+				<if test="entity.suffix != null">
+					suffix = #{entity.suffix},
+				</if>
+				<if test="entity.size != null">
+					size = #{entity.size},
+				</if>
+				<if test="entity.MD5 != null">
+					MD5 = #{entity.MD5},
+				</if>
+				<if test="entity.fingerPrint != null">
+					finger_print = #{entity.fingerPrint},
+				</if>
+				<if test="entity.shotDate != null">
+					shot_date = #{entity.shotDate},
+				</if>
+				<if test="entity.similarId != null">
+					similar_id = #{entity.similarId},
+				</if>
+				<if test="entity.similarStatus != null">
+					similar_status = #{entity.similarStatus},
 				</if>
 				<if test="entity.state != null">
 					state = #{entity.state},

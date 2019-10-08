@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS timeline;
 DROP TABLE IF EXISTS timeline_label;
 DROP TABLE IF EXISTS timeline_label_quick;
 DROP TABLE IF EXISTS timeline_pic;
+DROP TABLE IF EXISTS timeline_similar;
 
 
 
@@ -87,7 +88,7 @@ CREATE TABLE timeline_label_quick
 	-- 标签组
 	labels varchar(200) COMMENT '标签组',
 	-- 1雪碧2乐乐
-	typd varchar(4) COMMENT '1雪碧2乐乐',
+	belong varchar(4) COMMENT '1雪碧2乐乐',
 	-- 创建时间
 	create_date datetime COMMENT '创建时间',
 	-- 创建人
@@ -116,6 +117,8 @@ CREATE TABLE timeline_pic
 	path varchar(300) COMMENT '路径',
 	-- 访问路径
 	src varchar(300) COMMENT '访问路径',
+	-- 缩略图路径
+	src_thumbnail varchar(200) COMMENT '缩略图路径',
 	-- 后缀名
 	suffix varchar(10) COMMENT '后缀名',
 	-- 大小
@@ -143,6 +146,18 @@ CREATE TABLE timeline_pic
 	del_flag varchar(2) COMMENT '1. 已删除
 0. 未删除',
 	PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE timeline_similar
+(
+	-- picid
+	picid varchar(8) COMMENT 'picid',
+	-- 比对图片的id
+	otherid varchar(8) COMMENT '比对图片的id',
+	-- 相似度
+	similarity decimal(6,2) COMMENT '相似度',
+	UNIQUE (picid, otherid)
 );
 
 

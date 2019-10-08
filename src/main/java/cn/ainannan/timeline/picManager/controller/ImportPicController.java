@@ -26,6 +26,7 @@ import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.sys.utils.ImageUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import cn.ainannan.timeline.picManager.bean.TimelineSimilar;
 import cn.ainannan.timeline.picManager.service.ImportPicService;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
 
@@ -46,7 +47,7 @@ public class ImportPicController {
 	@RequestMapping("getSimilarImgList")
 	public ResultObject getSimilarImgList(TimelinePic timelinePic) {
 		
-		List<TimelinePic> list = timelinePicService.getSimilarImgList(timelinePic);
+		List<TimelineSimilar> list = null;
 		
 		return ResultGen.genSuccessResult(list); 
 	}

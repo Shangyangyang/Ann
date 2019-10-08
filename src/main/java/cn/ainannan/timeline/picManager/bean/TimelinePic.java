@@ -21,6 +21,7 @@ public class TimelinePic extends BaseBean {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date shotDate;
 	private String similarId;
+	private Integer similarStatus;
 	private String state;
 	private String belong; // 归属1雪碧2乐乐
 	
@@ -258,6 +259,14 @@ public class TimelinePic extends BaseBean {
 
 	public void setLimitCount(Integer limitCount) {
 		this.limitCount = limitCount;
+	}
+
+	public Integer getSimilarStatus() {
+		return similarStatus;
+	}
+
+	public void setSimilarStatus(Integer similarStatus) {
+		this.similarStatus = similarStatus;
 	}
 
 	

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="cn.ainannan.timeline.picManager.mapper.TimelineSimilarMapper">
+
+	<select id="findList" parameterType="timelineSimilar" resultType="timelineSimilar">
+		SELECT
+			a.picid,
+			a.otherid,
+			a.similarity,
+			p.src_thumbnail as "pic.srcThumbnail",
+			p.src as "pic.src",
+			o.src_thumbnail as "other.srcThumbnail",
+			o.src as "other.src"
+		FROM
+			(
+				SELECT
+					picid,
+					otherid,
+					similarity
+				FROM
+					timeline_similar
+				GROUP BY
+					picid,
+					otherid,
+					similarity
+				ORDER BY
+					picid,
+					similarity DESC
+			) a
+		LEFT JOIN timeline_pic p on p.short_ID = a.picid
+		LEFT JOIN timeline_pic o on o.short_ID = a.otherid
+	</select>
+
+	<insert id="insertSimilarByList" parameterType="java.util.List">
+		INSERT INTO timeline_similar(
+		picid,
+		otherid,
+		similarity
+		)
+		<foreach collection="list" item="entity"
+			separator=" union all ">
+			SELECT
+			#{entity.picid},
+			#{entity.otherid},
+			#{entity.similarity}
+		</foreach>
+	</insert>
+</mapper>
