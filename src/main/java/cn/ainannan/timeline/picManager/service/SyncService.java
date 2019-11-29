@@ -1,14 +1,17 @@
 package cn.ainannan.timeline.picManager.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.drew.imaging.jpeg.JpegProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 
+import cn.ainannan.commons.utils.ImageUtils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.bean.TimelineSimilar;
@@ -82,8 +85,42 @@ public class SyncService{
 		System.out.println("本次共发现： " + count);
 
 		picMapper.updateByList(tpList);
+	}
+	
+	
+	@Scheduled(cron = "0 */1 * * * ?")
+	public void computeGeoXY() {
+		// 调取整个表，循环判断，并存储
 		
+		TimelinePic query = new TimelinePic();
+		query.setGeoIsNull(0);
 		
+		PageHelper.startPage(1, 150);
+		List<TimelinePic> picList = picMapper.findList(query);
 		
+		if(picList == null || picList.size() == 0) return;
+		
+		List<TimelinePic> tpList = Lists.newArrayList();
+		
+		for (TimelinePic item : picList) {
+			try {
+				String [] strs = ImageUtils.getGeoxy(item.getPath() + item.getFilename());
+				
+				if(StringUtils.isNotBlank(strs[0]) && StringUtils.isNotBlank(strs[1])) {
+					TimelinePic tp = new TimelinePic();
+					
+					tp.setId(item.getId());
+					tp.setGeox(strs[0]);
+					tp.setGeoy(strs[1]);
+					
+					tpList.add(tp);
+				}
+				
+			} catch (JpegProcessingException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		picMapper.updateByList(tpList);
 	}
 }

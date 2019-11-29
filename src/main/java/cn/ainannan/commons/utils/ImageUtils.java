@@ -1,6 +1,7 @@
 package cn.ainannan.commons.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import org.apache.sanselan.common.IImageMetadata;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
@@ -59,6 +62,33 @@ public class ImageUtils {
 	}
 	
 	/**
+	 * 返回图片的经纬度
+	 * @param filename
+	 * @return x为纬度，y为经度
+	 * @throws JpegProcessingException
+	 * @throws IOException
+	 */
+	public static String[] getGeoxy(String filename) throws JpegProcessingException, IOException {
+		String [] strs = new String [2];
+		File jpegFile = new File(filename);
+		Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
+		for (Directory directory : metadata.getDirectories()) {
+			for (Tag tag : directory.getTags()) {
+				// y
+				if ("GPS Longitude".equals(tag.getTagName())) {
+					strs[1] = changeXY(tag.getDescription());
+				}
+				// x
+				if ("GPS Latitude".equals(tag.getTagName())) {
+					strs[0] = changeXY(tag.getDescription());
+				}
+			}
+		}
+		
+		return strs;
+	}
+	
+	/**
 	 * 读取照片里面的信息
 	 */
 	public static void printImageTags(File file) throws ImageProcessingException, Exception {
@@ -97,6 +127,45 @@ public class ImageUtils {
 		Double miao = Double.parseDouble(point.substring(point.indexOf("'") + 1, point.indexOf("\"")).trim());
 		Double duStr = du + fen / 60 + miao / 60 / 60;
 		return duStr.toString();
+	}
+	
+	/**
+	 * 经纬度格式 转换为 度分秒格式 ,如果需要的话可以调用该方法进行转换
+	 * 
+	 * 第二种写法
+	 * 
+	 * @param point
+	 *            坐标点
+	 * @return
+	 */
+	public static String changeXY(String jwd) {
+		
+		if (jwd != null && !"".equals(jwd.trim()) && (jwd.contains("°"))) {// 如果不为空并且存在度单位
+			// 计算前进行数据处理
+			jwd = jwd.replace("E", "").replace("N", "").replace(":", "").replace("：", "").replace(" ", "");
+			double d = 0, m = 0, s = 0;
+			d = Double.parseDouble(jwd.split("°")[0]);
+			// 不同单位的分，可扩展
+			if (jwd.contains("′")) {// 正常的′
+				m = Double.parseDouble(jwd.split("°")[1].split("′")[0]);
+			} else if (jwd.contains("'")) {// 特殊的'
+				m = Double.parseDouble(jwd.split("°")[1].split("'")[0]);
+			}
+			// 不同单位的秒，可扩展
+			if (jwd.contains("″")) {// 正常的″
+				// 有时候没有分 如：112°10.25″
+				s = jwd.contains("′") ? Double.parseDouble(jwd.split("′")[1].split("″")[0])
+						: Double.parseDouble(jwd.split("°")[1].split("″")[0]);
+			} else if (jwd.contains("''")) {// 特殊的''
+				// 有时候没有分 如：112°10.25''
+				s = jwd.contains("'") ? Double.parseDouble(jwd.split("'")[1].split("''")[0])
+						: Double.parseDouble(jwd.split("°")[1].split("''")[0]);
+			} else if (jwd.contains("\"")) {// 特殊的''
+				s = Double.parseDouble(jwd.split("'")[1].split("\"")[0]);
+			}
+			jwd = String.valueOf(d + m / 60 + s / 60 / 60);// 计算并转换为string
+		}
+		return jwd;
 	}
 	
 }

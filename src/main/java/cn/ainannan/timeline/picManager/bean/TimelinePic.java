@@ -17,7 +17,7 @@ public class TimelinePic extends BaseBean {
 	private Long size;
 	private String MD5;
 	private String fingerPrint;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date shotDate;
 	private String similarId;
@@ -25,31 +25,35 @@ public class TimelinePic extends BaseBean {
 	private String state;
 	private String belong; // 归属1雪碧2乐乐
 	
+	private String geox;
+	private String geoy;
+
 	// 三个统计字段
-	private String lastTotal;	// 最新总数
+	private String lastTotal; // 最新总数
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date lastShotDate;	// 最新拍摄日期
+	private Date lastShotDate; // 最新拍摄日期
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date lastImportDate;	// 最近导入日期
-	
-	private String preSrc;	// 查询参数，以src进行模糊查询
-	private String timelineFlag;	// 不为空则进行与timeline表的exists查询
-	
+	private Date lastImportDate; // 最近导入日期
+
+	private String preSrc; // 查询参数，以src进行模糊查询
+	private String timelineFlag; // 不为空则进行与timeline表的exists查询
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date beginShotDate;	// 起始拍摄日期
-	
+	private Date beginShotDate; // 起始拍摄日期
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date endShotDate;	// 结束拍摄日期
-	
+	private Date endShotDate; // 结束拍摄日期
+
 	// 查询参数
-	private String shotDateL;	// Like查询拍摄日期
-	private Integer limitNum;	// 查询页数
-	private Integer limitCount;	// 查询条数
-	private String thumbnailFlag;	// 0：srcThumbnail为空
-	
+	private String shotDateL; // Like查询拍摄日期
+	private Integer limitNum; // 查询页数
+	private Integer limitCount; // 查询条数
+	private String thumbnailFlag; // 0：srcThumbnail为空
+
+	private Integer geoIsNull; // geo是否为空1是0否
+
 	private List<TimelinePic> picList;
-	
-	
+
 	public String getShortId() {
 		return shortId;
 	}
@@ -269,5 +273,28 @@ public class TimelinePic extends BaseBean {
 		this.similarStatus = similarStatus;
 	}
 
-	
+	public Integer getGeoIsNull() {
+		return geoIsNull;
+	}
+
+	public void setGeoIsNull(Integer geoIsNull) {
+		this.geoIsNull = geoIsNull;
+	}
+
+	public String getGeox() {
+		return geox;
+	}
+
+	public void setGeox(String geox) {
+		this.geox = geox;
+	}
+
+	public String getGeoy() {
+		return geoy;
+	}
+
+	public void setGeoy(String geoy) {
+		this.geoy = geoy;
+	}
+
 }

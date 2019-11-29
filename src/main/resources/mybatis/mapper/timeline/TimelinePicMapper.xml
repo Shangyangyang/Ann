@@ -24,6 +24,8 @@
 		a.create_user as "createUser.id",
 		a.update_date as "updateDate",
 		a.update_user as "updateUser.id",
+		a.geox,
+		a.geoy,
 		a.del_flag as "delFlag"
 	</sql>
 
@@ -74,6 +76,9 @@
 		<if
 			test="thumbnailFlag != null and thumbnailFlag != '' and thumbnailFlag == 0">
 			and src_thumbnail is null
+		</if>
+		<if test="geoIsNull != null and geoIsNull != '' and geoIsNull == 0">
+			and (a.geox isnull or a.geox = '' or a.geoy isnull or a.geoy = '')
 		</if>
 	</sql>
 
@@ -269,12 +274,12 @@
 		insert into timeline_pic(id,
 		short_id, filename, path, src, src_thumbnail, suffix, size, MD5,
 		finger_print, shot_date, similar_id, similar_status, state, belong, create_date, create_user,
-		update_date, update_user, del_flag)
+		update_date, update_user, del_flag,geox,geoy)
 		value(#{id}, #{shortId},
 		#{filename}, #{path}, #{src}, #{srcThumbnail}, #{suffix}, #{size},
 		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId}, #{similarStatus}, #{state}, #{belong}
 		#{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},
-		#{DEL_FLAG_NORMAL})
+		#{DEL_FLAG_NORMAL}, #{geox}, #{geoy})
 	</insert>
 
 	<insert id="insertByList" parameterType="java.util.List">
@@ -298,6 +303,8 @@
 		create_user,
 		update_date,
 		update_user,
+		geox,
+		geoy,
 		del_flag
 		)
 		<foreach collection="list" item="entity"
@@ -321,7 +328,7 @@
 			#{entity.createDate},
 			#{entity.createUser.id},
 			#{entity.updateDate},
-			#{entity.updateUser.id},
+			#{entity.updateUser.id}, #{geox}, #{geoy},
 			#{entity.delFlag}
 
 		</foreach>
@@ -371,6 +378,12 @@
 			</if>
 			<if test="belong != null">
 				belong = #{belong},
+			</if>
+			<if test="geox != null and geox != ''">
+				geox = #{geox},
+			</if>
+			<if test="geoy != null and geoy != ''">
+				geoy = #{geoy},
 			</if>
 			<if test="createDate != null">
 				create_date = #{createDate},
@@ -446,6 +459,12 @@
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},
 				</if>
+				<if test="entity.geox != null and entity.geox != ''">
+					geox = #{entity.geox},
+				</if>
+				<if test="entity.geoy != null and entity.geoy != ''">
+					geoy = #{entity.geoy},
+				</if>
 				<if
 					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
 					update_user = #{entity.updateUser.id},
@@ -510,6 +529,12 @@
 				</if>
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},
+				</if>
+				<if test="entity.geox != null and entity.geox != ''">
+					geox = #{entity.geox},
+				</if>
+				<if test="entity.geoy != null and entity.geoy != ''">
+					geoy = #{entity.geoy},
 				</if>
 				<if
 					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
