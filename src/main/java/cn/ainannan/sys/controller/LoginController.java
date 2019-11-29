@@ -62,6 +62,35 @@ public class LoginController {
 		return writeSession(sysUser, session, false);
 	}
 
+	@RequestMapping("m/login")
+	public ResultObject checkUserNameM(HttpSession session, HttpServletRequest request, Model model) {
+
+		String userName = request.getParameter("userName");
+		if (StringUtils.isEmpty(userName)) {
+			return ResultGen.genFailResult("请填写用户名");
+		}
+
+		String password = request.getParameter("password");
+		if (StringUtils.isEmpty(password)) {
+			return ResultGen.genFailResult("请填写密码");
+		}
+
+		// 查询并验证用户密码
+		User sysUser = getUserByUserName(userName);
+		if (sysUser == null) {
+			return ResultGen.genFailResult("用户名或密码错误");
+		}
+
+		if (!PassUtil.matches(password, sysUser.getPassword())) {
+			return ResultGen.genFailResult("用户名或密码错误");
+		}
+		
+		// 获取ip
+		sysUser.setIp(this.getIpAddr(request));
+
+		return writeSession(sysUser, session, true);
+	}
+	
 	/**
 	 * 登录成功后的写缓存操作
 	 * 
@@ -86,7 +115,9 @@ public class LoginController {
 		UserUtil.setUserSession(sysUser);
 
 		if (isApp) {
-			return ResultGen.appResullt(true, 0, "登录成功", sysUser);
+			// return ResultGen.appResullt(true, 0, "登录成功", sysUser);
+			System.out.println("sessionid:"+session.getId());
+			return ResultGen.genSuccessResult(sysUser).setData2(session.getId());
 		} else {
 			return ResultGen.genSuccessResult(sysUser);
 		}

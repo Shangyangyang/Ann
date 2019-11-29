@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import cn.ainannan.sys.bean.User;
+import cn.ainannan.sys.utils.UserUtil;
 
 
 @Component
@@ -47,15 +48,15 @@ public abstract class BaseBean {
 		this.setId(UUID.randomUUID().toString().replace("-", ""));
 		Date d = new Date();
 		this.setCreateDate(d);
-		this.setCreateUser(new User("10000000000000000000000000000000"));
+		this.setCreateUser(UserUtil.getUser());
 		this.setUpdateDate(d);
-		this.setUpdateUser(new User("10000000000000000000000000000000"));
+		this.setUpdateUser(UserUtil.getUser());
 		this.setDelFlag(DEL_FLAG_NORMAL);
 	}
 
 	public void preUpdate() {
 		this.setUpdateDate(new Date());
-		this.setUpdateUser(new User("10000000000000000000000000000000"));
+		this.setUpdateUser(UserUtil.getUser());
 	}
 	
 	public boolean isNewRecord() {
