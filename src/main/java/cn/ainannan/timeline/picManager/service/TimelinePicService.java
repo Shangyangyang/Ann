@@ -53,6 +53,15 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	public List<TimelinePic> findListFor1000(TimelinePic tp) {
 		return dao.findListFor1000(tp);
 	}
+	
+	/**
+	 * 获取相似照片的集合
+	 * @param tp
+	 * @return
+	 */
+	public List<TimelinePic> findSimilarImgList(TimelinePic tp) {
+		return dao.findSimilarImgList(tp);
+	}
 
 	/**
 	 * 以list的形式更新数据

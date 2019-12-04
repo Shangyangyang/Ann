@@ -15,6 +15,7 @@ public class TimelineSimilar extends BaseBean {
 	private String picid;		// 图片id
 	private String otherid;		// 另一个图片的id
 	private Float similarity;	// 相似度
+	private Integer type;		// 类别1指纹2直方图
 
 	public String getPicid() {
 		return picid;
@@ -42,6 +43,14 @@ public class TimelineSimilar extends BaseBean {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 }

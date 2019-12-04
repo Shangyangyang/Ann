@@ -25,6 +25,12 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	List<TimelinePic> getEqualMd5();
 	
 	/**
+	 * 获取相似照片的集合
+	 * @return
+	 */
+	List<TimelinePic> findSimilarImgList(TimelinePic tp);
+	
+	/**
 	 * 获取文件指纹相同的数据
 	 * @return
 	 */

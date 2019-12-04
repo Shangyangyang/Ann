@@ -3,6 +3,7 @@ package cn.ainannan.timeline.picManager.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class SyncService{
 	
 	private static List<TimelinePic> picList2 = null;
 	
-	// @Scheduled(cron = "0 */3 * * * ?")
+	// @Scheduled(cron = "*/10 * * * * ?")
 	public void executedSimilarityCompute() {
 		// 调取整个表，循环判断，并存储
 		
@@ -57,14 +58,16 @@ public class SyncService{
 						&& p1.getFingerPrint() != null 
 						&& p2.getFingerPrint() != null) {
 					float similar = StringUtils.getSimilarityRatio(p1.getFingerPrint(), p2.getFingerPrint());
-					
-					System.out.println(similar);
-					
+										
 					if(similar >= SIMILAR_MIN_SIZE) {
+
+						System.out.println("超过90的： " + similar);
+						
 						ts = new TimelineSimilar();
 						ts.setPicid(p1.getShortId());
 						ts.setOtherid(p2.getShortId());
 						ts.setSimilarity(similar);
+						ts.setType(1);
 						
 						tsList.add(ts);
 					}
@@ -79,6 +82,8 @@ public class SyncService{
 			// 执行批量保存
 			if(tsList.size() > 0) similarMapper.insertSimilarByList(tsList);
 			count += tsList.size();
+			
+			tsList = Lists.newArrayList();
 		}
 		
 
@@ -88,12 +93,12 @@ public class SyncService{
 	}
 	
 	
-	@Scheduled(cron = "0 */1 * * * ?")
+	//@Scheduled(cron = "*/20 * * * * ?")
 	public void computeGeoXY() {
 		// 调取整个表，循环判断，并存储
 		
 		TimelinePic query = new TimelinePic();
-		query.setGeoIsNull(0);
+		query.setGeoIsNull("0");
 		
 		PageHelper.startPage(1, 150);
 		List<TimelinePic> picList = picMapper.findList(query);
@@ -103,24 +108,33 @@ public class SyncService{
 		List<TimelinePic> tpList = Lists.newArrayList();
 		
 		for (TimelinePic item : picList) {
+			// gif跳过
+			if(item.getFilename().contains("gif")) continue;
+			
 			try {
 				String [] strs = ImageUtils.getGeoxy(item.getPath() + item.getFilename());
 				
-				if(StringUtils.isNotBlank(strs[0]) && StringUtils.isNotBlank(strs[1])) {
-					TimelinePic tp = new TimelinePic();
+				TimelinePic tp = new TimelinePic();
+				
+				tp.setId(item.getId());
+				
+				if(strs != null && StringUtils.isNotBlank(strs[0]) && StringUtils.isNotBlank(strs[1])) {
 					
-					tp.setId(item.getId());
 					tp.setGeox(strs[0]);
 					tp.setGeoy(strs[1]);
 					
-					tpList.add(tp);
+				} else {
+					tp.setGeox("0");
+					tp.setGeoy("0");
 				}
+				
+				tpList.add(tp);
 				
 			} catch (JpegProcessingException | IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		picMapper.updateByList(tpList);
+		if(tpList.size() > 0) picMapper.updateByList(tpList);
 	}
 }

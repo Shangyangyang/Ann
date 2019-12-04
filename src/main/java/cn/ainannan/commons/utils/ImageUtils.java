@@ -71,7 +71,16 @@ public class ImageUtils {
 	public static String[] getGeoxy(String filename) throws JpegProcessingException, IOException {
 		String [] strs = new String [2];
 		File jpegFile = new File(filename);
-		Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
+		Metadata metadata = null;
+		try {
+			metadata = JpegMetadataReader.readMetadata(jpegFile);
+		} catch (Exception e) {
+			System.out.println("出错的图片");
+			System.out.println(filename);
+		}
+		
+		if(metadata == null )return null;
+		
 		for (Directory directory : metadata.getDirectories()) {
 			for (Tag tag : directory.getTags()) {
 				// y

@@ -100,6 +100,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 					tp.setShotDate(this.executeShotDate(sourceFile.getName()));
 				}
 				
+				tp.setSimilarStatus(0);
 				tp.preInsert();
 				tpList.add(tp);
 				

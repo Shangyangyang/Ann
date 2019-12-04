@@ -78,7 +78,26 @@
 			and src_thumbnail is null
 		</if>
 		<if test="geoIsNull != null and geoIsNull != '' and geoIsNull == 0">
-			and (a.geox isnull or a.geox = '' or a.geoy isnull or a.geoy = '')
+			and (a.geox is null or a.geox = '' or a.geoy is null or a.geoy = '')
+		</if>
+		<if test="similarIsNotEmpty != null and similarIsNotEmpty != ''">
+			<if test="similarIsNotEmpty == 1">
+				and EXISTS (
+					SELECT
+						c.picid
+					FROM
+						(
+							SELECT
+								picid
+							FROM
+								timeline_similar
+							GROUP BY
+								picid
+						) c
+					WHERE
+						a.short_ID = c.picid
+				)
+			</if>
 		</if>
 	</sql>
 
@@ -171,6 +190,28 @@
 		)
 		ORDER BY
 		a.create_date DESC
+	</select>
+
+	<select id="findSimilarImgList" resultType="timelinePic">
+		SELECT
+			a.short_ID,
+			a.path,
+			a.filename,
+			a.src_Thumbnail as "srcThumbnail",
+			s.similarity
+		FROM
+			timeline_pic a
+		LEFT JOIN timeline_similar s ON s.picid = #{shortId}
+		AND s.otherid = a.short_ID and s.type = #{similarType}
+		WHERE
+			a.short_ID IN (
+				SELECT
+					a.otherid
+				FROM
+					timeline_similar a
+				WHERE
+					a.picid = #{shortId}
+			)
 	</select>
 
 	<select id="getLastStatus" resultType="timelinePic">

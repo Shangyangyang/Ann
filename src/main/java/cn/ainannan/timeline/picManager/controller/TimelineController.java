@@ -82,6 +82,17 @@ public class TimelineController {
 		Timeline dest = timelineService.get(timeline);
 		return ResultGen.genSuccessResult(dest);
 	}
+	
+
+	/**
+	 * 获取相似照片的集合
+	 * @param tp
+	 * @return
+	 */
+	@RequestMapping("findSimilarImgList")
+	public ResultObject findSimilarImgList(TimelinePic tp, HttpServletRequest request) {
+		return ResultGen.genSuccessResult(tpService.findSimilarImgList(tp));
+	}
 
 	/**
 	 * 获取时光轴已筛选未筛选的

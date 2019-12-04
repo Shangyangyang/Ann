@@ -24,7 +24,7 @@ public class TimelinePic extends BaseBean {
 	private Integer similarStatus;
 	private String state;
 	private String belong; // 归属1雪碧2乐乐
-	
+
 	private String geox;
 	private String geoy;
 
@@ -49,8 +49,9 @@ public class TimelinePic extends BaseBean {
 	private Integer limitNum; // 查询页数
 	private Integer limitCount; // 查询条数
 	private String thumbnailFlag; // 0：srcThumbnail为空
-
-	private Integer geoIsNull; // geo是否为空1是0否
+	private Integer similarType;	// 1指纹2直方图
+	private String similarIsNotEmpty;	// 1是
+	private String geoIsNull; // geo是否为空1是0否
 
 	private List<TimelinePic> picList;
 
@@ -273,14 +274,6 @@ public class TimelinePic extends BaseBean {
 		this.similarStatus = similarStatus;
 	}
 
-	public Integer getGeoIsNull() {
-		return geoIsNull;
-	}
-
-	public void setGeoIsNull(Integer geoIsNull) {
-		this.geoIsNull = geoIsNull;
-	}
-
 	public String getGeox() {
 		return geox;
 	}
@@ -295,6 +288,30 @@ public class TimelinePic extends BaseBean {
 
 	public void setGeoy(String geoy) {
 		this.geoy = geoy;
+	}
+
+	public String getGeoIsNull() {
+		return geoIsNull;
+	}
+
+	public void setGeoIsNull(String geoIsNull) {
+		this.geoIsNull = geoIsNull;
+	}
+
+	public Integer getSimilarType() {
+		return similarType;
+	}
+
+	public void setSimilarType(Integer similarType) {
+		this.similarType = similarType;
+	}
+
+	public String getSimilarIsNotEmpty() {
+		return similarIsNotEmpty;
+	}
+
+	public void setSimilarIsNotEmpty(String similarIsNotEmpty) {
+		this.similarIsNotEmpty = similarIsNotEmpty;
 	}
 
 }

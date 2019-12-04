@@ -36,14 +36,16 @@
 		INSERT INTO timeline_similar(
 		picid,
 		otherid,
-		similarity
+		similarity,
+		type
 		)
 		<foreach collection="list" item="entity"
 			separator=" union all ">
 			SELECT
 			#{entity.picid},
 			#{entity.otherid},
-			#{entity.similarity}
+			#{entity.similarity},
+			#{entity.type}
 		</foreach>
 	</insert>
 </mapper>
