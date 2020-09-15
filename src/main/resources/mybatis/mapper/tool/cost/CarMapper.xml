@@ -51,6 +51,26 @@
 		order by a.input_date desc
 	</select>
 	
+	<select id="findColumnData" resultType="Tongji">
+		SELECT
+			a.y,
+			sum(case when a.type = '1' then a.money else 0 end) as 'a',
+			sum(case when a.type = '2' then a.money else 0 end) as 'b',
+			sum(case when a.type = '3' then a.money else 0 end) as 'c',
+			sum(case when a.type = '4' then a.money else 0 end) as 'd',
+			sum(case when a.type = '5' then a.money else 0 end) as 'e'
+		FROM
+			(
+				SELECT
+					LEFT (input_date, 4) AS 'y',
+					money,
+					type
+				FROM
+					cost_car
+			) a
+		GROUP BY a.y
+	</select>
+	
 	
 	<insert id="insert" parameterType="user">
 		insert into cost_car(id,

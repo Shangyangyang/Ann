@@ -18,6 +18,17 @@ public class ResultObject {
     private Object data3;
     private Object data4;
 
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public ResultObject setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public ResultObject() {
         super();
     }

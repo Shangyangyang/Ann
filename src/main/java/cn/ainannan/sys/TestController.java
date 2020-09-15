@@ -1,65 +1,83 @@
 package cn.ainannan.sys;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.format.DateTimeFormat;
-import com.alibaba.excel.annotation.format.NumberFormat;
-import com.alibaba.excel.annotation.write.style.ColumnWidth;
-import com.alibaba.excel.annotation.write.style.ContentRowHeight;
-import com.alibaba.excel.annotation.write.style.HeadRowHeight;
-import com.alibaba.excel.util.FileUtils;
-import com.alibaba.excel.write.merge.LoopMergeStrategy;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.WriteTable;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+
 import com.google.common.collect.Lists;
 
 import cn.ainannan.AnnApplication;
 import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
-import cn.ainannan.sys.test.DemoData;
-import cn.ainannan.sys.test.TestFileUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 import cn.ainannan.timeline.picManager.service.SyncService;
+import cn.ainannan.tool.dj.bean.Dj;
+import cn.ainannan.tool.dj.bean.Song;
+import cn.ainannan.tool.dj.service.DjService;
 
 @RestController
 @RequestMapping("test")
-@RunWith(SpringJUnit4ClassRunner.class)
+// @RunWith(SpringJUnit4ClassRunner.class)
+// junit5 改用以下方式
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = AnnApplication.class, 
 				webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // 指定spring-boot的启动类
 public class TestController {
 	@Autowired
 	private TimelinePicMapper picDao;
-	
+
 	@Autowired
 	private SyncService syncService;
+	@Autowired
+	private DjService djService;
 	
-/*	@Test()
-	public void addPic() {
-		syncService.executedSimilarityCompute();
+
+	@RequestMapping("index")
+	public String index(){
+		return "hello ann";
 	}
-*/	
+
+	@RequestMapping("abc")
+	public String abc(){
+		return "hello abc";
+	}
+
+	@RequestMapping("ccc")
+	public String ccc(){
+		return "hello ccc";
+	}
+
+	/**
+	 * mybatis 查询子集合的试验
+	 */
+	@Test()
+	public void method2() {
+		List<Dj> djList = djService.listWithChildren(new Dj());
+		
+		for (Dj dj : djList) {
+			System.out.println("=============================");
+			System.out.println(dj.getName());
+			System.out.println(dj.getId());
+			
+			for (Song song : dj.getSongList()) {
+				System.out.println("-----------------------");
+				System.out.println(song.getId());
+				System.out.println(song.getName());
+				System.out.println(song.getSinger());
+				System.out.println("-----------------------");
+			}
+			System.out.println("=============================");
+		}
+	}
+	
 	public void method() {
 		List<TimelinePic> picList = picDao.findTempList();
 		

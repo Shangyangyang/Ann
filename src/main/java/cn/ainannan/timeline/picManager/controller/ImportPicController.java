@@ -36,6 +36,8 @@ public class ImportPicController {
 
 	@Value("${myPic-basePath}")
 	private String basePath;
+	@Value("${myPanfu}")
+	private String basePanfu;
 	
 	@Autowired
 	private TimelinePicService timelinePicService;
@@ -311,7 +313,7 @@ public class ImportPicController {
 				System.out.println(totalNum--);
 				// 组装源地址与目标地址
 				String sourcePath = t.getPath() + t.getFilename();
-				String targetPath = basePath + Constant.IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
+				String targetPath = basePanfu + basePath + Constant.IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
 				String targetPath2 = Constant.IMG_THUMBNAIL_ROOT_SRC + t.getSrc();
 				
 				// 判断目标在不在，不在的话先创建
@@ -456,7 +458,7 @@ public class ImportPicController {
 		List<String> fileList = Lists.newArrayList();
 		
 		for (int i = 0; i < Constant.picFiles.length; i++) {
-			FileUtils.addList(basePath + Constant.picFiles[i], fileList);
+			FileUtils.addList(basePanfu + basePath + Constant.picFiles[i], fileList);
 		}
 		
 		return fileList;

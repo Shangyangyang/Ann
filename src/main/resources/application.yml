@@ -1,6 +1,8 @@
+server:
+  port: 8001
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -19,7 +21,8 @@ spring:
     store-type: redis
     redis:
       flush-mode: immediate
-      
+    #timeout: 7200
+
   redis:
     host: localhost
     port: 6379
@@ -37,8 +40,9 @@ logging:
     org.springframework.web: info
     org.mybatis: debug
 
-myPic-basePath: H:\尚羊羊\图片\个人相册\
-ecxel-basePath: H:\尚羊羊\个人文档\excel\
+myPanfu: 'H:'
+myPic-basePath: '\尚羊羊\图片\个人相册\'
+ecxel-basePath: '\尚羊羊\个人文档\excel\'
 
 #spring.resources.static-locations: file:H:\尚羊羊\图片\个人相册\
 #spring.mvc.static-path-pattern: /**

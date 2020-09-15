@@ -5,14 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import cn.ainannan.base.result.ResultObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +19,12 @@ import com.google.common.collect.Lists;
 
 /**
  * websocket
- * 
+ *
  * @author hufx
  * @version 1.0
  * @date 2017年6月2日上午10:27:40
  */
-@ServerEndpoint(value = "/websocket/{fuserid}")
+@ServerEndpoint(value = "/websocket/{fuserid}", encoders = { ServerEncoder.class })
 @Component
 public class WebSocketUtil {
 	private static Logger log = LoggerFactory.getLogger(WebSocketUtil.class);
@@ -95,7 +92,8 @@ public class WebSocketUtil {
 				return;
 			}
 			System.out.println("来自客户端的消息:" + message);
-			this.sendMessage("来自服务端的消息: <已读> " + message);
+			if("heart beat".equals(message)) this.sendMessage("heart beat");
+			// this.sendMessage("来自服务端的消息: <已读> " + message);
 
 		} catch (IOException e) {
 			System.out.println("发送消息异常！");
@@ -114,7 +112,7 @@ public class WebSocketUtil {
 
 	/**
 	 * 获取所有的连接列表
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<String> getFuseridList() {
@@ -139,7 +137,7 @@ public class WebSocketUtil {
 
 	/**
 	 * 根据当前登录用户ID获取他的websocket对象
-	 * 
+	 *
 	 * @param fuserid
 	 *            用户ID
 	 * @return MyWebSocket
@@ -153,7 +151,7 @@ public class WebSocketUtil {
 		Iterator<WebSocketUtil> iterator = webSocketSet.iterator();
 		while (iterator.hasNext()) {
 			WebSocketUtil _this = iterator.next();
-			if (_this.fuserid == fuserid) {
+			if (fuserid.equals(_this.fuserid)) {
 				return _this;
 			}
 		}
@@ -162,7 +160,7 @@ public class WebSocketUtil {
 
 	/**
 	 * 给当前用户发消息（单条）
-	 * 
+	 *
 	 * @param message
 	 *            消息
 	 * @throws IOException
@@ -175,9 +173,29 @@ public class WebSocketUtil {
 		// this.session.getAsyncRemote().sendText(message);
 	}
 
+	public void sendObj(ResultObject message) throws IOException, EncodeException {
+		this.session.getBasicRemote().sendObject(message);
+	}
+
+	public static void sendObj(String fuserid, ResultObject message) {
+		try {
+			WebSocketUtil _this = getcurrentWenSocket(fuserid);
+			if (_this == null) {
+				return;
+			}
+
+			_this.sendObj(message);
+		} catch (IOException e) {
+			System.out.println("发送消息异常！");
+		} catch (EncodeException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	/**
 	 * 给指定用户发指定消息（单人单条）
-	 * 
+	 *
 	 * @param fuserid
 	 *            用户ID
 	 * @param message
@@ -202,7 +220,7 @@ public class WebSocketUtil {
 
 	/**
 	 * 给指定人群发消息（单条）
-	 * 
+	 *
 	 * @param fuseridList
 	 *            用户ID列表
 	 * @param message
@@ -230,7 +248,7 @@ public class WebSocketUtil {
 
 	/**
 	 * 给所有在线用户发消息（单条）
-	 * 
+	 *
 	 * @param message
 	 *            消息
 	 * @throws IOException

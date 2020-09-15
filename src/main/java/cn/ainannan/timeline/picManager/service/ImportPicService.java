@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,10 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 
 	@Value("${myPic-basePath}")
 	private String BASE_PATH;
+	@Value("${myPanfu}")
+	private String BASE_PANFU;
 	
-	private static final int MAX_ADD_PIC_NUM = 50;
+	private static final int MAX_ADD_PIC_NUM = 120;
 	
 	public String addPic() throws IOException {
 		int addNum = 0; // 新增图片计数器
@@ -71,9 +72,9 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			}
 			
 			// 生成目标文件路径
-			String rootPath = sourceStr.replace(BASE_PATH + Constant.TIMELINE_PIC_WEISHAIXUAN, "");
-			String targetPath = BASE_PATH + prePath + rootPath;
-			String targetThumbnailPath = BASE_PATH + Constant.IMG_THUMBNAIL_ROOT_SRC + prePath + rootPath;
+			String rootPath = sourceStr.replace(BASE_PANFU + BASE_PATH + Constant.TIMELINE_PIC_WEISHAIXUAN, "");
+			String targetPath = BASE_PANFU + BASE_PATH + prePath + rootPath;
+			String targetThumbnailPath = BASE_PANFU + BASE_PATH + Constant.IMG_THUMBNAIL_ROOT_SRC + prePath + rootPath;
 			
 			File targetFile = new File(targetPath);
 			// 如果文件已经存在 ，则跳过
@@ -147,7 +148,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	 */
 	private List<String> getFileList() {
 		List<String> fileList = Lists.newArrayList();
-		FileUtils.addList(BASE_PATH + Constant.TIMELINE_PIC_WEISHAIXUAN, fileList);
+		FileUtils.addList(BASE_PANFU + BASE_PATH + Constant.TIMELINE_PIC_WEISHAIXUAN, fileList);
 		return fileList;
 	}
 
@@ -347,7 +348,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		tp.setShortId(UUIDUtils.generateShortUuid());
 		tp.setFilename(FilenameUtils.getName(filePath));
 		tp.setPath(FilenameUtils.getFullPath(filePath));
-		tp.setSrc(filePath.replace(BASE_PATH, ""));
+		tp.setSrc(filePath.replace(BASE_PANFU + BASE_PATH, ""));
 		tp.setSuffix(FilenameUtils.getExtension(filePath));
 		tp.setSize(file.length());
 		tp.setMD5(MD5Utils.getFileMD5(file));

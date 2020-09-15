@@ -38,6 +38,8 @@ public class CostLijinController {
 	private CostLijinService costLijinService;
 	@Value("${ecxel-basePath}")
 	private String basePath;
+    @Value("${myPanfu}")
+    private String basePanfu;
 	
 	@RequestMapping({ "", "list" })
 	public ResultObject list(CostLijin costLijin, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
@@ -107,10 +109,10 @@ public class CostLijinController {
         //生成本地
         String filePath = DateUtil.getStrCurrDate("yyyy-MM");
         String fileName = "礼金-" + DateUtil.getStrCurrDate("yyyyMMddHHmmss") + ".xlsx";
-        String baseFileName = basePath + filePath + File.separatorChar + fileName;
+        String baseFileName = basePanfu + basePath + filePath + File.separatorChar + fileName;
         
         File f = new File(baseFileName);
-        File path = new File(basePath + filePath);
+        File path = new File(basePanfu + basePath + filePath);
         if(!path.exists()) {
         	path.mkdirs();  
         }

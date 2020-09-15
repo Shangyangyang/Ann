@@ -65,9 +65,11 @@ public class LoginIntercepter implements HandlerInterceptor {
         // 系统管理类
         // 字典
         if (url.startsWith("/sys/dict/list")) return true;
-        
+
+        // 测试的
+		if (url.startsWith("/test")) return true;
         // uniapp测试
-        if (url.startsWith("/cost/car")) return true;
+        // if (url.startsWith("/cost/car")) return true;
 		
 		return false;
 	}

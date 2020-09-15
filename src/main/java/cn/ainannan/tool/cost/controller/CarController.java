@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -21,6 +22,7 @@ import cn.ainannan.commons.utils.NumberUtils;
 import cn.ainannan.excel.EasyPoiUtil;
 import cn.ainannan.tool.cost.bean.Car;
 import cn.ainannan.tool.cost.bean.CarOilWear;
+import cn.ainannan.tool.cost.bean.Tongji;
 import cn.ainannan.tool.cost.service.CarService;
 
 @RestController
@@ -137,5 +139,12 @@ public class CarController {
 
 		return ResultGen.genSuccessResult(cow);
 	}
+	
+	@RequestMapping(value = "findColumnData")
+	public ResultObject findColumnData(Tongji bean) {
+		return ResultGen.genSuccessResult(carService.findColumnData(bean));
+	}
+	
+	
 
 }

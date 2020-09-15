@@ -10,7 +10,7 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 
 @RestController
-@RequestMapping("sys/websocket")
+@RequestMapping("sys/websocket-test")
 public class WebsocketController {
 	
 	@RequestMapping(value = "getFuseridList")
@@ -34,16 +34,31 @@ public class WebsocketController {
 		
 		return ResultGen.genSuccessResult();
 	}
+
+	@RequestMapping(value = "imitate")
+	public void imitate(String uuid) throws InterruptedException {
+
+		WebSocketUtil.sendObj(uuid, ResultGen.genSuccessResult(0).setName("jindutiao"));
+		Thread.sleep(1000);
+		for (int i = 0; i < 100;) {
+			i += (int)(Math.random() * 40 + 1);
+			if(i>100) i = 100;
+			WebSocketUtil.sendObj(uuid, ResultGen.genSuccessResult(i).setName("jindutiao"));
+			Thread.sleep(1000);
+		}
+	}
 	
 	// @Scheduled(cron = "0 */1 * * * ? ")
 	public void testWebsocket() {
 		System.out.println("定时任务执行");
 		
 		List<String> strList = WebSocketUtil.getFuseridList();
-		
+
+		System.out.println("strList = " + strList);
+
 		strList.stream().forEach(item -> {
-			System.out.println(item);
-			WebSocketUtil.sendMessage(item, item + "： 你好！");
+
+			WebSocketUtil.sendObj(item, ResultGen.genSuccessResult(item + ": 你好!").setName("test"));
 		});
 		
 		

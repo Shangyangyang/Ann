@@ -1,5 +1,6 @@
 package cn.ainannan.base.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import cn.ainannan.sys.utils.UserUtil;
 
 
 @Component
-public abstract class BaseBean {
+public abstract class BaseBean implements Serializable {
 	protected String id;
 	protected User createUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
