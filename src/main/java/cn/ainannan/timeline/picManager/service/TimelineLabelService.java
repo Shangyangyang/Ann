@@ -68,8 +68,7 @@ public class TimelineLabelService extends BaseService<TimelineLabelMapper, Timel
 		// 获取数据
 		List<TimelineLabel> tlList = this.findList(new TimelineLabel());
 		List<Timeline> timelineList = timelineMapper.findListByLabelNotNull();
-		// List<Timeline> newTimelineList = Lists.newArrayList();
-		
+
 		// 标签表的字符串集合，用作查询
 		StringBuffer labelDB = new StringBuffer();
 		
