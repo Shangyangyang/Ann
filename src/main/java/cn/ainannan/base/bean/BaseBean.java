@@ -1,24 +1,25 @@
 package cn.ainannan.base.bean;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
-
+import cn.ainannan.sys.bean.User;
+import cn.ainannan.sys.utils.UserUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import cn.ainannan.sys.bean.User;
-import cn.ainannan.sys.utils.UserUtil;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
 
 
 @Component
 public abstract class BaseBean implements Serializable {
 	protected String id;
 	protected User createUser;
+	// protected String createBy;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date createDate;
 	protected User updateUser;
+	// protected String updateBy;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date updateDate;
 	protected String delFlag;
@@ -50,8 +51,10 @@ public abstract class BaseBean implements Serializable {
 		Date d = new Date();
 		this.setCreateDate(d);
 		this.setCreateUser(UserUtil.getUser());
+		//this.setCreateBy(UserUtil.getUser().getId());
 		this.setUpdateDate(d);
 		this.setUpdateUser(UserUtil.getUser());
+		//this.setUpdateBy(UserUtil.getUser().getId());
 		this.setDelFlag(DEL_FLAG_NORMAL);
 	}
 
@@ -112,6 +115,19 @@ public abstract class BaseBean implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	
-
+//	public String getCreateBy() {
+//		return createBy;
+//	}
+//
+//	public void setCreateBy(String createBy) {
+//		this.createBy = createBy;
+//	}
+//
+//	public String getUpdateBy() {
+//		return updateBy;
+//	}
+//
+//	public void setUpdateBy(String updateBy) {
+//		this.updateBy = updateBy;
+//	}
 }
