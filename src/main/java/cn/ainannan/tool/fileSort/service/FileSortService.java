@@ -3,19 +3,18 @@ package cn.ainannan.tool.fileSort.service;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
-import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.commons.utils.StringUtils;
+import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
+import cn.ainannan.tool.fileSort.thread.FileSortThread;
 import com.google.common.collect.Lists;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
          *
          */
 
+
         String regularExpression = "([a-zA-Z]:)+(\\\\[a-zA-Z0-9\\u4E00-\\u9FA5_.-]+)+\\\\?";
 
 
@@ -56,8 +56,21 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
         }
 
 
+        // 获取符合条件的文件集合
         List<File> fList = Lists.newArrayList();
         getFileListByPath(new File(bean.getFilePath()), bean.getSuffixs(), fList);
+
+        new FileSortThread(bean, fList, UserUtil.getUser()).start();
+
+        return ResultGen.genSuccessResult("本次共有" + fList.size() + "个文件需要处理，请稍候");
+
+        /*
+        // websocket前来报道
+
+        // 记录执行记录
+        StringBuffer logSb = new StringBuffer();
+        int successNum = 0;
+        int failNum = 0;
 
         String basePath = BASE_PANFU + FILE_SORT_PATH + File.separator;
 
@@ -90,6 +103,8 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
 
                 fsList.add(fs);
 
+            } else {
+                file.delete();
             }
         }
 
@@ -119,6 +134,7 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
         }
 
         return ResultGen.genSuccessResult(fsList);
+        */
     }
 
     /**
