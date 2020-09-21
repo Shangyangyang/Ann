@@ -11,7 +11,6 @@ import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class FileSortThread extends Thread {
-    @Value("${myPanfu}")
-    private String BASE_PANFU;
+
     private static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
 
     private FileSort bean;
@@ -37,6 +35,7 @@ public class FileSortThread extends Thread {
 
     public void run() {
         FileSortMapper fsMapper = (FileSortMapper) SpringContextUtil.getBean("fileSortMapper");
+        String basePanfu = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("myPanfu");
         // websocket前来报道
 
         // 记录执行记录
@@ -45,14 +44,15 @@ public class FileSortThread extends Thread {
         int failNum = 0;
         Long startT = new Date().getTime();
 
-        String basePath = BASE_PANFU + FILE_SORT_PATH + File.separator;
+        String basePath = basePanfu + FILE_SORT_PATH + File.separator;
+
 
         // 获取数据库中，所有的文件的md5，放到map中
         String md5Strs = fsMapper.getMd5Str();
 
         List<FileSort> fsList = Lists.newArrayList();
 
-        logSb.append("本次共搜索到").append(fsList.size()).append("个文件，");
+        logSb.append("本次共搜索到").append(fList.size()).append("个文件，");
 
 
         for (File file : fList) {
@@ -82,31 +82,32 @@ public class FileSortThread extends Thread {
 
             } else {
                 failNum++;
-                // file.delete();
+                file.delete();
             }
             // 临时增加耗时，看效果
-            try {
-                Thread.sleep(2000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000L);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
             // 推送进度
             WebSocketUtil.sendObj(
-                    user.getId(),
+                    user.getUserName(),
                     ResultGen.genSuccessResult(
-                            Integer.parseInt(String.valueOf((successNum + failNum) / fList.size())) + 1
+                            (int)((double)(successNum + failNum) / fList.size() * 100)
                     ).setName("jindutiao2"));
         }
 
         Long endT = new Date().getTime();
 
-        WebSocketUtil.sendObj(user.getId(), ResultGen.genSuccessResult(0).setName("jindutiao2"));
+        WebSocketUtil.sendObj(user.getUserName(), ResultGen.genSuccessResult(0).setName("jindutiao2"));
         logSb.append("成功导入").append(successNum).append("个文件，因重复删除")
-                .append(failNum).append("个文件，共耗时").append(endT - startT / 1000L).append("秒");
+                .append(failNum).append("个文件，共耗时").append((endT - startT) / 1000L).append("秒");
 
         System.out.println(logSb.toString());
 
-        WebSocketUtil.sendObj(user.getId(), ResultGen.genSuccessResult(logSb.toString()).setName("fileSortSyncMsg"));
+        WebSocketUtil.sendObj(user.getUserName(), ResultGen.genSuccessResult(logSb.toString()).setName("fileSortSyncMsg"));
 
         // 填充完毕后，进行文件移动工作
         for (FileSort fileSort : fsList) {

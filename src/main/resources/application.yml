@@ -16,12 +16,12 @@ spring:
     #date-format: yyyy-MM-dd
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-    
+
   session:
     store-type: redis
     redis:
       flush-mode: immediate
-    #timeout: 7200
+    timeout: 7200
 
   redis:
     host: localhost

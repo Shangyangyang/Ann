@@ -63,78 +63,6 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
         new FileSortThread(bean, fList, UserUtil.getUser()).start();
 
         return ResultGen.genSuccessResult("本次共有" + fList.size() + "个文件需要处理，请稍候");
-
-        /*
-        // websocket前来报道
-
-        // 记录执行记录
-        StringBuffer logSb = new StringBuffer();
-        int successNum = 0;
-        int failNum = 0;
-
-        String basePath = BASE_PANFU + FILE_SORT_PATH + File.separator;
-
-        // 获取数据库中，所有的文件的md5，放到map中
-        String md5Strs = dao.getMd5Str();
-
-        System.out.println("md5Strs = " + md5Strs);
-
-        List<FileSort> fsList = Lists.newArrayList();
-
-        for (File file : fList) {
-            // file.getAbsolutePath();
-            // 首先生成md5，判断数据库里有没有相同md5的
-            String md5 = MD5Utils.getFileMD5(file);
-
-            if(StringUtils.isBlank(md5Strs) || md5Strs.indexOf(md5) == -1){
-
-                System.out.println("file = " + file.getPath());
-
-                // 如果没有重复的，则进入下一环节，填充各种数据，insert到数据库
-                FileSort fs = new FileSort();
-                fs.preInsert();
-                fs.setCreateBy(fs.getCreateUser().getId());
-                fs.setMd5(md5);
-                fs.setPath(file.getPath());
-                fs.setName(file.getName());
-                fs.setSuffix(FilenameUtils.getExtension(file.getAbsolutePath()));
-                fs.setSize(file.length());
-                fs.setType(bean.getType());
-
-                fsList.add(fs);
-
-            } else {
-                file.delete();
-            }
-        }
-
-        // 填充完毕后，进行文件移动工作
-        for (FileSort fileSort : fsList) {
-            try {
-                FileUtils.moveFile(new File(fileSort.getPath()),
-                        new File(basePath + fileSort.getName()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // 移动文件后，将新的path替换掉老的path
-            fileSort.setPath(basePath + fileSort.getName());
-        }
-
-        // 批量保存
-        if(fsList.size() > 0) dao.insertByList(fsList);
-
-
-        // 去掉隐私信息，返回列表
-
-        for (FileSort fileSort : fsList) {
-            setFieldValueByFieldName("path", fileSort, null);
-            setFieldValueByFieldName("md5", fileSort, null);
-            setFieldValueByFieldName("type", fileSort, null);
-        }
-
-        return ResultGen.genSuccessResult(fsList);
-        */
     }
 
     /**
@@ -175,7 +103,7 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
                 }
 
             } else {
-                if(suffixs.indexOf(FilenameUtils.getExtension(file.getAbsolutePath())) > -1){
+                if(suffixs.indexOf(FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase()) > -1){
                     fList.add(file);
                 }
             }

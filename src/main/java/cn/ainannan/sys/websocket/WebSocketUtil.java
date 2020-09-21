@@ -1,21 +1,20 @@
 package cn.ainannan.sys.websocket;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import cn.ainannan.base.result.ResultObject;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
+import javax.websocket.*;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * websocket
@@ -53,6 +52,7 @@ public class WebSocketUtil {
 			webSocketSet.add(this); // 将当前websocket加入set中
 			addOnlineCount(); // 在线数加1
 			sendMessage("连接成功！");
+			System.out.println("this.fuserid = " + this.fuserid);
 			System.out.println("有一新连接！当前在线人数为" + getOnlineCount());
 		} catch (IOException e) {
 			System.out.println("连接异常！");
@@ -178,8 +178,11 @@ public class WebSocketUtil {
 	}
 
 	public static void sendObj(String fuserid, ResultObject message) {
+		System.out.println("fuserid = " + fuserid);
+		System.out.println("message = " + JSON.toJSONString(message));
 		try {
 			WebSocketUtil _this = getcurrentWenSocket(fuserid);
+
 			if (_this == null) {
 				return;
 			}
