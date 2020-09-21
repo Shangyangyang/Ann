@@ -11,6 +11,7 @@ import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class FileSortThread extends Thread {
         this.user = user;
     }
 
+    @Transactional(readOnly = false)
     public void run() {
         FileSortMapper fsMapper = (FileSortMapper) SpringContextUtil.getBean("fileSortMapper");
         String basePanfu = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("myPanfu");
@@ -61,6 +63,11 @@ public class FileSortThread extends Thread {
             String md5 = MD5Utils.getFileMD5(file);
 
             if(StringUtils.isBlank(md5Strs) || md5Strs.indexOf(md5) == -1){
+
+                // 在目标文件夹下查找是否文件是否存在，如果存在，则进行重命操作
+                String fileName = checkAndGenPath(basePath, file.getPath(), file.getName());
+                System.gc();
+
                 successNum++;
 
                 // 如果没有重复的，则进入下一环节，填充各种数据，insert到数据库
@@ -72,10 +79,10 @@ public class FileSortThread extends Thread {
                 fs.setDelFlag("0");
                 fs.setCreateBy(user.getId());
                 fs.setMd5(md5);
-                fs.setPath(file.getPath());
-                fs.setName(file.getName());
+                fs.setPath(file.getParent() + File.separator + fileName);
+                fs.setName(fileName);
                 fs.setSuffix(FilenameUtils.getExtension(file.getAbsolutePath()));
-                fs.setSize(file.length());
+                fs.setSize(new File(file.getParent() + File.separator + fileName).length());
                 fs.setType(bean.getType());
 
                 fsList.add(fs);
@@ -112,7 +119,8 @@ public class FileSortThread extends Thread {
         // 填充完毕后，进行文件移动工作
         for (FileSort fileSort : fsList) {
             try {
-                FileUtils.moveFile(new File(fileSort.getPath()),
+                FileUtils.moveFile(
+                        new File(fileSort.getPath()),
                         new File(basePath + fileSort.getName()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -134,6 +142,26 @@ public class FileSortThread extends Thread {
             setFieldValueByFieldName("type", fileSort, null);
         }
 
+    }
+
+    private static String checkAndGenPath(String basePath, String path, String name) {
+        if(new File(basePath + name).exists()) {
+            return checkAndGenPath(basePath, path, genFileName(name));
+        } else {
+            File oleF = new File(path);
+            File newF = new File(oleF.getParent() + File.separator + name);
+            if(!newF.exists()) oleF.renameTo(newF);
+            return name;
+        }
+    }
+
+    private static String genFileName(String name){
+        String qianzhui = name.substring(0, name.lastIndexOf("."));
+        String nowTime = String.valueOf(new Date().getTime());
+        String newFilename = qianzhui +
+                "_" + nowTime.substring(nowTime.length() - 4, nowTime.length()) +
+                "." + FilenameUtils.getExtension(name);
+        return newFilename;
     }
 
     /**

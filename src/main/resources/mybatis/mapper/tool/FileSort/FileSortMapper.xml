@@ -47,7 +47,8 @@
 		size,
 		create_by,
 		create_date,
-		del_flag
+		del_flag,
+		type
 		)
 		<foreach collection="list" item="entity"
 				 separator=" union all ">
@@ -60,7 +61,8 @@
 			#{entity.size},
 			#{entity.createBy},
 			#{entity.createDate},
-			#{entity.delFlag}
+			#{entity.delFlag},
+			#{entity.type}
 
 		</foreach>
 	</insert>

@@ -66,28 +66,6 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
     }
 
     /**
-     * 根据属性名设置属性值
-     *
-     * @param fieldName
-     * @param object
-     * @return
-     */
-    private void setFieldValueByFieldName(String fieldName, Object object, String value) {
-        try {
-            // 获取object的字节文件对象
-            Class<?> c = object.getClass();
-            // 获取指定的属性名称
-            Field f = c.getDeclaredField(fieldName);
-            // 设置访问私有成员变量的权限为true
-            f.setAccessible(true);
-            // 向指定成员变量添加指定值
-            f.set(object, value);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
      * 递归获取指定文件夹下的指定后缀名的文件
      * @param file
      * @param suffixs
@@ -109,28 +87,5 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
             }
         }
 
-    }
-
-    public static void main(String[] args) {
-        File f = new File("F:\\360Downloads\\");
-        FileSortService fss = new FileSortService();
-
-        List<File> fList = Lists.newArrayList();
-        fss.getFileListByPath(f, "mp3", fList);
-
-        for (File file : fList) {
-            System.out.println("file = " + file);
-        }
-    }
-
-    private String getServicePath(FileSort bean) {
-
-        switch (bean.getType()) {
-            case "1":
-
-                break;
-        }
-
-        return null;
     }
 }
