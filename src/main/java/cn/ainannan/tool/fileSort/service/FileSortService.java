@@ -40,14 +40,14 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
          */
 
 
-        String regularExpression = "([a-zA-Z]:)+(\\\\[a-zA-Z0-9\\u4E00-\\u9FA5_.-]+)+\\\\?";
+        String regularExpression = "([a-zA-Z]:)+(\\\\[a-zA-Z0-9\\u4E00-\\u9FA5_.-\\\\(\\\\)]+)+\\\\?";
 
 
-        if (StringUtils.isBlank(bean.getFilePath())
-                || "".equals(bean.getFilePath().trim())
-                || !bean.getFilePath().matches(regularExpression)) {
-            return ResultGen.genFailResult("[filePath]格式不正确");
-        }
+//        if (StringUtils.isBlank(bean.getFilePath())
+//                || "".equals(bean.getFilePath().trim())
+//                || !bean.getFilePath().matches(regularExpression)) {
+//            return ResultGen.genFailResult("[filePath]格式不正确");
+//        }
 
         File fileList = new File(bean.getFilePath());
 
