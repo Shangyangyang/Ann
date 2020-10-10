@@ -1,9 +1,9 @@
 package cn.ainannan.tool.fileSort.service;
 
+import cn.ainannan.base.bean.TongjiBean;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
-import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.List;
 
 
@@ -26,6 +25,11 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
     @Value("${myPanfu}")
     private String BASE_PANFU;
     private static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
+
+
+    public TongjiBean getFileInfo(){
+        return dao.getFileInfo();
+    }
 
     public ResultObject findFileList(FileSort bean) {
         /**

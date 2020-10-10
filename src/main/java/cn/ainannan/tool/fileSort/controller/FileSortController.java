@@ -1,5 +1,6 @@
 package cn.ainannan.tool.fileSort.controller;
 
+import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.service.FileSortService;
@@ -24,6 +25,11 @@ public class FileSortController {
 	@RequestMapping({ "", "findFlieList" })
 	public ResultObject list(FileSort bean, HttpServletRequest request) {
 		return fileSortService.findFileList(bean);
+	}
+
+	@RequestMapping("getFileInfo")
+	public ResultObject getFileInfo(FileSort bean, HttpServletRequest request) {
+		return ResultGen.genSuccessResult(fileSortService.getFileInfo());
 	}
 
 //	@RequestMapping(value = "download")
