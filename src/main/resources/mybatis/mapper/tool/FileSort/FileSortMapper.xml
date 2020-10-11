@@ -46,6 +46,7 @@
 				count(1) as "n1",
 				sum(case when a.type = '1' then 1 else 0 end) as "n2",
 				sum(case when a.type = '2' then 1 else 0 end) as "n3",
+				sum(case when a.newid is not null then 1 else 0 end) as "n4",
 				sum(a.size) as "l1",
 				d.d1
 
