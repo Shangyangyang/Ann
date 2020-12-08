@@ -398,6 +398,7 @@ public class ImportPicController {
 	 */
 	@RequestMapping("cleanDatabase")
 	public ResultObject cleanDatabase(TimelinePic timelinePic) {
+		if(!new File("H://").exists()) return ResultGen.genFailResult("图片源不存在，请检查移动硬盘是否存在");
 		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
 		int i = 0; // 进度统计-当前进度
 		int deleteNum = 0;
