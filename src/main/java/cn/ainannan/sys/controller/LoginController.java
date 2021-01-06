@@ -1,23 +1,20 @@
 package cn.ainannan.sys.controller;
 
-import java.net.InetAddress;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.sys.bean.User;
+import cn.ainannan.sys.service.UserService;
+import cn.ainannan.sys.utils.PassUtil;
+import cn.ainannan.sys.utils.UserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.ainannan.base.result.ResultGen;
-import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.sys.bean.User;
-import cn.ainannan.sys.service.UserService;
-import cn.ainannan.sys.utils.CaptchaController;
-import cn.ainannan.sys.utils.PassUtil;
-import cn.ainannan.sys.utils.UserUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.net.InetAddress;
 
 @RestController
 @RequestMapping("sys/login")
@@ -90,6 +87,11 @@ public class LoginController {
 
 		return writeSession(sysUser, session, true);
 	}
+
+    @RequestMapping ("getUser")
+    public ResultObject getUser() {
+        return ResultGen.genSuccessResult(UserUtil.getUser());
+    }
 	
 	/**
 	 * 登录成功后的写缓存操作

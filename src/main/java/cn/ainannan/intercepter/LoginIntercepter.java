@@ -1,15 +1,14 @@
 package cn.ainannan.intercepter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import cn.ainannan.sys.bean.User;
+import cn.ainannan.sys.utils.UserUtil;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.ainannan.commons.Constant;
-import cn.ainannan.sys.bean.User;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LoginIntercepter implements HandlerInterceptor {
 
@@ -37,7 +36,7 @@ public class LoginIntercepter implements HandlerInterceptor {
 		// 判断sesson
 		HttpSession session = request.getSession();
 		// 取出userName信息
-		User loginUser = (User) session.getAttribute(Constant.LOGIN_USER);
+		User loginUser = UserUtil.getUser();
 		
 		if (null != loginUser) {
 			return true;
@@ -64,7 +63,10 @@ public class LoginIntercepter implements HandlerInterceptor {
         
         // 系统管理类
         // 字典
-        if (url.startsWith("/sys/dict/list")) return true;
+		if (url.startsWith("/sys/dict/list")) return true;
+
+		// 下载
+		if (url.startsWith("/sys/file/download")) return true;
 
         // 测试的
 		if (url.startsWith("/test")) return true;

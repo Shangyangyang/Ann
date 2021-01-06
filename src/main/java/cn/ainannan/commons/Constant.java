@@ -20,7 +20,7 @@ public class Constant {
 
 	// session属性名
 	// 登录用户
-	public static final String LOGIN_USER = "login_user";
+	public static final String LOGIN_USER = "ann_login_user";
 	
 	
 	// ================= 时光轴专区  =======================
