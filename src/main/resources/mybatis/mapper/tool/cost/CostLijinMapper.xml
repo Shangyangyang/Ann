@@ -103,9 +103,9 @@
 			#{yihuanMoney},
 			#{yihuanDate},
 			#{createDate},
-			#{createUser.id},
+			#{createUser},
 			#{updateDate},
-			#{updateUser.id},
+			#{updateUser},
 			#{delFlag}
 		)
 	</insert>
@@ -143,8 +143,8 @@
 			<if test="updateDate != null and updateDate != ''">
 				update_date = #{updateDate},
 			</if>	
-			<if test="updateUser != null and updateUser.id != ''">
-				update_user = #{updateUser.id}
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser}
 			</if>
 		</trim>
 		WHERE id = #{id}

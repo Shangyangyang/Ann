@@ -10,9 +10,9 @@
 		a.reason as "reason",
 		a.related_person as "relatedPerson",
 		a.create_date as "createDate",
-		a.create_user as "createUser.id",
+		a.create_user as "createUser",
 		a.update_date as "updateDate",
-		a.update_user as "updateUser.id",
+		a.update_user as "updateUser",
 		a.del_flag as "delFlag",
 		type.name as "typeName",
 		relatedPerson.name as "relatedPersonName"
@@ -53,7 +53,7 @@
 
 	<insert id="insert" parameterType="dog">
 		insert into cost_dog(id, money, type, cost_date, reason, related_person, create_date, create_user, update_date, update_user, del_flag )
-		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{createDate}, #{createUser.id}, #{updateDate}, #{updateUser.id},  #{DEL_FLAG_NORMAL})
+		value(#{id}, #{money}, #{type}, #{costDate}, #{reason}, #{relatedPerson}, #{createDate}, #{createUser}, #{updateDate}, #{updateUser},  #{DEL_FLAG_NORMAL})
 	</insert>
 
 	<update id="update">
@@ -77,14 +77,14 @@
 			<if test="createDate != null">
 				create_date = #{createDate},
 			</if>
-			<if test="createUser != null and createUser.id != null and '' != createUser.id">
-				create_user = #{createUser.id},
+			<if test="createUser != null and createUser != ''">
+				create_user = #{createUser},
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
-			<if test="updateUser != null and updateUser.id != null and '' != updateUser.id">
-				update_user = #{updateUser.id},
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
 			</if>
 		</trim>
 		WHERE id = #{id}

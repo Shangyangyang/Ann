@@ -112,9 +112,9 @@
 			#{status},
 			#{reason},
 			#{selectNum},
-			#{createUser.id},
+			#{createUser},
 			#{createDate},
-			#{updateUser.id},
+			#{updateUser},
 			#{updateDate},
 			#{delFlag},
 			#{fontcolor},
@@ -147,7 +147,7 @@
 				update_date = #{updateDate},
 			</if>	
 			<if test="updateUser != null">
-				update_user = #{updateUser.id},
+				update_user = #{updateUser},
 			</if>
 			<if test="fontcolor != null">
 				fontcolor = #{fontcolor},

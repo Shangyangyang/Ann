@@ -7,9 +7,9 @@
         a.label as "label", 
         a.value as "value", 
         a.sort as "sort", 
-        a.create_user as "createUser.id", 
+        a.create_user as "createUser",
         a.create_date as "createDate", 
-        a.update_user as "updateUser.id", 
+        a.update_user as "updateUser",
         a.update_date as "updateDate", 
         a.del_flag as "delFlag"
     </sql>
@@ -73,9 +73,9 @@
     		#{value},
     		#{name},
     		#{sort},
-    		#{createUser.id},
+    		#{createUser},
     		#{createDate},
-    		#{updateUser.id},
+    		#{updateUser},
     		#{updateDate},
     		#{delFlag}
     	)
@@ -96,8 +96,8 @@
 			<if test="sort != null">
 				sort = #{sort},
 			</if>
-			<if test="updateUser != null and updateUser.id != null">
-				update_user = #{updateUser.id},
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
 			</if>	
 			<if test="updateDate != null">
 				update_date = #{updateDate},

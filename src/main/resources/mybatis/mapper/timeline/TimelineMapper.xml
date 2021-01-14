@@ -158,9 +158,9 @@
 			#{score},
 			#{reason},
 			#{createDate},
-			#{createUser.id},
+			#{createUser},
 			#{updateDate},
-			#{updateUser.id},
+			#{updateUser},
 			#{delFlag}
 		)
 	</insert>
@@ -196,14 +196,14 @@
 			<if test="reason != null">
 				reason = #{reason},
 			</if>	
-			<if test="createUser != null and createUser.id != null">
-				create_user = #{createUser.id},
+			<if test="createUser != null and createUser != ''">
+				create_user = #{createUser},
 			</if>	
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>	
-			<if test="updateUser != null and updateUser.id != null">
-				update_user = #{updateUser.id}
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser}
 			</if>
 		</trim>
 		WHERE id = #{id}

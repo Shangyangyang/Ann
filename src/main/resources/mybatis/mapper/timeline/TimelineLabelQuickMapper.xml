@@ -97,9 +97,9 @@
 		#{type},
 		#{belong},
 		#{selectNum},
-		#{createUser.id},
+		#{createUser},
 		#{createDate},
-		#{updateUser.id},
+		#{updateUser},
 		#{updateDate},
 		#{delFlag}
 		)
@@ -127,7 +127,7 @@
 				update_date = #{updateDate},
 			</if>
 			<if test="updateUser != null">
-				update_user = #{updateUser.id},
+				update_user = #{updateUser},
 			</if>
 			<if test="selectRaise != null and selectRaise != ''">
 				select_num = select_num + 1

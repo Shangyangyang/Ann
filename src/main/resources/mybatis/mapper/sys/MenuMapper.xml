@@ -9,9 +9,9 @@
         a.name as "name",
         a.count as "count", 
         a.sort as "sort", 
-        a.create_user as "createUser.id", 
+        a.create_user as "createUser",
         a.create_date as "createDate", 
-        a.update_user as "updateUser.id", 
+        a.update_user as "updateUser",
         a.update_date as "updateDate", 
         a.del_flag as "delFlag"
     </sql>

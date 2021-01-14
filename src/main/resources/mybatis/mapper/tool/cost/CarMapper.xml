@@ -10,9 +10,9 @@
         a.youjia as "youjia", 
         a.reason as "reason", 
         a.input_date as "inputDate", 
-        a.create_user as "createUser.id", 
+        a.create_user as "createUser",
         a.create_date as "createDate", 
-        a.update_user as "updateUser.id", 
+        a.update_user as "updateUser",
         a.update_date as "updateDate", 
         a.del_flag as "delFlag",
         d.name as "typeName"
@@ -51,27 +51,6 @@
 		order by a.input_date desc
 	</select>
 	
-	<select id="findColumnData" resultType="Tongji">
-		SELECT
-			a.y,
-			sum(case when a.type = '1' then a.money else 0 end) as 'a',
-			sum(case when a.type = '2' then a.money else 0 end) as 'b',
-			sum(case when a.type = '3' then a.money else 0 end) as 'c',
-			sum(case when a.type = '4' then a.money else 0 end) as 'd',
-			sum(case when a.type = '5' then a.money else 0 end) as 'e'
-		FROM
-			(
-				SELECT
-					LEFT (input_date, 4) AS 'y',
-					money,
-					type
-				FROM
-					cost_car
-			) a
-		GROUP BY a.y
-	</select>
-	
-	
 	<insert id="insert" parameterType="user">
 		insert into cost_car(id,
 		money, type, licheng, youjia, reason, input_date, 
@@ -81,9 +60,9 @@
 		update_date,
 		del_flag)
 		value(#{id}, #{money}, #{type}, #{licheng}, #{youjia}, #{reason}, #{inputDate},
-		#{createUser.id},
+		#{createUser},
 		#{createDate},
-		#{updateUser.id},
+		#{updateUser},
 		#{updateDate},
 		#{delFlag})
 	</insert>
@@ -110,8 +89,8 @@
 			<if test="inputDate != null">
 				input_date = #{inputDate},
 			</if>
-			<if test="updateUser != null and updateUser.id != null">
-				update_user = #{updateUser.id},
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
 			</if>	
 			<if test="updateDate != null">
 				update_date = #{updateDate},

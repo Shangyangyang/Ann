@@ -22,9 +22,9 @@
 		a.state as "state",
 		a.belong as "belong",
 		a.create_date as "createDate",
-		a.create_user as "createUser.id",
+		a.create_user as "createUser",
 		a.update_date as "updateDate",
-		a.update_user as "updateUser.id",
+		a.update_user as "updateUser",
 		a.geox,
 		a.geoy,
 		a.del_flag as "delFlag"
@@ -333,8 +333,8 @@
 		#{suffix}, #{size},
 		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId},
 		#{similarStatus}, #{state}, #{belong}
-		#{createDate}, #{createUser.id},
-		#{updateDate}, #{updateUser.id},
+		#{createDate}, #{createUser},
+		#{updateDate}, #{updateUser},
 		#{DEL_FLAG_NORMAL}, #{geox}, #{geoy})
 	</insert>
 
@@ -382,9 +382,9 @@
 			#{entity.state},
 			#{entity.belong},
 			#{entity.createDate},
-			#{entity.createUser.id},
+			#{entity.createUser},
 			#{entity.updateDate},
-			#{entity.updateUser.id},
+			#{entity.updateUser},
 			#{entity.geox},
 			#{entity.geoy},
 			#{entity.delFlag}
@@ -447,15 +447,15 @@
 				create_date = #{createDate},
 			</if>
 			<if
-				test="createUser != null and createUser.id != null and '' != createUser.id">
-				create_user = #{createUser.id},
+				test="createUser != null and createUser != ''">
+				create_user = #{createUser},
 			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
 			<if
-				test="updateUser != null and updateUser.id != null and '' != updateUser.id">
-				update_user = #{updateUser.id},
+				test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
 			</if>
 		</trim>
 		WHERE id = #{id}
@@ -511,8 +511,8 @@
 					create_date = #{entity.createDate},
 				</if>
 				<if
-					test="entity.createUser != null and createUser.id != null and '' != createUser.id">
-					create_user = #{entity.createUser.id},
+					test="entity.createUser != null and entity.createUser != ''">
+					create_user = #{entity.createUser},
 				</if>
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},
@@ -524,8 +524,8 @@
 					geoy = #{entity.geoy},
 				</if>
 				<if
-					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
-					update_user = #{entity.updateUser.id},
+					test="entity.updateUser != null and entity.updateUser != ''">
+					update_user = #{entity.updateUser},
 				</if>
 			</trim>
 			where id = #{entity.id}
@@ -582,8 +582,8 @@
 					create_date = #{entity.createDate},
 				</if>
 				<if
-					test="entity.createUser != null and createUser.id != null and '' != createUser.id">
-					create_user = #{entity.createUser.id},
+					test="entity.createUser != null and entity.createUser != ''">
+					create_user = #{entity.createUser},
 				</if>
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},
@@ -595,8 +595,8 @@
 					geoy = #{entity.geoy},
 				</if>
 				<if
-					test="entity.updateUser != null and updateUser.id != null and '' != updateUser.id">
-					update_user = #{entity.updateUser.id},
+					test="entity.updateUser != null and entity.updateUser != ''">
+					update_user = #{entity.updateUser},
 				</if>
 			</trim>
 			where id = #{entity.id}

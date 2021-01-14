@@ -1,6 +1,5 @@
 package cn.ainannan.base.bean;
 
-import cn.ainannan.sys.bean.User;
 import cn.ainannan.sys.utils.UserUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
@@ -14,12 +13,10 @@ import java.util.UUID;
 @Component
 public abstract class BaseBean implements Serializable {
 	protected String id;
-	protected User createUser;
-	// protected String createBy;
+	protected String createUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date createDate;
-	protected User updateUser;
-	// protected String updateBy;
+	protected String updateUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date updateDate;
 	protected String delFlag;
@@ -50,17 +47,15 @@ public abstract class BaseBean implements Serializable {
 		this.setId(UUID.randomUUID().toString().replace("-", ""));
 		Date d = new Date();
 		this.setCreateDate(d);
-		this.setCreateUser(UserUtil.getUser());
-		//this.setCreateBy(UserUtil.getUser().getId());
+		this.setCreateUser(UserUtil.getUser().getId());
 		this.setUpdateDate(d);
-		this.setUpdateUser(UserUtil.getUser());
-		//this.setUpdateBy(UserUtil.getUser().getId());
+		this.setUpdateUser(UserUtil.getUser().getId());
 		this.setDelFlag(DEL_FLAG_NORMAL);
 	}
 
 	public void preUpdate() {
 		this.setUpdateDate(new Date());
-		this.setUpdateUser(UserUtil.getUser());
+		this.setUpdateUser(UserUtil.getUser().getId());
 	}
 	
 	public boolean isNewRecord() {
@@ -99,35 +94,19 @@ public abstract class BaseBean implements Serializable {
 		this.updateDate = updateDate;
 	}
 
-	public User getCreateUser() {
+	public String getCreateUser() {
 		return createUser;
 	}
 
-	public void setCreateUser(User createUser) {
+	public void setCreateUser(String createUser) {
 		this.createUser = createUser;
 	}
 
-	public User getUpdateUser() {
+	public String getUpdateUser() {
 		return updateUser;
 	}
 
-	public void setUpdateUser(User updateUser) {
+	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
-
-//	public String getCreateBy() {
-//		return createBy;
-//	}
-//
-//	public void setCreateBy(String createBy) {
-//		this.createBy = createBy;
-//	}
-//
-//	public String getUpdateBy() {
-//		return updateBy;
-//	}
-//
-//	public void setUpdateBy(String updateBy) {
-//		this.updateBy = updateBy;
-//	}
 }
