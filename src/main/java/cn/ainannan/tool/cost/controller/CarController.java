@@ -144,7 +144,12 @@ public class CarController {
 	public ResultObject findColumnData(Tongji bean) {
 		return ResultGen.genSuccessResult(carService.findColumnData(bean));
 	}
-	
+
+	@RequestMapping(value = "tongjiByNianduCharts")
+	public ResultObject tongjiByNianduCharts(Car bean) {
+		return ResultGen.genSuccessResult(carService.tongjiByNianduCharts(bean));
+	}
+
 	
 
 }

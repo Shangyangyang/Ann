@@ -50,6 +50,18 @@
 		</where>
 		order by a.input_date desc
 	</select>
+
+	<select id="tongjiByNianduCharts" resultType="Tongji">
+		SELECT
+			substr(a.input_date, 1, 4) as "niandu",
+			a.type as "s1",
+			sum(money) as "m1"
+		FROM
+			cost_car a
+		WHERE
+			a.del_flag = '0'
+		GROUP BY substr(a.input_date, 1, 4), a.type
+	</select>
 	
 	<insert id="insert" parameterType="user">
 		insert into cost_car(id,

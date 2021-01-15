@@ -17,7 +17,8 @@ public class Car extends BaseBean {
 	private String reason;
 	@Excel(name = "日期", orderNum="5")
 	private String inputDate;
-	
+	private String niandu;
+
 	public Car() {
 		super();
 	}
@@ -25,6 +26,14 @@ public class Car extends BaseBean {
 	public Car(String id) {
 		super();
 		this.id = id;
+	}
+
+	public String getNiandu() {
+		return niandu;
+	}
+
+	public void setNiandu(String niandu) {
+		this.niandu = niandu;
 	}
 
 	public Double getMoney() {

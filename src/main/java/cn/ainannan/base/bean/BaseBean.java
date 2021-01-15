@@ -47,9 +47,9 @@ public abstract class BaseBean implements Serializable {
 		this.setId(UUID.randomUUID().toString().replace("-", ""));
 		Date d = new Date();
 		this.setCreateDate(d);
-		this.setCreateUser(UserUtil.getUser().getId());
+		if(UserUtil.getUser() != null) this.setCreateUser(UserUtil.getUser().getId());
 		this.setUpdateDate(d);
-		this.setUpdateUser(UserUtil.getUser().getId());
+		if(UserUtil.getUser() != null) this.setUpdateUser(UserUtil.getUser().getId());
 		this.setDelFlag(DEL_FLAG_NORMAL);
 	}
 
