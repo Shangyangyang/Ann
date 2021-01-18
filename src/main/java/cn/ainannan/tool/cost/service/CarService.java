@@ -16,5 +16,8 @@ public class CarService extends BaseService<CarMapper, Car>{
 	public List<Tongji> tongjiByNianduCharts(Car bean){
 		return dao.tongjiByNianduCharts(bean);
 	}
+	public Tongji tongjiStr(Car bean){
+		return dao.tongjiStr(bean);
+	}
 
 }

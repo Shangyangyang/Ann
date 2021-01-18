@@ -29,5 +29,9 @@
 			a.del_flag = '0'
 		AND s.id IS NOT NULL
     </select>
+
+	<select id="list" resultType="Dj">
+
+	</select>
 	
 </mapper>

@@ -1,26 +1,27 @@
 package cn.ainannan.tool.dj.bean;
 
+import cn.ainannan.base.bean.BaseBean;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
 
-import cn.ainannan.base.bean.BaseBean;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Dj extends BaseBean {
 	private String name;
+	private String path;
+	private Long size;
+	private Integer length;
+	private String type;	// 1：唯美女声2：动感串烧3：欧美金曲4：激情电音5：其它
+	private String state;	// 状态
+	private String xingji;	// 评分 12345星
+	private String fileId;
+
 	private List<Song> songList;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<Song> getSongList() {
-		return songList;
-	}
-
-	public void setSongList(List<Song> songList) {
-		this.songList = songList;
-	}
 }

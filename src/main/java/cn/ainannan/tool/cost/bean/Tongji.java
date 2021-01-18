@@ -15,7 +15,10 @@ public class Tongji{
 	private String s2;
 	private Integer n1;
 	private Integer n2;
+	private Integer n3;
 	private Double m1;
 	private Double m2;
+	private Double m3;
+	private Double m4;
 
 }

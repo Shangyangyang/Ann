@@ -13,4 +13,5 @@ public interface CarMapper extends BaseDao<Car> {
 	List<Tongji> findColumnData(Tongji bean);
 
 	List<Tongji> tongjiByNianduCharts(Car bean);
+	Tongji tongjiStr(Car bean);
 }
