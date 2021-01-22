@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class LoginIntercepter implements HandlerInterceptor {
 
@@ -17,31 +16,25 @@ public class LoginIntercepter implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
+
 		//如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
 
-        // HandlerMethod handlerMethod = (HandlerMethod) handler;
-        //获取请求方法
-        // Method method = handlerMethod.getMethod();
         //请求的url
-        String url = request.getRequestURI().substring(request.getContextPath().length()); 
-		
-		if("/".equals(url) || "".equals(url) || this.checkUrl(url)) {
-			return true;
-		}
-		
-		// 判断sesson
-		HttpSession session = request.getSession();
+        String url = request.getRequestURI().substring(request.getContextPath().length());
 		// 取出userName信息
 		User loginUser = UserUtil.getUser();
-		
+
 		if (null != loginUser) {
 			return true;
 		}
-		
+
+		if("/".equals(url) || "".equals(url) || this.checkUrl(url)) {
+			return true;
+		}
+
 		response.setStatus(401);
 		return false;
 	}

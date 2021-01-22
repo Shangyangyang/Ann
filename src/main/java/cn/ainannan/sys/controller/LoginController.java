@@ -117,8 +117,6 @@ public class LoginController {
 		UserUtil.setUserSession(sysUser);
 
 		if (isApp) {
-			// return ResultGen.appResullt(true, 0, "登录成功", sysUser);
-			// System.out.println("sessionid:"+session.getId());
 			return ResultGen.genSuccessResult(sysUser).setData2(session.getId());
 		} else {
 			return ResultGen.genSuccessResult(sysUser);

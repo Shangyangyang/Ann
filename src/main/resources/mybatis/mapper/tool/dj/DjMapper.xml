@@ -1,26 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.ainannan.tool.dj.mapper.DjMapper">
-	
+
+	<sql id="bean_Column_List" >
+        a.id as "id",
+		a.name as "name",
+-- 		a.path as "path",
+		a.size as "size",
+		a.length as "length",
+		a.type as "type",
+		a.state as "state",
+		a.xingji as "xingji",
+		a.file_id as "fileId",
+		a.create_date as "createDate",
+		a.create_user as "createUser",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="left_join_include">
+	</sql>
+
+	<sql id="bean_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<select id="get" resultType="Dj">
+		select
+		<include refid="bean_Column_List" />
+		from dj a
+		<include refid="left_join_include" />
+		where a.id = #{id}
+	</select>
+
+	<select id="getPathById" resultType="Dj">
+		SELECT
+			a.path
+		FROM dj a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="Dj">
+		select
+		<include refid="bean_Column_List" />
+		from dj a
+		<include refid="left_join_include" />
+		<where>
+			<include refid="bean_where" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+
 	<resultMap id="songListMap" type="cn.ainannan.tool.dj.bean.Song">
-        <id column="id" jdbcType="VARCHAR" property="id" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="singer" jdbcType="VARCHAR" property="singer" />
-    </resultMap>
-	
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="singer" jdbcType="VARCHAR" property="singer" />
+	</resultMap>
+
 	<resultMap id="Map2" type="cn.ainannan.tool.dj.bean.Dj">
 		<id column="id" jdbcType="VARCHAR" property="id" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <collection property="songList" resultMap="songListMap" columnPrefix="sub_">
-        </collection>
-    </resultMap>
-	
-    <select id="listWithChildren" resultMap="Map2">
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<collection property="songList" resultMap="songListMap" columnPrefix="sub_">
+		</collection>
+	</resultMap>
+
+	<select id="listWithChildren" resultMap="Map2">
         SELECT
 			a.id,
 			a. NAME,
 			s.id AS "sub_id",
-			s. NAME AS "sub_name",
+			s.NAME AS "sub_name",
 			s.singer AS "sub_singer"
 		FROM
 			dj a
@@ -29,9 +78,5 @@
 			a.del_flag = '0'
 		AND s.id IS NOT NULL
     </select>
-
-	<select id="list" resultType="Dj">
-
-	</select>
 	
 </mapper>

@@ -28,7 +28,6 @@ public class UserUtil {
 	 */
 	public static User getUser() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		System.out.println("sessionid:" + request.getSession().getId());
 		User user = (User) request.getSession().getAttribute(Constant.LOGIN_USER);
 		return user;
 	}
