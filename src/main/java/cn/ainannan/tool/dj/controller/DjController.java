@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 import java.util.List;
 
 @RestController
@@ -41,10 +40,13 @@ public class DjController {
 
     @RequestMapping("getFile")
     public void getFile(String id, HttpServletRequest request, HttpServletResponse resp) {
-
-        Enumeration<String> paraNames = request.getHeaders("Range");
-        System.out.println("paraNames.nextElement() = " + paraNames.nextElement());
-
         djService.getFile(id, resp);
+    }
+
+
+    @RequestMapping("save")
+    public ResultObject save(Dj bean, HttpServletRequest request, HttpServletResponse resp) {
+        djService.save(bean);
+        return ResultGen.genSuccessResult();
     }
 }

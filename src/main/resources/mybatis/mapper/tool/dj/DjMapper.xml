@@ -51,7 +51,7 @@
 	</select>
 
 
-	<resultMap id="songListMap" type="cn.ainannan.tool.dj.bean.Song">
+	<resultMap id="songListMap" type="cn.ainannan.tool.dj.bean.DjSong">
 		<id column="id" jdbcType="VARCHAR" property="id" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="singer" jdbcType="VARCHAR" property="singer" />
@@ -78,5 +78,72 @@
 			a.del_flag = '0'
 		AND s.id IS NOT NULL
     </select>
-	
+
+	<insert id="insert" parameterType="Dj">
+		insert into dj(
+		id,
+		name,
+		path,
+		size,
+		length,
+		type,
+		state,
+		xingji,
+		fileId,
+		create_user,
+		create_date,
+		del_flag
+		)
+		value(
+		#{id},
+		#{name},
+		#{path},
+		#{size},
+		#{length},
+		#{type},
+		#{state},
+		#{xingji},
+		#{file_id},
+		#{createUser},
+		#{createDate},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dj
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="path != null and path != ''">
+				path = #{path},
+			</if>
+			<if test="size != null and size != ''">
+				size = #{size},
+			</if>
+			<if test="length != null and length != ''">
+				length = #{length},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="xingji != null and xingji != ''">
+				xingji = #{xingji},
+			</if>
+			<if test="fileId != null and fileId != ''">
+				file_id = #{fileId},
+			</if>
+			<if test="delFlag != null">
+				del_flag = #{delFlag},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+
+
 </mapper>

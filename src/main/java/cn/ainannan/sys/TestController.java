@@ -1,27 +1,21 @@
 package cn.ainannan.sys;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import com.google.common.collect.Lists;
-
 import cn.ainannan.AnnApplication;
 import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 import cn.ainannan.timeline.picManager.service.SyncService;
-import cn.ainannan.tool.dj.bean.Dj;
-import cn.ainannan.tool.dj.bean.Song;
 import cn.ainannan.tool.dj.service.DjService;
+import com.google.common.collect.Lists;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("test")
@@ -60,22 +54,7 @@ public class TestController {
 	 */
 	@Test()
 	public void method2() {
-		List<Dj> djList = djService.listWithChildren(new Dj());
-		
-		for (Dj dj : djList) {
-			System.out.println("=============================");
-			System.out.println(dj.getName());
-			System.out.println(dj.getId());
-			
-			for (Song song : dj.getSongList()) {
-				System.out.println("-----------------------");
-				System.out.println(song.getId());
-				System.out.println(song.getName());
-				System.out.println(song.getSinger());
-				System.out.println("-----------------------");
-			}
-			System.out.println("=============================");
-		}
+
 	}
 	
 	public void method() {

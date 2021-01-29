@@ -1,6 +1,7 @@
 package cn.ainannan.tool.dj.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Dj extends BaseBean {
 	private String name;
 	private String path;
@@ -22,6 +24,6 @@ public class Dj extends BaseBean {
 	private String xingji;	// 评分 12345星
 	private String fileId;
 
-	private List<Song> songList;
+	private List<DjSong> songList;
 
 }

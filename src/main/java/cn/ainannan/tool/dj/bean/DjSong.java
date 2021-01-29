@@ -1,6 +1,7 @@
 package cn.ainannan.tool.dj.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Song extends BaseBean {
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+public class DjSong extends BaseBean {
 	private String djId;
 	private Integer location;
 	private String name;

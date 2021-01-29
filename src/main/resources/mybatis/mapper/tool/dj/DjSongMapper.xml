@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.dj.mapper.DjSongMapper">
+
+	<sql id="bean_Column_List" >
+        a.id as "id",
+		a.dj_id as "djId",
+		a.location as "location",
+		a.name as "name",
+		a.singer as "singer",
+		a.fanchang as "fanchang",
+		a.yuanchang_singer as "yuanchangSinger",
+		a.label as "label",
+		a.sort as "sort",
+		a.create_date as "createDate",
+		a.create_user as "createUser",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="left_join_include">
+	</sql>
+
+	<sql id="bean_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="djId != null and djId != ''">
+			and a.dj_id = #{djId}
+		</if>
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',#{name},'%')
+        </if>
+	</sql>
+
+	<select id="get" resultType="DjSong">
+		select
+		<include refid="bean_Column_List" />
+		from dj_song a
+		<include refid="left_join_include" />
+		where a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DjSong">
+		select
+		<include refid="bean_Column_List" />
+		from dj_song a
+		<include refid="left_join_include" />
+		<where>
+			<include refid="bean_where" />
+		</where>
+		order by a.dj_id, a.sort asc
+	</select>
+
+	<insert id="insert" parameterType="DjSong">
+		INSERT INTO dj_song (
+			`id`,
+			`dj_id`,
+			`location`,
+			`name`,
+			`singer`,
+			`fanchang`,
+			`label`,
+			`yuanchang_singer`,
+			`sort`,
+			`create_date`,
+			`create_user`,
+			`del_flag`
+		)
+		VALUES
+		(
+			#{id},
+			#{djId},
+			#{location},
+			#{name},
+			#{singer},
+			#{fanchang},
+			#{label},
+			#{yuanchangSinger},
+			#{sort},
+			#{createDate},
+			#{createUser},
+			#{delFlag}
+		);
+	</insert>
+
+	<update id="update">
+		UPDATE dj_song
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="location != null and location != ''">
+				location = #{location},
+			</if>
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="singer != null and singer != ''">
+				singer = #{singer},
+			</if>
+			<if test="fanchang != null and fanchang != ''">
+				fanchang = #{fanchang},
+			</if>
+			<if test="label != null and label != ''">
+				label = #{label},
+			</if>
+			<if test="yuanchangSinger != null and yuanchangSinger != ''">
+				yuanchang_singer = #{yuanchangSinger},
+			</if>
+			<if test="sort != null and sort != ''">
+				sort = #{sort},
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				del_flag = #{delFlag},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		UPDATE dj_song	set del_flag = '1'
+		WHERE id = #{id}
+	</update></mapper>
