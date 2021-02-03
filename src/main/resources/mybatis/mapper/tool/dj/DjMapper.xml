@@ -22,6 +22,21 @@
 
 	<sql id="bean_where">
 		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="name != null and name != ''">
+			and a.name like concat('%',#{name},'%')
+		</if>
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state}
+		</if>
+		<if test="xingji != null and xingji != ''">
+			and a.xingji = #{xingji}
+		</if>
+		<if test="fileId != null and fileId != ''">
+			and a.file_id = #{fileId}
+		</if>
 	</sql>
 
 	<select id="get" resultType="Dj">

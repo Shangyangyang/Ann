@@ -49,4 +49,16 @@ public class DjController {
         djService.save(bean);
         return ResultGen.genSuccessResult();
     }
+
+    @RequestMapping("getTempList")
+    public ResultObject getTempList(String filePath) {
+        return ResultGen.genSuccessResult(djService.getTempList(filePath));
+    }
+
+    @RequestMapping("checkIsAlready")
+    public ResultObject checkIsAlready(String filePath) {
+        return ResultGen.genSuccessResult(djService.checkIsAlready(filePath));
+    }
+
+
 }
