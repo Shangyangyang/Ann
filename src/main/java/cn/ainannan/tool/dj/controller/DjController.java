@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -52,12 +53,17 @@ public class DjController {
 
     @RequestMapping("getTempList")
     public ResultObject getTempList(String filePath) {
-        return ResultGen.genSuccessResult(djService.getTempList(filePath));
+        return djService.getTempList(filePath);
     }
 
     @RequestMapping("checkIsAlready")
     public ResultObject checkIsAlready(String filePath) {
         return ResultGen.genSuccessResult(djService.checkIsAlready(filePath));
+    }
+
+    @RequestMapping("add")
+    public ResultObject add(Dj bean) throws IOException {
+        return djService.add(bean);
     }
 
 

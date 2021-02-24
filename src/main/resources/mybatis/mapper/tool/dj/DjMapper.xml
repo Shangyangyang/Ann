@@ -62,7 +62,7 @@
 		<where>
 			<include refid="bean_where" />
 		</where>
-		order by a.create_date desc
+		order by a.state asc, a.create_date asc
 	</select>
 
 
@@ -104,7 +104,7 @@
 		type,
 		state,
 		xingji,
-		fileId,
+		file_id,
 		create_user,
 		create_date,
 		del_flag
@@ -118,7 +118,7 @@
 		#{type},
 		#{state},
 		#{xingji},
-		#{file_id},
+		#{fileId},
 		#{createUser},
 		#{createDate},
 		#{delFlag}

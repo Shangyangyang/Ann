@@ -48,7 +48,7 @@
 				AND a.type = #{type}
 			</if>
 			<if test="belong != null and belong != ''">
-				AND a.belong = #{belong}
+				AND a.belong like concat('%',#{belong},'%')
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -67,7 +67,7 @@
 			<otherwise>
 				ORDER BY a.select_num DESC
 			</otherwise>
-		</choose>		
+		</choose>
 	</select>
 
 	<select id="findAllList" resultType="TimelineLabel">

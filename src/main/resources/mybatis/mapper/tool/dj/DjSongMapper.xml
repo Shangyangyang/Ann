@@ -38,6 +38,10 @@
 		where a.id = #{id}
 	</select>
 
+	<select id="getSingerList" resultType="java.lang.String">
+		select a.singer from dj_song a GROUP BY a.singer order by create_date desc
+	</select>
+
 	<select id="findList" resultType="DjSong">
 		select
 		<include refid="bean_Column_List" />

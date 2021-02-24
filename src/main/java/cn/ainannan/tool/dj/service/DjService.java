@@ -1,5 +1,7 @@
 package cn.ainannan.tool.dj.service;
 
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.MD5Utils;
@@ -8,7 +10,6 @@ import cn.ainannan.tool.dj.mapper.DjMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
     public void getFile(String id, HttpServletResponse resp) {
 		Dj dj = dao.getPathById(id);
 
-		String filePath = dj.getPath().replace("djSource", "H:\\尚羊羊\\音乐\\水晶DJ\\source");
+		String filePath = dj.getPath().replace(DJ_PRE_PATH, DJ_FILE_SAVE_PATH);
 
 		File file = new File(filePath);
 		try {
@@ -36,15 +37,10 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		}
 	}
 
-	@Test
-	public void test2(){
-		String filePath = "F:\\BaiduNetdiskDownload\\微信：vip44493667";
-		this.getTempList(filePath);
-	}
+	public ResultObject getTempList(String filePath){
 
-	public List<Dj> getTempList(String filePath){
 		List<Dj> djList = Lists.newArrayList();
-		if(StringUtils.isBlank(filePath)) return djList;
+		if(StringUtils.isBlank(filePath)) return ResultGen.genFailResult("路径不能为空");
 
 		/*
 		简单梳理
@@ -54,12 +50,18 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		 */
 
 		File path = new File(filePath);
+
+		if(!path.exists()) return ResultGen.genFailResult("路径无效");
+
 		Dj obj = null;
+		String fileType = "";
 
 		if(!path.isDirectory()){
+			fileType = FILE_TYPE_FILE;
+
 			if("mp3".equals(FilenameUtils.getExtension(filePath))){
 				obj = new Dj();
-				System.out.println("filePath = " + FilenameUtils.getBaseName(filePath));
+
 				obj.setName(FilenameUtils.getBaseName(filePath));
 				obj.setPath(path.getName());
 				obj.setSize(path.length());
@@ -67,6 +69,8 @@ public class DjService extends BaseService<DjMapper, Dj>{
 				djList.add(obj);
 			}
 		} else {
+			fileType = FILE_TYPE_DIR;
+
 			File [] files = path.listFiles();
 			int count = 0;
 			for (File f : files ) {
@@ -82,7 +86,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
 			}
 		}
 
-		return djList;
+		return ResultGen.genSuccessResult(djList).setData2(fileType);
 	}
 
 	public Integer checkIsAlready(String filePath) {
@@ -97,4 +101,43 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		if(djList == null) return 0;
 		return djList.size();
 	}
+
+	public ResultObject add(Dj bean){
+		String path = bean.getPath();
+		System.out.println("bean.getPath() = " + path);
+
+		if(StringUtils.isBlank(path)) return ResultGen.genFailResult("路径不能为空");
+
+		File file = new File(path);
+
+		if(!file.exists()) return ResultGen.genFailResult("路径无效");
+
+		Dj obj = new Dj();
+		obj.setName(FilenameUtils.getBaseName(path));
+		obj.setPath(DJ_PRE_PATH + "/" + file.getName());
+		obj.setSize(file.length());
+		obj.setFileId(MD5Utils.getFileMD5(file));
+		obj.setState(DJ_STATE_WEIJIEXI);
+
+		this.save(obj);
+		obj.setPath(null);
+
+		try {
+			org.apache.commons.io.FileUtils.moveFile(
+					file, new File(DJ_FILE_SAVE_PATH + "/" + file.getName()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResultGen.genFailResult("文件移动失败，" + e.toString());
+		}
+
+		return ResultGen.genSuccessResult(obj);
+	}
+
+
+	private static final String FILE_TYPE_FILE = "1";
+	private static final String FILE_TYPE_DIR = "2";
+
+	private static final String DJ_STATE_WEIJIEXI = "1";
+	private static final String DJ_PRE_PATH = "djSource";
+	private static final String DJ_FILE_SAVE_PATH = "H:\\尚羊羊\\音乐\\水晶DJ\\source";
 }

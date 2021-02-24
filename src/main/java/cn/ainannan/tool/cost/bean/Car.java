@@ -7,6 +7,7 @@ public class Car extends BaseBean {
 	@Excel(name = "金额", orderNum="1")
 	private Double money;
 	@Excel(name = "类型", orderNum="2", replace= {"油费_1", "过路费_2", "罚款_3", "保险_4", "其它_5"})
+	private String carType;
 	private String type;
 	private String typeName;
 	@Excel(name = "里程数", orderNum="3")
@@ -26,6 +27,14 @@ public class Car extends BaseBean {
 	public Car(String id) {
 		super();
 		this.id = id;
+	}
+
+	public String getCarType() {
+		return carType;
+	}
+
+	public void setCarType(String carType) {
+		this.carType = carType;
 	}
 
 	public String getNiandu() {

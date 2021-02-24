@@ -6,6 +6,7 @@
         a.id as "id",
         a.money as "money",
         a.type as "type",
+        a.car_type as "carType",
         a.licheng as "licheng",
         a.youjia as "youjia", 
         a.reason as "reason", 
@@ -19,7 +20,7 @@
     </sql>
 	
 	<sql id="left_join_include">
-		left join sys_dict d on d.value = a.type and d.label = 'car_type'
+		left join sys_dict d on d.value = a.type and d.label = 'car_cost_type'
 	</sql>
 	
 	<sql id="car_where">
@@ -29,6 +30,9 @@
 		</if>
 		<if test="type != null and type != ''">
 			and a.type = #{type}
+		</if>
+		<if test="carType != null and carType != ''">
+			and a.car_type = #{carType}
 		</if>
 	</sql>
 	
@@ -60,6 +64,7 @@
 			cost_car a
 		WHERE
 			a.del_flag = '0'
+			and a.car_type = '1'
 		GROUP BY substr(a.input_date, 1, 4), a.type
 	</select>
 
@@ -77,18 +82,19 @@
 			cost_car a
 		WHERE
 			a.type = '1'
+		and a.car_type = '1'
 		AND a.del_flag = '0'
 	</select>
 	
 	<insert id="insert" parameterType="user">
 		insert into cost_car(id,
-		money, type, licheng, youjia, reason, input_date, 
+		money, type, car_type, licheng, youjia, reason, input_date,
 		create_user,
 		create_date,
 		update_user,
 		update_date,
 		del_flag)
-		value(#{id}, #{money}, #{type}, #{licheng}, #{youjia}, #{reason}, #{inputDate},
+		value(#{id}, #{money}, #{type}, #{carType}, #{licheng}, #{youjia}, #{reason}, #{inputDate},
 		#{createUser},
 		#{createDate},
 		#{updateUser},
@@ -105,6 +111,9 @@
 			</if>
 			<if test="type != null">
 				type = #{type},
+			</if>
+			<if test="carType != null">
+				car_type = #{carType},
 			</if>
 			<if test="licheng != null">
 				licheng = #{licheng},

@@ -288,12 +288,18 @@
 			<version>1.47</version>
 		</dependency>
 
-        <!--  -->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
         </dependency>
+
+		<!-- 拼音 -->
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 
 	</dependencies>
 

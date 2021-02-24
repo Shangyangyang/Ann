@@ -31,6 +31,12 @@ public class DjSongController {
         return ResultGen.genSuccessResult(pageInfo);
     }
 
+    @RequestMapping("getSingerList")
+    public ResultObject getSingerList(DjSong bean) {
+
+        return ResultGen.genSuccessResult(djSongService.getSingerList());
+    }
+
     @RequestMapping("save")
     public ResultObject save(DjSong bean) {
         djSongService.save(bean);

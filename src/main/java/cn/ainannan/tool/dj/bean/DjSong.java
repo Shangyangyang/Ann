@@ -17,6 +17,7 @@ public class DjSong extends BaseBean {
 	private Integer location;
 	private String name;
 	private String singer;
+	private String singerPy;
 	private String fanchang;
 	private String yuanchangSinger;
 	private String label;	// 标签，多选
