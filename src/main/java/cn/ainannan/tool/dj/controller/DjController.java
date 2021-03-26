@@ -66,5 +66,10 @@ public class DjController {
         return djService.add(bean);
     }
 
+    @RequestMapping("delete")
+    public ResultObject delete(Dj bean) throws IOException {
+        return djService.delete(bean);
+    }
+
 
 }

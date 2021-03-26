@@ -14,10 +14,14 @@
 		a.file_id as "fileId",
 		a.create_date as "createDate",
 		a.create_user as "createUser",
-		a.del_flag as "delFlag"
+		a.del_flag as "delFlag",
+		IFNULL(s.songCount, 0) as "songCount"
     </sql>
 
 	<sql id="left_join_include">
+		left join (
+			select a.dj_id, count(1) as songCount from dj_song a where a.del_flag = '0' GROUP BY a.dj_id
+		) s on s.dj_id = a.id
 	</sql>
 
 	<sql id="bean_where">
@@ -157,6 +161,11 @@
 			</if>
 		</trim>
 		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		update dj set del_flag = '1' where id = #{id};
+		update dj_song set del_flag = '1' where dj_id = #{id}
 	</update>
 
 

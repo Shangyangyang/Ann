@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FileUtils {
@@ -45,7 +46,29 @@ public class FileUtils {
 			if(FilenameUtils.isExtension(filePath.toLowerCase(), extensions)) {
 				fileList.add(filePath);
 			}
-		}		
+		}
+	}
+
+	public static void main(String[] args) {
+		File file = new File("H:\\尚羊羊\\图片");
+		System.out.println("getFileSizeStr(file) = " + getFileSizeStr(file.length()));
+	}
+
+	public static String getFileSizeStr(Long size){
+		String [] unitStr = new String [] {"B", "KB","MB","GB",};
+
+		if(size <= 0) return "0B";
+		int count = 0;
+		long unit = 1024;
+		double temp = size;
+		while(temp > unit){
+			temp = temp / unit;
+			count++;
+		}
+
+		DecimalFormat df = new DecimalFormat("#.0");
+
+		return df.format(temp) + unitStr[count];
 	}
 
 	public static void sendFile(File file, HttpServletResponse response) throws IOException {

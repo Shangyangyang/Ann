@@ -2,6 +2,8 @@ package cn.ainannan.base.service;
 
 import java.util.List;
 
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,8 +70,8 @@ public abstract class BaseService<D extends BaseDao<T>, T extends BaseBean> {
 	 * @param entity
 	 */
 	@Transactional(readOnly = false)
-	public void delete(T entity) {
-		dao.delete(entity);
+	public ResultObject delete(T entity) {
+		return ResultGen.genSuccessResult(dao.delete(entity));
 	}
 
   /**

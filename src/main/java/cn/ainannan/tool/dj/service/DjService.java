@@ -133,6 +133,30 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		return ResultGen.genSuccessResult(obj);
 	}
 
+	/**
+	 * 删除串烧，先删物理文件再删数据
+	 * @param entity
+	 * @return
+	 */
+	@Override
+	public ResultObject delete(Dj entity) {
+		// 先删除文件，再删除数据
+
+		Dj dj = dao.getPathById(entity.getId());
+
+		if(dj == null) return ResultGen.genFailResult("删除失败，未找到文件");
+
+		String filePath = dj.getPath().replace(DJ_PRE_PATH, DJ_FILE_SAVE_PATH);
+
+		File file = new File(filePath);
+
+		if(file.delete()){
+			return super.delete(entity);
+		} else {
+			super.delete(entity);
+			return ResultGen.genSuccessResult("物理文件已经不存在，本次仅删除了数据");
+		}
+	}
 
 	private static final String FILE_TYPE_FILE = "1";
 	private static final String FILE_TYPE_DIR = "2";

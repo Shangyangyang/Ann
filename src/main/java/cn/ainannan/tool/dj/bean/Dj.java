@@ -25,5 +25,6 @@ public class Dj extends BaseBean {
 	private String fileId;
 
 	private List<DjSong> songList;
+	private Integer songCount; // 所包含的歌曲数
 
 }

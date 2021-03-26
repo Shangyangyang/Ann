@@ -41,6 +41,7 @@ public class WebSocketUtil {
 	 */
 	@OnOpen
 	public void onOpen(Session session, @PathParam(value = "fuserid") String fuserid) {
+		System.out.println("websocket 已经触发");
 		try {
 			this.session = session; // 设置当前session
 			this.fuserid = fuserid;
