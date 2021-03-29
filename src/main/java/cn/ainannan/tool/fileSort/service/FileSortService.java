@@ -4,6 +4,7 @@ import cn.ainannan.base.bean.TongjiBean;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
+import cn.ainannan.commons.Constant;
 import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
@@ -22,10 +23,10 @@ import java.util.List;
 @Transactional(readOnly = false)
 public class FileSortService extends BaseService<FileSortMapper, FileSort> {
 
+    public static String basePath = null;
+
     @Value("${myPanfu}")
     private String BASE_PANFU;
-    private static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
-
 
     public TongjiBean getFileInfo(){
         return dao.getFileInfo();
@@ -91,5 +92,46 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
             }
         }
 
+    }
+
+
+    /**
+     * 根据type转换路径的前半部分
+     * @param path
+     * @param type
+     * @return
+     */
+    public static String changePath(String path, int type) {
+        String newP = null;
+        if(type == Constant.FALSE_TO_TRUE){
+            newP = path.replace(Constant.FILE_SORT_PATH_STR, basePath);
+        } else if(type == Constant.TRUE_TO_FALSE){
+            newP = path.replace(basePath, Constant.FILE_SORT_PATH_STR);
+        }
+
+        return newP;
+    }
+
+    /**
+     * 根据后缀名动态的生成路径
+     * @param fs
+     * @param file
+     * @return
+     */
+    public static String getPath(FileSort fs, File file) {
+        String pdfStr = "pdf,";
+        String musicStr = "mp3,";
+        String path = null;
+        String middleChar = "";
+        if(pdfStr.indexOf(fs.getSuffix()) > -1){
+            middleChar = File.separator + Constant.FILE_SORT_PATH_PDF;
+        } else if(musicStr.indexOf(fs.getSuffix()) > -1){
+            middleChar = File.separator + Constant.FILE_SORT_PATH_MUSIC;
+        } else {
+            System.out.println("未知后缀名： " + fs.getSuffix());
+        }
+
+        path = Constant.FILE_SORT_PATH_STR + middleChar + File.separator + fs.getName();
+        return path;
     }
 }

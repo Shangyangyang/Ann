@@ -51,8 +51,8 @@ logging:
 
 myPanfu: 'H:'
 
-#myPic-basePath: '\尚羊羊\图片\个人相册\'
-myPic-basePath: '\尚羊羊\图片\金馆长\source\'
+myPic-basePath: '\尚羊羊\图片\个人相册\'
+#myPic-basePath: '\尚羊羊\图片\金馆长\source\'
 ecxel-basePath: '\尚羊羊\个人文档\excel\'
 
 #spring.resources.static-locations: file:H:\尚羊羊\图片\个人相册\

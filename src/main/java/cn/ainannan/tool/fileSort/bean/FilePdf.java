@@ -12,19 +12,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FileSort extends BaseBean {
-	private String filePath;
-	private String suffixs;
-
-    private String path;
-    private String oldPath;
+public class FilePdf extends BaseBean {
     private String name;
-    private String oldName;
-    private String md5;
-    private String suffix;
-    private Long size;
-    // 1音乐2pdf
+    private String typef;
     private String type;
-    private String createBy;
-
+    private String author;
+    private Integer pageCount;
+    private String years;
+    private Integer grade;
+    private String state; // 0未生成thum;1已生成
 }

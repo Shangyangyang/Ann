@@ -24,11 +24,20 @@ public class Constant {
 	
 	
 	// ================= 时光轴专区  =======================
+
 	public static final String LABEL_BELONG_XUEBI = "1";
 	public static final String LABEL_BELONG_LELE = "2";
 	
 	public static final String LABEL_STATUS_WEI_TG = "0";
 	public static final String LABEL_STATUS_YI_TG = "1";
-	
+
+
+	// ================= PDF专区  =======================
+	public static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
+	public static final String FILE_SORT_PATH_PDF = "pdf";
+	public static final String FILE_SORT_PATH_MUSIC = "music";
+	public static final String FILE_SORT_PATH_STR = "FILE_SORT_PATH";
+	public static final int FALSE_TO_TRUE = 1;
+	public static final int TRUE_TO_FALSE = 2;
 	
 }

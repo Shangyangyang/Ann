@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FilePdfMapper">
+	<sql id="column_List" >
+        a.id as "id",
+		a.name as "name",
+		a.typef as "typef",
+		a.type as "type",
+		a.author as "author",
+		a.page_count as "pageCount",
+		a.years as "years",
+		a.grade as "grade",
+		a.state as "state",
+		a.create_by as "createBy",
+		a.create_date as "createDate",
+		a.update_by as "updateBy",
+		a.update_date as "updateDate",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="left_join_include">
+	</sql>
+
+	<sql id="where_List">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="state != null and state != ''">
+			and a.state = #{state}
+		</if>
+	</sql>
+
+
+	<select id="findList" parameterType="user" resultType="FilePdf">
+		select
+		<include refid="column_List" />
+		from file_pdf a
+		<include refid="left_join_include" />
+		<where>
+			<include refid="where_List" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+	<insert id="insertBySortId">
+		INSERT INTO `ainannan`.`file_pdf` (
+			`id`,
+			`name`,
+			`typef`,
+			`type`,
+			`author`,
+			`page_count`,
+			`years`,
+			`grade`,
+			`state`,
+			`create_by`,
+			`create_date`,
+			`update_by`,
+			`update_date`,
+			`del_flag`
+		) SELECT
+			a.id,
+			a.old_name,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			'0',
+			'admin',
+			now(),
+			'admin',
+			now(),
+			'0'
+		FROM
+			file_sort_list a
+		WHERE
+			a.id NOT IN (
+				SELECT
+					id
+				FROM
+					file_pdf
+				WHERE
+					del_flag = '0'
+			)
+	</insert>
+</mapper>

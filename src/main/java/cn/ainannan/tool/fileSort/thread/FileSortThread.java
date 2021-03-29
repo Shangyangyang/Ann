@@ -1,6 +1,7 @@
 package cn.ainannan.tool.fileSort.thread;
 
 import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.sys.bean.User;
@@ -8,6 +9,7 @@ import cn.ainannan.sys.utils.SpringContextUtil;
 import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
+import cn.ainannan.tool.fileSort.service.FileSortService;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -21,8 +23,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class FileSortThread extends Thread {
-
-    private static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
 
     private FileSort bean;
     private List<File> fList;
@@ -46,7 +46,7 @@ public class FileSortThread extends Thread {
         int failNum = 0;
         Long startT = new Date().getTime();
 
-        String basePath = basePanfu + FILE_SORT_PATH + File.separator;
+        FileSortService.basePath = basePanfu + Constant.FILE_SORT_PATH + File.separator;
 
 
         // 获取数据库中，所有的文件的md5，放到map中
@@ -65,7 +65,7 @@ public class FileSortThread extends Thread {
             if(StringUtils.isBlank(md5Strs) || md5Strs.indexOf(md5) == -1){
 
                 // 在目标文件夹下查找是否文件是否存在，如果存在，则进行重命操作
-                String fileName = checkAndGenPath(basePath, file.getPath(), file.getName());
+                String fileName = checkAndGenPath(FileSortService.basePath, file.getPath(), file.getName());
                 System.gc();
 
                 successNum++;
@@ -79,11 +79,13 @@ public class FileSortThread extends Thread {
                 fs.setDelFlag("0");
                 fs.setCreateBy(user.getId());
                 fs.setMd5(md5);
-                fs.setPath(file.getParent() + File.separator + fileName);
-                fs.setName(fileName);
                 fs.setSuffix(FilenameUtils.getExtension(file.getAbsolutePath()));
+                fs.setName(fs.getId() + "." + fs.getSuffix());
+                fs.setOldName(fileName);
+                fs.setOldPath(file.getPath());
                 fs.setSize(new File(file.getParent() + File.separator + fileName).length());
                 fs.setType(bean.getType());
+                fs.setPath(FileSortService.getPath(fs, file));
 
                 fsList.add(fs);
 
@@ -92,11 +94,11 @@ public class FileSortThread extends Thread {
                 file.delete();
             }
             // 临时增加耗时，看效果
-//            try {
-//                Thread.sleep(1000L);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             // 推送进度
             WebSocketUtil.sendObj(
@@ -120,14 +122,13 @@ public class FileSortThread extends Thread {
         for (FileSort fileSort : fsList) {
             try {
                 FileUtils.moveFile(
-                        new File(fileSort.getPath()),
-                        new File(basePath + fileSort.getName()));
+                        new File(fileSort.getOldPath()),
+                        new File(FileSortService.changePath(fileSort.getPath(), Constant.FALSE_TO_TRUE))
+                );
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // 移动文件后，将新的path替换掉老的path
-            fileSort.setPath(basePath + fileSort.getName());
         }
 
         // 批量保存
@@ -140,8 +141,21 @@ public class FileSortThread extends Thread {
             setFieldValueByFieldName("path", fileSort, null);
             setFieldValueByFieldName("md5", fileSort, null);
             setFieldValueByFieldName("type", fileSort, null);
+            setFieldValueByFieldName("oldName", fileSort, null);
         }
 
+    }
+
+
+    public static void main(String[] args) {
+        File file = new File("F:\\123\\test\\第一期：销售信赚钱圣经1.0（营销内功）.pdf");
+
+        System.out.println("file.getPath() = " + file.getPath());
+        System.out.println("file.getAbsolutePath() = " + file.getAbsolutePath());
+        
+        File newFile = new File("F:\\123\\test\\123.pdf");
+
+        // file.renameTo(newFile);
     }
 
     private static String checkAndGenPath(String basePath, String path, String name) {
