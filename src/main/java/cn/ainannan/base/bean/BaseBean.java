@@ -55,7 +55,7 @@ public abstract class BaseBean implements Serializable {
 
 	public void preUpdate() {
 		this.setUpdateDate(new Date());
-		this.setUpdateUser(UserUtil.getUser().getId());
+		if(UserUtil.getUser() != null) this.setUpdateUser(UserUtil.getUser().getId());
 	}
 	
 	public boolean isNewRecord() {

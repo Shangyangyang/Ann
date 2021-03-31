@@ -1,20 +1,19 @@
 package cn.ainannan.sys.utils;
 
+import cn.ainannan.commons.Constant;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-
-import org.apache.commons.lang3.StringUtils;
-
-import net.coobird.thumbnailator.Thumbnails;
 
 public class ImageUtil {
 	
@@ -64,6 +63,50 @@ public class ImageUtil {
 			out.close();
 			return descfile;
 		}
+	}
+
+	/**
+	 * 生成缩略图
+	 * @param sourcePath
+	 * @param targetPath
+	 */
+	public static void genThumbnail(String sourcePath, String targetPath) {
+		// 判断目标在不在，不在的话先创建
+		File file = new File(new File(targetPath).getParent());
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		File sourceFile = new File(sourcePath);
+		File targetFile = new File(targetPath);
+
+//		// 判断文件是否存在，如果不存在，等一会再处理
+//		int count = 0;
+//		while (!sourceFile.exists() && count++ < 5){
+//			try {
+//				Thread.sleep(1000L);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		count = 0;
+//		while (!targetFile.exists() && count++ < 5){
+//			try {
+//				Thread.sleep(1000L);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+
+		// 先降低图片质量
+		try {
+			ImageUtil.compressPictureByQality(sourceFile, targetFile, 0.3F);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// 再缩小图片
+		ImageUtil.operateByMaxSize(targetPath, targetPath,
+				Constant.IMG_THUMBNAIL_SIZE, Constant.IMG_THUMBNAIL_SIZE);
 	}
 	
 	public static void main(String[] args) {

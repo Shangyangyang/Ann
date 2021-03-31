@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FilePdfThumMapper">
+	<sql id="column_List" >
+        a.id as "id",
+		a.pid as "pid",
+		a.pagenum as "pagenum",
+		a.path as "path",
+		a.isthum as "isthum",
+		a.create_date as "createDate",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="left_join_include">
+	</sql>
+
+	<sql id="where_List">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="isthum != null and isthum != ''">
+			and a.isthum = #{isthum}
+		</if>
+	</sql>
+
+
+	<select id="findList" parameterType="filePdfThum" resultType="FilePdfThum">
+		select
+		<include refid="column_List" />
+		from file_pdf_thum a
+		<include refid="left_join_include" />
+		<where>
+			<include refid="where_List" />
+		</where>
+		order by a.pagenum asc, a.isthum asc
+	</select>
+
+	<insert id="insertByList" parameterType="java.util.List">
+		INSERT INTO file_pdf_thum(
+		id,
+		pid,
+		pagenum,
+		path,
+		isthum,
+		create_date,
+		del_flag
+		)
+		<foreach collection="list" item="entity"
+				 separator=" union all ">
+			SELECT
+			#{entity.id},
+			#{entity.pid},
+			#{entity.pagenum},
+			#{entity.path},
+			#{entity.isthum},
+			#{entity.createDate},
+			#{entity.delFlag}
+		</foreach>
+	</insert>
+</mapper>

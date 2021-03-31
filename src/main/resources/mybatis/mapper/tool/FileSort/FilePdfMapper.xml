@@ -29,7 +29,7 @@
 	</sql>
 
 
-	<select id="findList" parameterType="user" resultType="FilePdf">
+	<select id="findList" parameterType="filePdf" resultType="FilePdf">
 		select
 		<include refid="column_List" />
 		from file_pdf a
@@ -83,4 +83,80 @@
 					del_flag = '0'
 			)
 	</insert>
+
+	<update id="update">
+		UPDATE file_pdf
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="typef != null and typef != ''">
+				typef = #{typef},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="author != null and author != ''">
+				author = #{author},
+			</if>
+			<if test="pageCount != null and pageCount != ''">
+				page_count = #{pageCount},
+			</if>
+			<if test="years != null and years != ''">
+				years = #{years},
+			</if>
+			<if test="grade != null and grade != ''">
+				grade = #{grade},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				update_date = #{updateDate},
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByList">
+		<foreach collection="list" item="entity" separator=";">
+			update file_pdf
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="entity.name != null">
+					name = #{entity.name},
+				</if>
+				<if test="entity.typef != null">
+					typef = #{entity.typef},
+				</if>
+				<if test="entity.type != null">
+					type = #{entity.type},
+				</if>
+				<if test="entity.author != null">
+					author = #{entity.author},
+				</if>
+				<if test="entity.pageCount != null">
+					page_count = #{entity.pageCount},
+				</if>
+				<if test="entity.years != null">
+					years = #{entity.years},
+				</if>
+				<if test="entity.grade != null">
+					grade = #{entity.grade},
+				</if>
+				<if test="entity.state != null">
+					state = #{entity.state},
+				</if>
+				<if test="entity.updateUser != null">
+					update_by = #{entity.updateUser},
+				</if>
+				<if test="entity.updateDate != null">
+					update_date = #{entity.updateDate},
+				</if>
+			</trim>
+			where id = #{entity.id}
+		</foreach>
+	</update>
 </mapper>

@@ -27,8 +27,14 @@ public class UserUtil {
 	 * @return
 	 */
 	public static User getUser() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		User user = (User) request.getSession().getAttribute(Constant.LOGIN_USER);
+		User user = null;
+		try{
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+			user = (User) request.getSession().getAttribute(Constant.LOGIN_USER);
+			return user;
+		} catch (NullPointerException e){
+
+		}
 		return user;
 	}
 	

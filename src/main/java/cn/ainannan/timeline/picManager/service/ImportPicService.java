@@ -1,21 +1,5 @@
 package cn.ainannan.timeline.picManager.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Lists;
-
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
@@ -26,6 +10,20 @@ import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
 import cn.ainannan.sys.utils.ImageUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic>{
@@ -88,7 +86,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			}
 			
 			// 生成缩略图
-			genThumbnail(targetPath, targetThumbnailPath);
+			ImageUtil.genThumbnail(targetPath, targetThumbnailPath);
 			
 			// 生成类，放入List
 			TimelinePic tp = getTimelinePic(targetPath);
@@ -120,27 +118,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		int shengyu = fileList.size() - addNum < 0 ? 0 : fileList.size() - addNum;
 		return "本次新增了 " + addNum + " 条，还剩 " + shengyu + " 条未处理。" ;
 	}
-	
-	
-	public void genThumbnail(String sourcePath, String targetPath) {
 
-		// 判断目标在不在，不在的话先创建
-		File file = new File(new File(targetPath).getParent());
-		if(!file.exists()) {
-			file.mkdirs();
-		}
-		
-		// 先降低图片质量
-		try {
-			ImageUtil.compressPictureByQality(new File(sourcePath), new File(targetPath), 0.3F);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// 再缩小图片
-		ImageUtil.operateByMaxSize(targetPath, targetPath, Constant.IMG_THUMBNAIL_SIZE, Constant.IMG_THUMBNAIL_SIZE);
-		
-	}
 	
 	/**
 	 * 获取指定文件夹下的图片名称集合

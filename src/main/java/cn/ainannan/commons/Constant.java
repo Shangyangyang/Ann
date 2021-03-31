@@ -1,6 +1,10 @@
 package cn.ainannan.commons;
 
 public class Constant {
+
+	public static final String YES = "1";
+	public static final String NO = "0";
+
 	
 	// 个人文件夹的子文件夹
 	public static String [] picFiles = {
@@ -35,9 +39,16 @@ public class Constant {
 	// ================= PDF专区  =======================
 	public static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
 	public static final String FILE_SORT_PATH_PDF = "pdf";
+	public static final String FILE_SORT_PATH_PDF_THUM = "thum";
 	public static final String FILE_SORT_PATH_MUSIC = "music";
 	public static final String FILE_SORT_PATH_STR = "FILE_SORT_PATH";
+	/**
+	 * 把路径里的假路径替换为真的
+	 */
 	public static final int FALSE_TO_TRUE = 1;
+	/**
+	 * 把路径里的真路径替换为假的
+	 */
 	public static final int TRUE_TO_FALSE = 2;
 	
 }
