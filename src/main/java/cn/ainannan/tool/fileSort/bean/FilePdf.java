@@ -20,5 +20,7 @@ public class FilePdf extends BaseBean {
     private Integer pageCount;
     private String years;
     private Integer grade;
-    private String state; // 0未生成thum;1已生成
+    private String state; // 0未生成thum1未解析2已解析
+    private Long size;
+    private String oldName;
 }

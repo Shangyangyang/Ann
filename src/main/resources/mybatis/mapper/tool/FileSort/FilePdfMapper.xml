@@ -15,10 +15,13 @@
 		a.create_date as "createDate",
 		a.update_by as "updateBy",
 		a.update_date as "updateDate",
-		a.del_flag as "delFlag"
+		a.del_flag as "delFlag",
+		f.size as "size",
+		f.old_name as "oldName"
     </sql>
 
 	<sql id="left_join_include">
+		left join file_sort_list f on f.id = a.id
 	</sql>
 
 	<sql id="where_List">
@@ -28,6 +31,13 @@
 		</if>
 	</sql>
 
+	<select id="get" parameterType="filePdf" resultType="FilePdf">
+		select
+		<include refid="column_List" />
+		from file_pdf a
+		<include refid="left_join_include" />
+		where a.id = #{id}
+	</select>
 
 	<select id="findList" parameterType="filePdf" resultType="FilePdf">
 		select
@@ -37,7 +47,7 @@
 		<where>
 			<include refid="where_List" />
 		</where>
-		order by a.create_date desc
+		order by a.state desc, a.create_date asc
 	</select>
 
 	<insert id="insertBySortId">

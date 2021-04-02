@@ -4,8 +4,10 @@
 	<sql id="column_List" >
         a.id as "id",
 		a.pid as "pid",
+		<if test="showPath != null and showPath != '' and showPath == 1">
+			a.path as "path",
+		</if>
 		a.pagenum as "pagenum",
-		a.path as "path",
 		a.isthum as "isthum",
 		a.create_date as "createDate",
 		a.del_flag as "delFlag"
@@ -19,8 +21,21 @@
 		<if test="isthum != null and isthum != ''">
 			and a.isthum = #{isthum}
 		</if>
+		<if test="pid != null and pid != ''">
+			and a.pid = #{pid}
+		</if>
+		<if test="pagenum != null and pagenum != ''">
+			and a.pagenum = #{pagenum}
+		</if>
 	</sql>
 
+
+	<select id="getPathById" resultType="FilePdfThum">
+		SELECT
+			a.path
+		FROM file_pdf_thum a
+		WHERE a.id = #{id}
+	</select>
 
 	<select id="findList" parameterType="filePdfThum" resultType="FilePdfThum">
 		select

@@ -57,6 +57,11 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
 
         List<FilePdf> fpList = dao.findList(query);
 
+        if(fpList.size() == 0) {
+            System.out.println("本次没有可生成的PDF");
+            return;
+        }
+
         List<FilePdf> savePdfList = Lists.newArrayList();
         List<FilePdfThum> savePdfThumList = Lists.newArrayList();
 
@@ -100,22 +105,23 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
         }
 
         int max = 100;
-
-        if (savePdfThumList.size() > max) {
-            for (int i = 0; i < savePdfThumList.size(); i += max) {
-                filePdfThumMapper.insertByList(
-                        savePdfThumList.subList(
-                                i,
-                                savePdfThumList.size() < i + max ?
-                                        savePdfThumList.size() : i + max
-                        )
-                );
+        if(savePdfThumList.size() > 0){
+            if (savePdfThumList.size() > max) {
+                for (int i = 0; i < savePdfThumList.size(); i += max) {
+                    filePdfThumMapper.insertByList(
+                            savePdfThumList.subList(
+                                    i,
+                                    savePdfThumList.size() < i + max ?
+                                            savePdfThumList.size() : i + max
+                            )
+                    );
+                }
+            } else {
+                filePdfThumMapper.insertByList(savePdfThumList);
             }
-        } else {
-            filePdfThumMapper.insertByList(savePdfThumList);
         }
+        if(savePdfList.size() > 0) dao.updateByList(savePdfList);
 
-        dao.updateByList(savePdfList);
 
 
     }

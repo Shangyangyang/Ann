@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FilePdfThumMapper extends BaseDao<FilePdfThum> {
     int insertByList(List<FilePdfThum> fptList);
+    FilePdfThum getPathById(String id);
 }

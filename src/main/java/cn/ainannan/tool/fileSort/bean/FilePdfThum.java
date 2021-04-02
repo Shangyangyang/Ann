@@ -17,4 +17,5 @@ public class FilePdfThum extends BaseBean {
     private Integer pagenum;
     private String path;
     private String isthum;
+    private Integer showPath;
 }
