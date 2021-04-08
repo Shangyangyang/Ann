@@ -14,6 +14,8 @@ import lombok.ToString;
 @ToString
 public class FilePdf extends BaseBean {
     private String name;
+    private String bookname;
+
     private String typef;
     private String type;
     private String author;
@@ -23,4 +25,8 @@ public class FilePdf extends BaseBean {
     private String state; // 0未生成thum1未解析2已解析
     private Long size;
     private String oldName;
+    private String country;
+    private String translator;
+    private String press;
+    private String labels;  // 标签
 }

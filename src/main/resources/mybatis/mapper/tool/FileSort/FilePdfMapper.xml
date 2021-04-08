@@ -4,16 +4,20 @@
 	<sql id="column_List" >
         a.id as "id",
 		a.name as "name",
+		a.bookname as "bookname",
 		a.typef as "typef",
 		a.type as "type",
 		a.author as "author",
 		a.page_count as "pageCount",
 		a.years as "years",
 		a.grade as "grade",
+		a.country as "country",
+		a.translator as "translator",
+		a.press as "press",
 		a.state as "state",
-		a.create_by as "createBy",
+		a.create_user as "createUser",
 		a.create_date as "createDate",
-		a.update_by as "updateBy",
+		a.update_user as "updateUser",
 		a.update_date as "updateDate",
 		a.del_flag as "delFlag",
 		f.size as "size",
@@ -26,6 +30,36 @@
 
 	<sql id="where_List">
 		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="bookname != null and bookname != ''">
+			and a.bookname = #{bookname}
+		</if>
+		<if test="name != null and name != ''">
+			and a.name = #{name}
+		</if>
+		<if test="typef != null and typef != ''">
+			and a.typef = #{typef}
+		</if>
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="author != null and author != ''">
+			and a.author = #{author}
+		</if>
+		<if test="years != null and years != ''">
+			and a.years = #{years}
+		</if>
+		<if test="grade != null and grade != ''">
+			and a.grade = #{grade}
+		</if>
+		<if test="country != null and country != ''">
+			and a.country = #{country}
+		</if>
+		<if test="translator != null and translator != ''">
+			and a.translator = #{translator}
+		</if>
+		<if test="press != null and press != ''">
+			and a.press = #{press}
+		</if>
 		<if test="state != null and state != ''">
 			and a.state = #{state}
 		</if>
@@ -47,28 +81,36 @@
 		<where>
 			<include refid="where_List" />
 		</where>
-		order by a.state desc, a.create_date asc
+		order by a.state asc, a.create_date asc
 	</select>
 
 	<insert id="insertBySortId">
 		INSERT INTO `ainannan`.`file_pdf` (
 			`id`,
 			`name`,
+			`bookname`,
 			`typef`,
 			`type`,
 			`author`,
 			`page_count`,
 			`years`,
 			`grade`,
+			`country`,
+			`translator`,
+			`press`,
 			`state`,
-			`create_by`,
+			`create_user`,
 			`create_date`,
-			`update_by`,
+			`update_user`,
 			`update_date`,
 			`del_flag`
 		) SELECT
 			a.id,
-			a.old_name,
+			substr(a.old_name, 1, CHAR_LENGTH(a.old_name) - 4),
+			NULL,
+			NULL,
+			NULL,
+			NULL,
 			NULL,
 			NULL,
 			NULL,
@@ -100,6 +142,9 @@
 			<if test="name != null and name != ''">
 				name = #{name},
 			</if>
+			<if test="bookname != null and bookname != ''">
+				bookname = #{bookname},
+			</if>
 			<if test="typef != null and typef != ''">
 				typef = #{typef},
 			</if>
@@ -118,10 +163,19 @@
 			<if test="grade != null and grade != ''">
 				grade = #{grade},
 			</if>
+			<if test="country != null and country != ''">
+				country = #{country},
+			</if>
+			<if test="translator != null and translator != ''">
+				translator = #{translator},
+			</if>
+			<if test="press != null and press != ''">
+				press = #{press},
+			</if>
 			<if test="state != null and state != ''">
 				state = #{state},
 			</if>
-			<if test="updateDate != null and updateDate != ''">
+			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
 			<if test="updateUser != null and updateUser != ''">
@@ -137,6 +191,9 @@
 			<trim prefix="SET" suffixOverrides=",">
 				<if test="entity.name != null">
 					name = #{entity.name},
+				</if>
+				<if test="entity.bookname != null">
+					bookname = #{entity.bookname},
 				</if>
 				<if test="entity.typef != null">
 					typef = #{entity.typef},
@@ -160,7 +217,7 @@
 					state = #{entity.state},
 				</if>
 				<if test="entity.updateUser != null">
-					update_by = #{entity.updateUser},
+					update_user = #{entity.updateUser},
 				</if>
 				<if test="entity.updateDate != null">
 					update_date = #{entity.updateDate},

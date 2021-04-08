@@ -47,4 +47,10 @@ public class FilePdfController {
 	public ResultObject get(FilePdf bean, HttpServletRequest request) {
 		return ResultGen.genSuccessResult(filePdfService.get(bean));
 	}
+
+	@RequestMapping("save")
+	public ResultObject save(FilePdf bean, HttpServletRequest request) {
+		filePdfService.save(bean);
+		return ResultGen.genSuccessResult();
+	}
 }
