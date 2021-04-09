@@ -21,11 +21,23 @@
 		a.update_date as "updateDate",
 		a.del_flag as "delFlag",
 		f.size as "size",
-		f.old_name as "oldName"
+		f.old_name as "oldName",
+		label.label as "labels"
     </sql>
 
 	<sql id="left_join_include">
 		left join file_sort_list f on f.id = a.id
+		left join (
+			SELECT
+				a.pid,
+				GROUP_CONCAT(cast(l.label as CHAR) SEPARATOR ',') as label
+			FROM
+				file_pdf_label_relation a
+			LEFT JOIN file_pdf_label l ON l.id = a.labelid
+
+			GROUP BY a.pid
+
+		) label on label.pid = a.id
 	</sql>
 
 	<sql id="where_List">

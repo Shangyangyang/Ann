@@ -42,6 +42,9 @@ public class Constant {
 	public static final String FILE_SORT_PATH_PDF_THUM = "thum";
 	public static final String FILE_SORT_PATH_MUSIC = "music";
 	public static final String FILE_SORT_PATH_STR = "FILE_SORT_PATH";
+
+	// 每个subDir里至少存放的文件数
+	public static final Integer FILE_SORT_PATH_SUBPATH_FILE_NUM = 100;
 	/**
 	 * 把路径里的假路径替换为真的
 	 */

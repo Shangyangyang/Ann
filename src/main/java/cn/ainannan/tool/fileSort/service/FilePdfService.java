@@ -41,7 +41,7 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
     private String BASE_PANFU;
 
     // 将新增的PDF文件更新到PDF表里
-    //@PostConstruct
+    @PostConstruct
     private void insertBySortId(){
         dao.insertBySortId();
     }

@@ -86,19 +86,20 @@ public class FileSortThread extends Thread {
                 fs.setSize(new File(file.getParent() + File.separator + fileName).length());
                 fs.setType(bean.getType());
                 fs.setPath(FileSortService.getPath(fs, file));
-
+                
                 fsList.add(fs);
 
             } else {
                 failNum++;
                 file.delete();
             }
+            
             // 临时增加耗时，看效果
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000L);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             // 推送进度
             WebSocketUtil.sendObj(
@@ -113,8 +114,6 @@ public class FileSortThread extends Thread {
         WebSocketUtil.sendObj(user.getUserName(), ResultGen.genSuccessResult(0).setName("jindutiao2"));
         logSb.append("成功导入").append(successNum).append("个文件，因重复删除")
                 .append(failNum).append("个文件，共耗时").append((endT - startT) / 1000L).append("秒");
-
-        System.out.println(logSb.toString());
 
         WebSocketUtil.sendObj(user.getUserName(), ResultGen.genSuccessResult(logSb.toString()).setName("fileSortSyncMsg"));
 
@@ -143,9 +142,7 @@ public class FileSortThread extends Thread {
             setFieldValueByFieldName("type", fileSort, null);
             setFieldValueByFieldName("oldName", fileSort, null);
         }
-
     }
-
 
     public static void main(String[] args) {
         File file = new File("F:\\123\\test\\第一期：销售信赚钱圣经1.0（营销内功）.pdf");

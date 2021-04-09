@@ -5,6 +5,7 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
+import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -121,6 +123,7 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
     public static String getPath(FileSort fs, File file) {
         String pdfStr = "pdf,";
         String musicStr = "mp3,";
+
         String path = null;
         String middleChar = "";
         if(pdfStr.indexOf(fs.getSuffix()) > -1){
@@ -131,7 +134,39 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
             System.out.println("未知后缀名： " + fs.getSuffix());
         }
 
-        path = Constant.FILE_SORT_PATH_STR + middleChar + File.separator + fs.getName();
+        path = Constant.FILE_SORT_PATH_STR + middleChar + File.separator + getSubFile() + File.separator + fs.getName();
         return path;
+    }
+
+    private static String getSubFile() {
+        String subPath = "";
+
+        File baseFile = new File(basePath + File.separator + Constant.FILE_SORT_PATH_PDF);
+
+        File[] files = baseFile.listFiles();
+        List<Integer> dirList = Lists.newArrayList();
+
+        for (File file : files) {
+            if(file.isDirectory() && !Constant.FILE_SORT_PATH_PDF_THUM.equals(file.getName()))
+                dirList.add(Integer.parseInt(file.getName()));
+        }
+
+        dirList.sort(Comparator.naturalOrder());
+
+        for (Integer s : dirList) {
+            File dirFile = new File(baseFile.getPath() + File.separator + s);
+            if(dirFile.list().length < Constant.FILE_SORT_PATH_SUBPATH_FILE_NUM){
+                subPath = String.valueOf(s);
+                break;
+            }
+        }
+
+        // 如果没有空闲文件夹，则新增
+        if(StringUtils.isBlank(subPath)){
+            Integer maxDirNum = dirList.stream().max((a, b) -> a - b).get();
+            subPath = String.valueOf(maxDirNum + 1);
+        }
+
+        return subPath;
     }
 }
