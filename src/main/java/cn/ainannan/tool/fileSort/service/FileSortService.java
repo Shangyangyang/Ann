@@ -5,6 +5,7 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
+import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.tool.fileSort.bean.FileSort;
@@ -169,4 +170,22 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
 
         return subPath;
     }
+
+    /**
+     * 删除物理文件
+     * @param id
+     */
+    public void deleteOfPhysical(String id){
+
+        FileSort bean = dao.get(id);
+
+        System.out.println("bean.getPath() = " + bean.getPath());
+
+        String path = this.changePath(bean.getPath(), Constant.FALSE_TO_TRUE);
+
+        File file = new File(path);
+
+        FileUtils.deleteFile(file);
+    }
+
 }

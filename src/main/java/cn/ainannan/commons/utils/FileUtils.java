@@ -153,4 +153,17 @@ public class FileUtils {
 			}
 		}
 	}
+
+	public static void deleteFile(File file){
+		while(file.delete()){
+			System.out.println("while循环执行");
+			System.gc();
+
+			try {
+				Thread.sleep(20L);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

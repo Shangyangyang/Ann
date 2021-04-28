@@ -2,7 +2,7 @@ package cn.ainannan.tool.cost.service;
 
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.tool.cost.bean.Car;
-import cn.ainannan.tool.cost.bean.Tongji;
+import cn.ainannan.base.bean.Tongji;
 import cn.ainannan.tool.cost.mapper.CarMapper;
 import org.springframework.stereotype.Service;
 

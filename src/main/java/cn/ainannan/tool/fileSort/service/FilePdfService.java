@@ -1,7 +1,10 @@
 package cn.ainannan.tool.fileSort.service;
 
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
+import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.sys.utils.ImageUtil;
 import cn.ainannan.sys.utils.PdfToImage;
@@ -21,6 +24,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Service
@@ -36,6 +40,8 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
     private FilePdfThumMapper filePdfThumMapper;
     @Autowired(required = false)
     private FilePdfLabelMapper filePdfLabelMapper;
+    @Autowired(required = false)
+    private FileSortService fsService;
 
     @Value("${myPanfu}")
     private String BASE_PANFU;
@@ -67,6 +73,7 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
      * @param pid
      */
     public void saveLabels(String attr, String pid){
+        if(StringUtils.isBlank(attr)) return;
         String [] labels = attr.split(",");
 
         if(labels.length == 0) return;
@@ -127,7 +134,7 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
     }
 
     /**
-     * 读出PDF，获取页数，生成三张缩略图
+     * 读出PDF，获取页数，生成多张缩略图
      */
     @PostConstruct
     private void genThum() throws IOException {
@@ -152,7 +159,6 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
 
             FileSort fs = fileSortMapper.get(filePdf.getId());
             String realPath = FileSortService.changePath(fs.getPath(), Constant.FALSE_TO_TRUE);
-
 
             // 缩略图地址
             String thumPath =
@@ -243,19 +249,78 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
         filePathList.addAll(thumList);
     }
 
-//    public static void main(String[] args) {
-//        List<String> list = Lists.newArrayList();
-//
-//        list.add("aaaaaaaaaaaaaaaaaaa.jpg");
-//        list.add("bbbbbb.abc.mp3");
-//
-//        List<String> newList = genThumImg(list);
-//
-//        System.out.println("========================");
-//
-//        for (String s : newList) {
-//            System.out.println("s = " + s);
-//        }
-//
-//    }
+    public List<FilePdf> findAuthorList(){
+        return dao.findAuthorList();
+    }
+
+
+    @Override
+    public ResultObject delete(FilePdf entity) {
+        // 先删除数据，再删除物理文件
+        // 先删除关联，再删除pdf表数据，再删除fIle_sort表数据
+
+        FilePdfLabelRelation query = new FilePdfLabelRelation();
+        query.setPid(entity.getId());
+        int i1 = filePdfLabelMapper.deleteRelationByPid(query);
+
+        // if(i1 == 0) return ResultGen.genFailResult("删除relation数据失败！");
+
+        int i2 = dao.delete(entity);
+
+        if(i2 == 0) return ResultGen.genFailResult("删除pdf表数据失败！");
+
+        FileSort queryFS = new FileSort();
+        queryFS.setId(entity.getId());
+        int i3 = fileSortMapper.delete(queryFS);
+
+        if(i3 == 0) return ResultGen.genFailResult("删除file_sort_list表数据失败！");
+
+        // 删除物理文件之前，先删除缩略图，再删除缩略图物理文件
+
+        FilePdfThum queryFpt = new FilePdfThum();
+        queryFpt.setPid(entity.getId());
+        queryFpt.setShowPath(1);
+
+        List<FilePdfThum> thumList = filePdfThumMapper.findList(queryFpt);
+
+        filePdfThumMapper.deleteByEntity(queryFpt);
+
+        // 删除thum物理文件
+        deleteThumOfPhysical(thumList);
+
+        // 删除物理文件
+        fsService.deleteOfPhysical(entity.getId());
+
+        return ResultGen.genSuccessResult();
+    }
+
+    public void deleteThumOfPhysical(List<FilePdfThum> thumList){
+
+        AtomicReference<File> parentFile = new AtomicReference();
+        thumList.stream().forEach(item -> {
+            System.out.println("item.getPath() = " + item.getPath());
+
+            String path = fsService.changePath(item.getPath(), Constant.FALSE_TO_TRUE);
+
+            File file = new File(path);
+
+            parentFile.set(file.getParentFile());
+
+            FileUtils.deleteFile(file);
+        });
+
+        File pf = parentFile.get();
+
+        // 删除文件夹
+        FileUtils.deleteFile(pf);
+    }
+
+    public static void main(String[] args) {
+        String path = "H:\\尚羊羊\\fileSort\\pdf\\thum\\eac596542a494c1d8ea1f66819d13aee\\eac596542a494c1d8ea1f66819d13aee_1.png";
+        File file = new File(path);
+
+        File parentFile = file.getParentFile();
+
+        System.out.println("parentFile.delete() = " + parentFile.delete());
+    }
 }

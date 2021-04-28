@@ -122,33 +122,33 @@ public class PdfToImage {
      */
     private static int[] getGenPages(int pageNum) {
         // 前三页以及中间两页及最后一页
-        int[] pages = new int[6];
-        if(pageNum < 7) {
+        int[] pages = new int[7];
+        if(pageNum < (pages.length + 1)) {
             int [] ps = new int[pageNum];
             for (int i = 0; i < pageNum; i++) {
                 ps[i] = i;
             }
             return ps;
         } else {
-            pages[0] = 0;
-            pages[1] = 1;
-            pages[2] = 2;
-            pages[3] = pageNum / 2;
-            pages[4] = pageNum / 2 + 1;
-            pages[5] = pageNum - 1;
+            for(int i = 0; i < 4; i++){
+                pages[i] = i;
+            }
+            pages[4] = pageNum / 2;
+            pages[5] = pageNum / 2 + 1;
+            pages[6] = pageNum - 1;
             return pages;
         }
     }
 
-//    public static void main(String[] args) {
-//        int p = 68;
-//        int[] ps = getGenPages(p);
-//
-//        System.out.println(ps.length);
-//        for (int i : ps) {
-//            System.out.println("i = " + i);
-//        }
-//    }
+    public static void main(String[] args) {
+        int p = 7;
+        int[] ps = getGenPages(p);
+
+        System.out.println(ps.length);
+        for (int i : ps) {
+            System.out.println("i = " + i);
+        }
+    }
 
     private static boolean createDirectory(String folder) {
         File dir = new File(folder);

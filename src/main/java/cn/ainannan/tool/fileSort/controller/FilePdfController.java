@@ -53,4 +53,15 @@ public class FilePdfController {
 		filePdfService.save(bean);
 		return ResultGen.genSuccessResult();
 	}
+
+	@RequestMapping("findAuthorList")
+	public ResultObject findAuthorList(FilePdf bean, HttpServletRequest request) {
+
+		return ResultGen.genSuccessResult(filePdfService.findAuthorList());
+	}
+
+	@RequestMapping("delete")
+	public ResultObject delete(FilePdf bean, HttpServletRequest request) {
+		return filePdfService.delete(bean);
+	}
 }

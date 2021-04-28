@@ -101,4 +101,8 @@
 
 		</foreach>
 	</insert>
+
+	<delete id="delete">
+		update file_sort_list set del_flag = '1' where id = #{id}
+	</delete>
 </mapper>

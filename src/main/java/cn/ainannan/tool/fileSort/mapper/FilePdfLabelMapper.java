@@ -12,4 +12,5 @@ public interface FilePdfLabelMapper extends BaseDao<FilePdfLabel> {
     FilePdfLabel getLabels();
     int insertByList(List<FilePdfLabel> labelList);
     int insertRelationByList(List<FilePdfLabelRelation> relationList);
+    int deleteRelationByPid(FilePdfLabelRelation bean);
 }

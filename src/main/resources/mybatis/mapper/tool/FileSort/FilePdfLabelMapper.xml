@@ -89,4 +89,8 @@
 			#{entity.delFlag}
 		</foreach>
 	</insert>
+
+	<delete id="deleteRelationByPid">
+		update file_pdf_label_relation set del_flag = '1' where pid = #{pid}
+	</delete>
 </mapper>
