@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface FilePdfMapper extends BaseDao<FilePdf> {
 	void insertBySortId();
+	void insertRepeat(FilePdf bean);
     void updateByList(List<FilePdf> savePdfList);
     List<FilePdf> findAuthorList();
+    List<FilePdf> findSimpleList(FilePdf bean);
 }

@@ -23,9 +23,15 @@
 		f.size as "size",
 		f.old_name as "oldName",
 		label.label as "labels"
+		<if test="showMd5 != null and showMd5 != '' and showMd5 == 1">
+			,sortList.md5 as "md5"
+		</if>
     </sql>
 
 	<sql id="left_join_include">
+		<if test="showMd5 != null and showMd5 != '' and showMd5 == 1">
+			left join file_sort_list sortList on a.id = sortList.id
+		</if>
 		left join file_sort_list f on f.id = a.id
 		left join (
 			SELECT
@@ -96,6 +102,7 @@
 		order by a.state asc, a.create_date asc
 	</select>
 
+	<!-- 获取作者名称 -->
 	<select id="findAuthorList" parameterType="filePdf" resultType="FilePdf">
 		SELECT
 			author
@@ -106,6 +113,26 @@
 			author
 		ORDER BY
 			count(1) DESC
+	</select>
+
+	<!-- 获取简单的列表 -->
+	<select id="findSimpleList" parameterType="filePdf" resultType="FilePdf">
+		SELECT
+			a.id,
+			a.name,
+			a.author,
+			a.page_count as "pageCount",
+			a.state,
+			sortList.md5 as "md5",
+			sortList.size as "size"
+		FROM
+			file_pdf a
+		left join file_sort_list sortList on a.id = sortList.id
+		where
+			a.del_flag = '0'
+			<if test="state != null and state != ''">
+				and a.state = #{state}
+			</if>
 	</select>
 
 	<insert id="insertBySortId">
@@ -158,6 +185,10 @@
 				WHERE
 					del_flag = '0'
 			)
+	</insert>
+
+	<insert id="insertRepeat">
+		insert into file_pdf_repeat (pid1, pid2, type, score) values (#{id}, #{typef}, #{type}, #{size})
 	</insert>
 
 	<update id="update">

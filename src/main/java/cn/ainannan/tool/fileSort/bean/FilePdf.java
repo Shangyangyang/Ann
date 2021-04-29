@@ -29,4 +29,7 @@ public class FilePdf extends BaseBean {
     private String translator;
     private String press;
     private String labels;  // 标签
+
+    private String md5;
+    private String showMd5;
 }

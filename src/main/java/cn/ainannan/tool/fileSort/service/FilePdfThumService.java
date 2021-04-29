@@ -32,7 +32,7 @@ public class FilePdfThumService extends BaseService<FilePdfThumMapper, FilePdfTh
         thum.setShowPath(1);    // 显示 Path
         List<FilePdfThum> thumList = dao.findList(thum);
 
-        if(thumList.size() < 1) return ;
+        if(thumList.size() < 1) return;
 
         String filePath = fileSortService.changePath(thumList.get(0).getPath(), Constant.FALSE_TO_TRUE);
         returnImg(filePath, resp);

@@ -26,10 +26,11 @@ import java.util.List;
 @Transactional(readOnly = false)
 public class FileSortService extends BaseService<FileSortMapper, FileSort> {
 
-    public static String basePath = null;
-
     @Value("${myPanfu}")
     private String BASE_PANFU;
+
+
+    public static String basePath = null;
 
     public TongjiBean getFileInfo(){
         return dao.getFileInfo();
@@ -104,14 +105,17 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
      * @param type
      * @return
      */
-    public static String changePath(String path, int type) {
+    public String changePath(String path, int type) {
+        if(StringUtils.isBlank(basePath)) basePath = BASE_PANFU + Constant.FILE_SORT_PATH + File.separator;
+        if(StringUtils.isBlank(path)) return null;
         String newP = null;
         if(type == Constant.FALSE_TO_TRUE){
             newP = path.replace(Constant.FILE_SORT_PATH_STR, basePath);
         } else if(type == Constant.TRUE_TO_FALSE){
             newP = path.replace(basePath, Constant.FILE_SORT_PATH_STR);
         }
-
+        System.out.println("basePath = " + basePath);
+        System.out.println("newP = " + newP);
         return newP;
     }
 

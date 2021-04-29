@@ -37,6 +37,7 @@ public class FileSortThread extends Thread {
     @Transactional(readOnly = false)
     public void run() {
         FileSortMapper fsMapper = (FileSortMapper) SpringContextUtil.getBean("fileSortMapper");
+        FileSortService fileSortService = (FileSortService) SpringContextUtil.getBean("fileSortService");
         String basePanfu = SpringContextUtil.getApplicationContext().getEnvironment().getProperty("myPanfu");
         // websocket前来报道
 
@@ -122,7 +123,7 @@ public class FileSortThread extends Thread {
             try {
                 FileUtils.moveFile(
                         new File(fileSort.getOldPath()),
-                        new File(FileSortService.changePath(fileSort.getPath(), Constant.FALSE_TO_TRUE))
+                        new File(fileSortService.changePath(fileSort.getPath(), Constant.FALSE_TO_TRUE))
                 );
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FilePdfRepeatMapper">
+	<sql id="column_List" >
+        a.pid1,
+        a.pid2,
+        a.type,
+        a.score
+    </sql>
+
+	<sql id="left_join_include">
+
+	</sql>
+
+	<sql id="where_List">
+		1=1
+		<if test="pid1 != null and pid1 != ''">
+			and a.pid1 = #{pid1}
+		</if>
+		<if test="pid2 != null and pid2 != ''">
+			and a.pid2 = #{pid2}
+		</if>
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+	</sql>
+
+	<select id="get" parameterType="filePdfRepeat" resultType="FilePdfRepeat">
+		select
+		<include refid="column_List" />
+		from file_pdf_repeat a
+		<include refid="left_join_include" />
+		where a.pid1 = #{pid1} and a.pid2 = #{pid2}
+	</select>
+
+	<select id="getByFullQuery" parameterType="filePdfRepeat" resultType="FilePdfRepeat">
+		select
+		<include refid="column_List" />
+		from file_pdf_repeat a
+		<include refid="left_join_include" />
+		where a.pid1 = #{pid1} and a.pid2 = #{pid2} and a.type = #{type}
+	</select>
+
+	<select id="findList" parameterType="filePdf" resultType="FilePdfRepeat">
+		select
+		<include refid="column_List" />
+		from file_pdf_repeat a
+		<include refid="left_join_include" />
+		<where>
+			<include refid="where_List" />
+		</where>
+		order by a.type asc
+	</select>
+
+	<insert id="insert">
+		insert into file_pdf_repeat (pid1, pid2, type, score) values (#{pid1}, #{pid2}, #{type}, #{score})
+	</insert>
+
+	<insert id="insertByList" parameterType="java.util.List">
+		INSERT INTO file_pdf_repeat(
+			pid1, pid2, type, score
+		)
+		<foreach collection="list" item="entity"
+				 separator=" union all ">
+			SELECT
+			#{entity.pid1},
+			#{entity.pid2},
+			#{entity.type},
+			#{entity.score}
+		</foreach>
+	</insert>
+
+
+</mapper>
