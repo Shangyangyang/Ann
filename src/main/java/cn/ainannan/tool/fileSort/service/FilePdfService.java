@@ -49,7 +49,7 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
             entity.preUpdate();
             dao.update(entity);
             // 这里需要把labels拆解，然后保存
-            saveLabels(entity.getLabels(), entity.getId());
+            if(StringUtils.isNotBlank(entity.getLabels())) saveLabels(entity.getLabels(), entity.getId());
         }
 
     }

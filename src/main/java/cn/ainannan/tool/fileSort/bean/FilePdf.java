@@ -32,4 +32,5 @@ public class FilePdf extends BaseBean {
 
     private String md5;
     private String showMd5;
+    private Integer readpage;
 }

@@ -15,6 +15,7 @@
 		a.translator as "translator",
 		a.press as "press",
 		a.state as "state",
+		a.readpage as "readpage",
 		a.create_user as "createUser",
 		a.create_date as "createDate",
 		a.update_user as "updateUser",
@@ -150,6 +151,7 @@
 			`translator`,
 			`press`,
 			`state`,
+			`readpage`,
 			`create_user`,
 			`create_date`,
 			`update_user`,
@@ -168,6 +170,7 @@
 			NULL,
 			NULL,
 			NULL,
+			0,
 			'0',
 			'admin',
 			now(),
@@ -185,10 +188,6 @@
 				WHERE
 					del_flag = '0'
 			)
-	</insert>
-
-	<insert id="insertRepeat">
-		insert into file_pdf_repeat (pid1, pid2, type, score) values (#{id}, #{typef}, #{type}, #{size})
 	</insert>
 
 	<update id="update">
@@ -230,6 +229,9 @@
 			<if test="state != null and state != ''">
 				state = #{state},
 			</if>
+			<if test="readpage != null and readpage != ''">
+				readpage = #{readpage},
+			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
@@ -270,6 +272,9 @@
 				</if>
 				<if test="entity.state != null">
 					state = #{entity.state},
+				</if>
+				<if test="entity.readpage != null">
+					readpage = #{entity.readpage},
 				</if>
 				<if test="entity.updateUser != null">
 					update_user = #{entity.updateUser},
