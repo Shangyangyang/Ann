@@ -4,9 +4,10 @@ public class Constant {
 
 	public static final String YES = "1";
 	public static final String NO = "0";
+    public static final String JWT_SECRET = "7786df7fc3a34e26a61c034d5ec8245d";
 
-	
-	// 个人文件夹的子文件夹
+
+    // 个人文件夹的子文件夹
 	public static String [] picFiles = {
 			"20未知年份", "2011及以前", "2012", "2013", "2014", 
 			"2015", "2016", "2017", "2018", "2019", "2020", "2021", "Selfie",

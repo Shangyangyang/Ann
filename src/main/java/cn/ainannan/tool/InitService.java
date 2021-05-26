@@ -55,9 +55,10 @@ public class InitService {
     /**
      * 将新增的PDF文件更新到PDF表里
      */
-    // @PostConstruct
-    private void insertBySortId(){
+    @PostConstruct
+    private void insertBySortId() throws IOException {
         filePdfMapper.insertBySortId();
+        genThum();
     }
 
     /**

@@ -16,6 +16,8 @@
 		a.press as "press",
 		a.state as "state",
 		a.readpage as "readpage",
+		a.read_bdate as "readBdate",
+		a.read_edate as "readEdate",
 		a.create_user as "createUser",
 		a.create_date as "createDate",
 		a.update_user as "updateUser",
@@ -78,6 +80,9 @@
 		</if>
 		<if test="press != null and press != ''">
 			and a.press = #{press}
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state}
 		</if>
 		<if test="state != null and state != ''">
 			and a.state = #{state}
@@ -152,6 +157,8 @@
 			`press`,
 			`state`,
 			`readpage`,
+			`read_bdate`,
+			`read_edate`,
 			`create_user`,
 			`create_date`,
 			`update_user`,
@@ -172,6 +179,8 @@
 			NULL,
 			0,
 			'0',
+			NULL,
+			NULL,
 			'admin',
 			now(),
 			'admin',
@@ -185,8 +194,9 @@
 					id
 				FROM
 					file_pdf
-				WHERE
-					del_flag = '0'
+-- 因为这里不需要过滤是否删除，已经删除的也不应该再添加进来了。
+-- 				WHERE
+-- 					del_flag = '0'
 			)
 	</insert>
 
@@ -232,6 +242,12 @@
 			<if test="readpage != null and readpage != ''">
 				readpage = #{readpage},
 			</if>
+			<if test="readBdate != null">
+				read_bdate = #{readBdate},
+			</if>
+			<if test="readEdate != null">
+				read_edate = #{readEdate},
+			</if>
 			<if test="updateDate != null">
 				update_date = #{updateDate},
 			</if>
@@ -275,6 +291,12 @@
 				</if>
 				<if test="entity.readpage != null">
 					readpage = #{entity.readpage},
+				</if>
+				<if test="entity.readBdate != null">
+					read_bdate = #{entity.readBdate},
+				</if>
+				<if test="entity.readEdate != null">
+					read_edate = #{entity.readEdate},
 				</if>
 				<if test="entity.updateUser != null">
 					update_user = #{entity.updateUser},

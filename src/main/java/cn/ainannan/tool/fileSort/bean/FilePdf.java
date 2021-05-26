@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Data
@@ -33,4 +36,9 @@ public class FilePdf extends BaseBean {
     private String md5;
     private String showMd5;
     private Integer readpage;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date readBdate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date readEdate;
+
 }

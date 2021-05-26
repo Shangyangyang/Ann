@@ -54,6 +54,20 @@
 		order by a.create_date desc
 	</select>
 
+	<select id="findByRelation" parameterType="filePdfLabelRelation" resultType="filePdfLabelRelation">
+		select
+			a.*
+		from file_pdf_label_relation a
+		where
+			1=1
+			<if test="pid != null and pid != ''">
+				and a.pid = #{pid}
+			</if>
+			<if test="labelid != null and labelid != ''">
+				and a.labelid = #{labelid}
+			</if>
+	</select>
+
 	<insert id="insertByList" parameterType="java.util.List">
 		INSERT INTO file_pdf_label(
 		id,

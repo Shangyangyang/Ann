@@ -107,7 +107,19 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
         });
 
         // 保存relationList
-        if(relationList.size() > 0) filePdfLabelMapper.insertRelationByList(relationList);
+        if(relationList.size() > 0) insertLabelRelation(relationList);
+    }
+
+    private void insertLabelRelation(List<FilePdfLabelRelation> relationList){
+        List<FilePdfLabelRelation> rList = Lists.newArrayList();
+
+        for (FilePdfLabelRelation r : relationList) {
+            // 先查询有没有，如果没有的话，加入到新增list里
+            List<FilePdfLabelRelation> qList = filePdfLabelMapper.findByRelation(r);
+            if(qList.size() == 0) rList.add(r);
+        }
+
+        if(rList.size() > 0) filePdfLabelMapper.insertRelationByList(rList);
     }
 
     private FilePdfLabel genNewObject(String label){
