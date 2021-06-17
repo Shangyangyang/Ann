@@ -27,7 +27,7 @@ spring:
     time-zone: GMT+8
 
   session:
-    store-type: redis
+    store-type: none
     redis:
       flush-mode: immediate
     timeout: 7200
@@ -38,7 +38,7 @@ spring:
     password: newheyd123321
 #server: 
 #  context-path: /ann  
-   
+
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath*:mybatis/mapper/**/*.xml

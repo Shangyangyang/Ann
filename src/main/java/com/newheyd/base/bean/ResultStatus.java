@@ -1,0 +1,18 @@
+package com.newheyd.base.bean;
+
+public enum ResultStatus {
+
+    OK(1), // 成功
+
+    ERROR(0), // 失败
+
+    APPCODEOK(0);
+
+    public int status;
+
+    ResultStatus(int status) {
+        this.status = status;
+    }
+
+
+}
