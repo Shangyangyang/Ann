@@ -1,7 +1,6 @@
 package cn.ainannan.sys.websocket;
 
 import cn.ainannan.base.result.ResultObject;
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -179,8 +178,6 @@ public class WebSocketUtil {
 	}
 
 	public static void sendObj(String fuserid, ResultObject message) {
-		System.out.println("fuserid = " + fuserid);
-		System.out.println("message = " + JSON.toJSONString(message));
 		try {
 			WebSocketUtil _this = getcurrentWenSocket(fuserid);
 

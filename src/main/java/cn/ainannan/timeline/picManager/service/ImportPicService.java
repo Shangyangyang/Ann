@@ -33,7 +33,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	@Value("${myPanfu}")
 	private String BASE_PANFU;
 	
-	private static final int MAX_ADD_PIC_NUM = 120;
+	private static final int MAX_ADD_PIC_NUM = 150;
 	
 	public String addPic() throws IOException {
 		int addNum = 0; // 新增图片计数器

@@ -1,13 +1,11 @@
 package cn.ainannan.sys.websocket;
 
-import java.util.List;
-
-import org.springframework.scheduling.annotation.Scheduled;
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.ainannan.base.result.ResultGen;
-import cn.ainannan.base.result.ResultObject;
+import java.util.List;
 
 @RestController
 @RequestMapping("sys/websocket-test")
@@ -41,14 +39,14 @@ public class WebsocketController {
 		WebSocketUtil.sendObj(uuid, ResultGen.genSuccessResult(0).setName("jindutiao"));
 		Thread.sleep(1000);
 		for (int i = 0; i < 100;) {
-			i += (int)(Math.random() * 40 + 1);
+			i += (int)(Math.random() * 20 + 1);
 			if(i>100) i = 100;
 			WebSocketUtil.sendObj(uuid, ResultGen.genSuccessResult(i).setName("jindutiao"));
 			Thread.sleep(1000);
 		}
 	}
 	
-	// @Scheduled(cron = "0 */1 * * * ? ")
+	//@Scheduled(cron = "0 */1 * * * ? ")
 	public void testWebsocket() {
 		System.out.println("定时任务执行");
 		

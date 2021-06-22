@@ -1,34 +1,32 @@
 package cn.ainannan.timeline.picManager.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.sys.utils.ImageUtil;
+import cn.ainannan.sys.utils.UserUtil;
+import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.bean.TimelineSimilar;
 import cn.ainannan.timeline.picManager.service.ImportPicService;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("timeline/importPic")
@@ -236,7 +234,7 @@ public class ImportPicController {
 	/**
 	 * 跳过这一组图片，并且把它们的shortId保存在对方的similarId中。
 	 * 
-	 * @param ids
+	 * @param tpList
 	 * @return
 	 */
 	@RequestMapping("skipByTpList")
@@ -403,6 +401,10 @@ public class ImportPicController {
 		int i = 0; // 进度统计-当前进度
 		int deleteNum = 0;
 		double size = (double) resultList.size();
+		String userName = UserUtil.getUser().getUserName();
+
+		Long time = new Date().getTime();
+
 		for (TimelinePic tp : resultList) {
 			// 进度统计
 			percent = (int) ((double) ++i / size * 100);
@@ -411,7 +413,15 @@ public class ImportPicController {
 				timelinePicService.delete(tp);
 				deleteNum++;
 			}
+			Long newTime = new Date().getTime();
+			if(newTime - time > 100){
+				WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(percent).setName("jindutiao"));
+				time = newTime;
+			}
+
 		}
+
+		WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(100).setName("jindutiao"));
 
 		return ResultGen.genSuccessResult("共清除了  " + deleteNum + "  条。");
 	}

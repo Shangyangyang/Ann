@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +54,7 @@ public class InitService {
     /**
      * 将新增的PDF文件更新到PDF表里
      */
-    @PostConstruct
+    // @PostConstruct
     private void insertBySortId() throws IOException {
         filePdfMapper.insertBySortId();
         genThum();
@@ -179,7 +178,7 @@ public class InitService {
     /**
      * 比较判断数据库里已解析过的文件，循环找出可能重复的文件，放到比较表里。
      */
-    @PostConstruct
+    // @PostConstruct
     public void comparePdf(){
         System.out.println("comparePdf 开始执行");
 
