@@ -397,6 +397,7 @@ public class ImportPicController {
 	@RequestMapping("cleanDatabase")
 	public ResultObject cleanDatabase(TimelinePic timelinePic) {
 		if(!new File("H://").exists()) return ResultGen.genFailResult("图片源不存在，请检查移动硬盘是否存在");
+		timelinePic.setShowPath("1");
 		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
 		int i = 0; // 进度统计-当前进度
 		int deleteNum = 0;
@@ -415,13 +416,13 @@ public class ImportPicController {
 			}
 			Long newTime = new Date().getTime();
 			if(newTime - time > 100){
-				WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(percent).setName("jindutiao"));
+				WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(percent).setName(Constant.WEB_SOCKET_SEND_TYPE_TIMELINE_CLEAN_PIC));
 				time = newTime;
 			}
 
 		}
 
-		WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(100).setName("jindutiao"));
+		WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(100).setName(Constant.WEB_SOCKET_SEND_TYPE_TIMELINE_CLEAN_PIC));
 
 		return ResultGen.genSuccessResult("共清除了  " + deleteNum + "  条。");
 	}
@@ -456,9 +457,29 @@ public class ImportPicController {
 
 		return ResultGen.genSuccessResult("本次后台共计算了 " + count + " 条记录。");
 	}
-	
-	
-	
+
+
+	/**
+     * 获取去重的列表
+	 */
+	@RequestMapping("findListByFinger")
+    public ResultObject findListByFinger(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page,
+                             @RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+        PageHelper.startPage(page, size);
+        List<TimelinePic> resultList = timelinePicService.findListByFinger(timelinePic);
+        PageInfo pageInfo = new PageInfo(resultList);
+        return ResultGen.genSuccessResult(pageInfo);
+    }
+
+	/**
+     * 获取去重的列表
+	 */
+	@RequestMapping("findListByShortId")
+    public ResultObject findListByShortId(TimelinePic timelinePic, HttpServletRequest request) {
+        List<TimelinePic> resultList = timelinePicService.findListByShortId(timelinePic);
+        return ResultGen.genSuccessResult(resultList);
+    }
+
 
 	/**
 	 * 获取图片列表

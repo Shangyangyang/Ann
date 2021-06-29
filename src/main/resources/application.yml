@@ -1,8 +1,11 @@
 pagehelper:
+  helperDialect: mysql
   offset-as-page-num: true
   row-bounds-with-count: true
   page-size-zero: true
   reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 server:
   port: 8001
   servlet:
@@ -40,14 +43,20 @@ spring:
 #  context-path: /ann  
 
 mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
+  # config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath*:mybatis/mapper/**/*.xml
   type-aliases-package: cn.ainannan
+  configuration:
+    map-underscore-to-camel-case: true
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 
 logging: 
   level:
     org.springframework.web: info
-    org.mybatis: debug
+    cn.ainannan: debug
+    # org.mybatis: info
+
 
 myPanfu: 'H:'
 

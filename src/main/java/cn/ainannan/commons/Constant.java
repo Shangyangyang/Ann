@@ -36,7 +36,6 @@ public class Constant {
 	public static final String LABEL_STATUS_WEI_TG = "0";
 	public static final String LABEL_STATUS_YI_TG = "1";
 
-
 	// ================= PDF专区  =======================
 	public static final String FILE_SORT_PATH = "\\尚羊羊\\fileSort";
 	public static final String FILE_SORT_PATH_PDF = "pdf";
@@ -54,5 +53,10 @@ public class Constant {
 	 * 把路径里的真路径替换为假的
 	 */
 	public static final int TRUE_TO_FALSE = 2;
-	
+
+	// ================= websocket  =======================
+
+	public static final String WEB_SOCKET_SEND_TYPE_TIMELINE_CLEAN_PIC = "jindutiao_clean_pic";
+	public static final String WEB_SOCKET_SEND_TYPE_TIMELINE_ADD_PIC = "jindutiao_add_pic";
+
 }

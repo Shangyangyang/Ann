@@ -1,13 +1,15 @@
 package cn.ainannan.timeline.picManager.bean;
 
+import cn.ainannan.base.bean.BaseBean;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import cn.ainannan.base.bean.BaseBean;
-
 public class TimelinePic extends BaseBean {
+
+	private static final Integer SIMILAR_PASS_LINE = 90;
+
 	private String shortId;
 	private String filename;
 	private String path;
@@ -52,6 +54,9 @@ public class TimelinePic extends BaseBean {
 	private Integer similarType;	// 1指纹2直方图
 	private String similarIsNotEmpty;	// 1是
 	private String geoIsNull; // geo是否为空1是0否
+	private String showPath;	// 是否查询path src
+
+	private Integer picCount; // 去重模块用到的统计字段，重复图片数
 
 	private List<TimelinePic> picList;
 
@@ -314,4 +319,19 @@ public class TimelinePic extends BaseBean {
 		this.similarIsNotEmpty = similarIsNotEmpty;
 	}
 
+	public Integer getPicCount() {
+		return picCount;
+	}
+
+	public void setPicCount(Integer picCount) {
+		this.picCount = picCount;
+	}
+
+	public String getShowPath() {
+		return showPath;
+	}
+
+	public void setShowPath(String showPath) {
+		this.showPath = showPath;
+	}
 }

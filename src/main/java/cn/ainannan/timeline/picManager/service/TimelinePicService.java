@@ -1,17 +1,27 @@
 package cn.ainannan.timeline.picManager.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import cn.ainannan.base.service.BaseService;
+import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TimelinePicService extends BaseService<TimelinePicMapper, TimelinePic>{
+
+	@Value("${myPic-basePath}")
+	private String BASE_PATH;
+	@Value("${myPanfu}")
+	private String BASE_PANFU;
+
 	/**
 	 * 获取图片库最近状态（总数、最新拍摄日期、最近导入日期）
 	 * @return
@@ -98,11 +108,31 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	public List<TimelinePic> findListByFinger(TimelinePic pic){
+		return dao.findListByFinger(pic);
+	}
+	public List<TimelinePic> findListByShortId(TimelinePic timelinePic){
+		return dao.findListByShortId(timelinePic);
+	}
+
+	public void getImg(String id, String type, HttpServletResponse resp) {
+		if(type == null || "".equals(type.trim())) return;
+		TimelinePic bean = dao.getUrl(id);
+		String filePath = this.changePath("1".equals(type) ? bean.getSrcThumbnail() : bean.getSrc());
+		returnImg(filePath, resp);
+	}
+
+	public void returnImg(String filePath, HttpServletResponse resp) {
+		File file = new File(filePath);
+
+		try {
+			FileUtils.sendFile(file, resp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String changePath(String path) {
+		return this.BASE_PANFU + File.separator + this.BASE_PATH + File.separator + path;
+	}
 }

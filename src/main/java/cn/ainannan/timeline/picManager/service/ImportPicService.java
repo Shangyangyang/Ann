@@ -1,5 +1,6 @@
 package cn.ainannan.timeline.picManager.service;
 
+import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
@@ -8,6 +9,9 @@ import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
 import cn.ainannan.sys.utils.ImageUtil;
+import cn.ainannan.sys.utils.StringUtil;
+import cn.ainannan.sys.utils.UserUtil;
+import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 import com.google.common.collect.Lists;
@@ -40,8 +44,23 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		// 获取未筛选文件夹中的图片
 		List<String> fileList = getFileList();
 		List<TimelinePic> tpList = Lists.newArrayList();
+
+		int i = 0; // 进度统计-当前进度
+		double size = (double) (fileList.size() < MAX_ADD_PIC_NUM ? fileList.size() : MAX_ADD_PIC_NUM);
+		Long time = new Date().getTime();
+		int percent = 0;
+		String userName = UserUtil.getUser().getUserName();
+
 		// 遍历操作
 		for (String sourceStr : fileList) {
+			percent = (int) ((double) ++i / size * 100);
+
+			Long newTime = new Date().getTime();
+			if(newTime - time > 1000){
+				WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(percent).setName(Constant.WEB_SOCKET_SEND_TYPE_TIMELINE_ADD_PIC));
+				time = newTime;
+			}
+
 			File sourceFile = new File(sourceStr);
 			
 			// 获取拍摄日期，如果没有的话，则根据文件名进行解析拍摄日期
@@ -116,6 +135,9 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		}
 		// 保存list
 		int shengyu = fileList.size() - addNum < 0 ? 0 : fileList.size() - addNum;
+
+		WebSocketUtil.sendObj(userName, ResultGen.genSuccessResult(100).setName(Constant.WEB_SOCKET_SEND_TYPE_TIMELINE_ADD_PIC));
+
 		return "本次新增了 " + addNum + " 条，还剩 " + shengyu + " 条未处理。" ;
 	}
 
@@ -137,8 +159,14 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	 * @return
 	 */
 	public Date executeShotDate(String str) {
+
 		Date newDate = null;
 		String guessTime = null;
+
+		if (StringUtil.strIsNum(str.split("\\.")[0]) && str.length() > 15) {
+			// 1588664252160
+			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(str.split("\\.")[0])));
+		}
 
 		if (str.indexOf("WuTa_") == 0 && str.length() > 19) {
 			String subStrO = str.substring(5, 24);
@@ -179,6 +207,26 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 					+ substr(subStr, 8, 2) + ":" + substr(subStr, 10, 2) + ":" + substr(subStr, 12, 2);
 		}
 
+
+		if (str.indexOf("notepad") == 0  && str.length() > 16) {
+			// notepad1621183051014
+			String subStr = substr(str, 7, str.length());
+
+			guessTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.parseLong(subStr)));
+
+		}
+
+		if (str.indexOf("IMG") == 0 && str.indexOf("IMG_") != 0 && str.length() > 16) {
+			// IMG20191121175136
+			String subStr = substr(str, 3, 15);
+
+			String dateStr = substr(subStr, 0, 4) + "-" + substr(str, 4, 2) + "-" + substr(str, 6, 2);
+			String timeStr = substr(subStr, 8, 2) + ":" + substr(str, 10, 2) + ":" + substr(str, 12, 2);
+
+			guessTime = dateStr + " " + timeStr;
+
+		}
+
 		if (str.indexOf("IMG_") == 0 && str.length() > 15) {
 			String subStr = substr(str, 4, 15);
 			String[] arr = subStr.split("_");
@@ -189,6 +237,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 			guessTime = dateStr + " " + timeStr;
 
 		}
+
 
 		if (str.indexOf("P") == 0 && str.length() > 13) {
 			// 2016\P61006-110001-001.jpg
@@ -282,8 +331,8 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 	 */
 	private String substr(String str, int begin, int length) {
 		try {
-
-			return str.substring(begin, begin + length);
+			int endL = begin + length > str.split("\\.")[0].length() ? str.split("\\.")[0].length() : begin + length;
+			return str.substring(begin, endL);
 		} catch (Exception e) {
 			System.out.println("str:\t" + str);
 			System.out.println("begin:\t" + begin);

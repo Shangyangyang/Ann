@@ -6,12 +6,10 @@
 	<sql id="timelinePicColumns">
 		a.id as "id",
 		a.short_id as "shortId",
-		a.filename as
-		"filename",
-		a.path as "path",
-		a.src as "src",
-		a.src_thumbnail as
-		srcThumbnail,
+		a.filename as "filename",
+		<if test="showPath != null and showPath != '' and showPath == 1">
+			a.path as "path", a.src as "src", a.src_thumbnail as "srcThumbnail",
+		</if>
 		a.suffix as "suffix",
 		a.size as "size",
 		a.MD5 as "MD5",
@@ -109,6 +107,17 @@
 	<select id="get" resultType="timelinePic">
 		select
 		<include refid="timelinePicColumns" />
+		from timeline_pic a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getUrl" resultType="timelinePic">
+		select
+			a.id,
+			a.filename,
+			a.path,
+			a.src,
+			a.src_thumbnail as "srcThumbnail"
 		from timeline_pic a
 		WHERE a.id = #{id}
 	</select>
@@ -320,6 +329,60 @@
 		<if test="limitNum != null">
 			limit #{limitNum}
 		</if>
+	</select>
+
+	<select id="findListByFinger" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+			a.id as 'id',
+			a.short_ID as 'shortId',
+			a.filename as 'filename',
+			a. SIZE as 'size',
+			a.shot_date as 'shotDate',
+			s.picCount
+		FROM
+			timeline_pic a
+		LEFT JOIN (
+			SELECT
+				picid,
+				count(1) AS 'picCount'
+			FROM
+				timeline_similar
+			WHERE
+				ignore_state is null
+				and similarity &gt; #{SIMILAR_PASS_LINE}
+			GROUP BY
+				picid
+		) s ON s.picid = a.short_ID
+		WHERE
+			a.short_ID IN (
+				SELECT
+					picid
+				FROM
+					timeline_similar
+			)
+		ORDER BY picCount desc
+	</select>
+    <select id="findListByShortId" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+            a.id as 'id',
+            a.short_ID as 'shortId',
+            a.filename as 'filename',
+            a. SIZE as 'size',
+            a.shot_date as 'shotDate'
+        FROM
+            timeline_pic a
+        left join (
+        	select a.picid, a.otherid, a.similarity from timeline_similar a where picid = #{shortId}
+        ) s on s.otherid = a.short_ID
+        WHERE
+            a.short_ID IN (
+                SELECT
+                    otherid
+                FROM
+                    timeline_similar
+                where picid = #{shortId} and similarity &gt; #{SIMILAR_PASS_LINE}
+            )
+        ORDER BY a.shot_date desc
 	</select>
 
 	<insert id="insert" parameterType="timelinePic">
