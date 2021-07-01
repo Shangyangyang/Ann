@@ -368,7 +368,8 @@
             a.short_ID as 'shortId',
             a.filename as 'filename',
             a. SIZE as 'size',
-            a.shot_date as 'shotDate'
+            a.shot_date as 'shotDate',
+            s.similarity as "similarity"
         FROM
             timeline_pic a
         left join (
@@ -382,7 +383,7 @@
                     timeline_similar
                 where picid = #{shortId} and similarity &gt; #{SIMILAR_PASS_LINE}
             )
-        ORDER BY a.shot_date desc
+        ORDER BY s.similarity desc
 	</select>
 
 	<insert id="insert" parameterType="timelinePic">

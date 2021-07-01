@@ -10,7 +10,6 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class SyncService{
 	
 	private static List<TimelinePic> picList2 = null;
 	
-	@Scheduled(cron = "0 */10 * * * ?")
+	// @Scheduled(cron = "0 */10 * * * ?")
 	// @PostConstruct
 	public void executedSimilarityCompute() {
 		// 调取整个表，循环判断，并存储

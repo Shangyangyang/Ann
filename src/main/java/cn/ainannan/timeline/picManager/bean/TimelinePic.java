@@ -1,11 +1,14 @@
 package cn.ainannan.timeline.picManager.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class TimelinePic extends BaseBean {
 
 	private static final Integer SIMILAR_PASS_LINE = 90;
@@ -29,6 +32,8 @@ public class TimelinePic extends BaseBean {
 
 	private String geox;
 	private String geoy;
+
+	private Double similarity; // 相似度最高100
 
 	// 三个统计字段
 	private String lastTotal; // 最新总数
@@ -59,6 +64,14 @@ public class TimelinePic extends BaseBean {
 	private Integer picCount; // 去重模块用到的统计字段，重复图片数
 
 	private List<TimelinePic> picList;
+
+	public Double getSimilarity() {
+		return similarity;
+	}
+
+	public void setSimilarity(Double similarity) {
+		this.similarity = similarity;
+	}
 
 	public String getShortId() {
 		return shortId;
