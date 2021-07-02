@@ -43,6 +43,7 @@ public class SyncService{
 		
 		if(picList == null || picList.size() == 0) return;
 		System.out.println("picList.size() = " + picList.size());
+
 		if(null == picList2) {
 			picList2 = picMapper.findTempList2();
 		}
