@@ -25,7 +25,7 @@ public class SyncService{
 	@Autowired(required = false)
 	private TimelineSimilarMapper similarMapper;
 	
-	private static final Float SIMILAR_MIN_SIZE = 90F;
+	public static final Float SIMILAR_MIN_SIZE = 90F;
 	
 	private static List<TimelinePic> picList2 = null;
 	
@@ -56,7 +56,6 @@ public class SyncService{
 
 		int count = 0;
 		int computeNum = 0;
-		Long curTime = new Date().getTime();
 
 		for (TimelinePic p1 : picList) {
 			Long curTime2 = new Date().getTime();

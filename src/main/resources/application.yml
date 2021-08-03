@@ -46,6 +46,7 @@ mybatis:
   mapper-locations: classpath*:mybatis/mapper/**/*.xml
   type-aliases-package: cn.ainannan
   configuration:
+    default-statement-timeout: 60
     map-underscore-to-camel-case: true
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

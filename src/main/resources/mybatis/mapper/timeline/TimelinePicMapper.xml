@@ -30,6 +30,13 @@
 
 	<sql id="timelinePic_where">
 		a.del_flag = #{DEL_FLAG_NORMAL}
+
+		<if test="bSize != null and bSize != 0">
+			and a.size &gt;= #{bSize}
+		</if>
+		<if test="eSize != null and eSize != 0">
+			and a.size &lt;= #{eSize}
+		</if>
 		<if test="id != null and id != ''">
 			and a.id = #{id}
 		</if>
@@ -37,7 +44,7 @@
 			and a.short_Id = #{shortId}
 		</if>
 		<if test="filename != null and filename != ''">
-			and a.filename = #{filename}
+			and a.filename like concat('%',#{filename},'%')
 		</if>
 		<if test="path != null and path != ''">
 			and a.path = #{path}

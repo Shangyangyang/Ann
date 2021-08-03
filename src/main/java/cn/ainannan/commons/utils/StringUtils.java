@@ -1,14 +1,14 @@
 package cn.ainannan.commons.utils;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	
@@ -351,7 +351,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return
      */
     public static float getSimilarityRatio(String str, String target) {
-
+		// System.out.println("StringUtils-> " + Thread.currentThread().getName() + " 在执行");
+		long startTime = new Date().getTime();
 		int d[][]; // 矩阵
 		int n = str.length();
 		int m = target.length();
@@ -387,6 +388,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 			}
 		}
 
+		// System.out.println("StringUtils-> " + Thread.currentThread().getName() + " 执行完成，耗时 " + ((new Date().getTime() - startTime) / 1000) + " 秒");
 		return (1 - (float) d[n][m] / Math.max(str.length(), target.length())) * 100F;
 	}
 }

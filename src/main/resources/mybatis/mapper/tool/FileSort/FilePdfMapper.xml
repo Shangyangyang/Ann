@@ -55,7 +55,7 @@
 			and a.bookname = #{bookname}
 		</if>
 		<if test="name != null and name != ''">
-			and a.name = #{name}
+			and a.name like concat('%', #{name}, '%')
 		</if>
 		<if test="typef != null and typef != ''">
 			and a.typef = #{typef}

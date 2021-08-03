@@ -17,6 +17,7 @@
 		a.del_flag AS "delFlag",
 		pic.src as "pic.src",
 		pic.src_thumbnail as "pic.srcThumbnail",
+		pic.filename as "pic.filename",
 		<!-- concat('http://ainannan.frpgz1.idcfengye.com/', pic.src) as "pic.src", -->
 		pic.shot_date as "pic.shotDate"
 	</sql>
@@ -100,7 +101,7 @@
 				ORDER BY #{sqlOrderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date DESC
 			</otherwise>
 		</choose>		
 	</select>

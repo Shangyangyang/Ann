@@ -11,7 +11,7 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class TimelinePic extends BaseBean {
 
-	private static final Integer SIMILAR_PASS_LINE = 90;
+	private static final Integer SIMILAR_PASS_LINE = 99;
 
 	private String shortId;
 	private String filename;
@@ -60,10 +60,30 @@ public class TimelinePic extends BaseBean {
 	private String similarIsNotEmpty;	// 1是
 	private String geoIsNull; // geo是否为空1是0否
 	private String showPath;	// 是否查询path src
+	private Integer bSize;
+	private Integer eSize;
+
 
 	private Integer picCount; // 去重模块用到的统计字段，重复图片数
 
 	private List<TimelinePic> picList;
+
+
+	public Integer getbSize() {
+		return bSize;
+	}
+
+	public void setbSize(Integer bSize) {
+		this.bSize = bSize;
+	}
+
+	public Integer geteSize() {
+		return eSize;
+	}
+
+	public void seteSize(Integer eSize) {
+		this.eSize = eSize;
+	}
 
 	public Double getSimilarity() {
 		return similarity;
