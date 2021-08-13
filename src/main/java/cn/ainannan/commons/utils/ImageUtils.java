@@ -1,24 +1,89 @@
 package cn.ainannan.commons.utils;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.imaging.jpeg.JpegProcessingException;
+import com.drew.lang.BufferBoundsException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import org.apache.sanselan.Sanselan;
+import org.apache.sanselan.common.IImageMetadata;
+
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.sanselan.Sanselan;
-import org.apache.sanselan.common.IImageMetadata;
-
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-
 public class ImageUtils {
+
+	/**
+	 * 将经纬度从时分秒转换成度
+	 * 返回值是保留了4位小数的字符串
+	 * @param lng
+	 * @return
+	 */
+	public static String tranformPos(String lng){
+		if(StringUtils.isBlank(lng)) return "0";
+		String[] lntArr = lng
+				.trim()
+				.replace("°", ";")
+				.replace("′", ";")
+				.replace("'", ";")
+				.replace("\"", "")
+				.split(";");
+		String result = "0";
+		Double d = 0D;
+		for (int i = lntArr.length; i >0 ; i--) {
+			double v = Double.parseDouble(lntArr[i-1]);
+			if(i==1){
+				d=v+d;
+			}else{
+				d=(d+v)/60;
+			}
+		}
+		DecimalFormat df = new DecimalFormat("#.0000");
+		result = df.format(d);
+		return result;
+	}
+
+	/**
+	 * 获取照片中的经纬度
+	 * x是纬度，y是经度
+	 */
+	public static String getXYbyFile(String path, String tagName) throws ImageProcessingException, IOException {
+
+		System.out.println("path = " + path);
+
+		Metadata metadata = ImageMetadataReader.readMetadata(new File(path));
+
+		for (Directory directory : metadata.getDirectories()) {
+			for (Tag tag : directory.getTags()) {
+				if("GPS".equals(directory.getName())){
+					if("x".equals(tagName)){
+						if("GPS Latitude".equals(tag.getTagName())){
+							return tag.getDescription();
+						}
+					}
+					if("y".equals(tagName)){
+						if("GPS Longitude".equals(tag.getTagName())){
+							return tag.getDescription();
+						}
+					}
+				}
+			}
+			if (directory.hasErrors()) {
+				for (String error : directory.getErrors()) {
+					System.err.format("ERROR: %s", error);
+				}
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * 获取拍摄日期
@@ -59,6 +124,15 @@ public class ImageUtils {
 		}
 		
 		return d;
+	}
+
+	public static void main(String[] args) throws JpegProcessingException, IOException {
+		String [] xys = getGeoxy("E:\\TEST\\333.jpg");
+
+		for (String xy : xys) {
+
+			System.out.println("xy = " + xy);
+		}
 	}
 	
 	/**

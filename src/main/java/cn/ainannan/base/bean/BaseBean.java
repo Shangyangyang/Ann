@@ -109,4 +109,13 @@ public abstract class BaseBean implements Serializable {
 	public void setUpdateUser(String updateUser) {
 		this.updateUser = updateUser;
 	}
+
+	public String getSqlOrderBy() {
+		return sqlOrderBy;
+	}
+
+	public void setSqlOrderBy(String sqlOrderBy) {
+		this.sqlOrderBy = sqlOrderBy;
+	}
+
 }

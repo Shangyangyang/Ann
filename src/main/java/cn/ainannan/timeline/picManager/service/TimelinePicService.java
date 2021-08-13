@@ -72,6 +72,15 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	}
 
 	/**
+	 * 获取到指定经纬度附近的照片列表
+	 * @param tp
+	 * @return
+	 */
+	public List<TimelinePic> findGeoAdjoinList(TimelinePic tp) {
+		return dao.findGeoAdjoinList(tp);
+	}
+
+	/**
 	 * 以list的形式更新数据
 	 * @param savePic
 	 */
@@ -135,4 +144,8 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	private String changePath(String path) {
 		return this.BASE_PANFU + File.separator + this.BASE_PATH + File.separator + path;
 	}
+
+    public TimelinePic getRandomImg() {
+		return dao.getRandomImg();
+    }
 }

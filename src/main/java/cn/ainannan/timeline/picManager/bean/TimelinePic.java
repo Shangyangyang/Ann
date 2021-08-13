@@ -33,6 +33,8 @@ public class TimelinePic extends BaseBean {
 	private String geox;
 	private String geoy;
 
+	private int distance; // 相距距离（米）
+
 	private Double similarity; // 相似度最高100
 
 	// 三个统计字段
@@ -62,14 +64,30 @@ public class TimelinePic extends BaseBean {
 	private String showPath;	// 是否查询path src
 	private Integer bSize;
 	private Integer eSize;
+	private String notId;   // 不包含的ID
 
 
 	private Integer picCount; // 去重模块用到的统计字段，重复图片数
 
 	private List<TimelinePic> picList;
 
+	public int getDistance() {
+		return distance;
+	}
 
-	public Integer getbSize() {
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
+	public String getNotId() {
+        return notId;
+    }
+
+    public void setNotId(String notId) {
+        this.notId = notId;
+    }
+
+    public Integer getbSize() {
 		return bSize;
 	}
 

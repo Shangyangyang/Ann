@@ -26,7 +26,21 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	 * @return
 	 */
 	List<TimelinePic> findSimilarImgList(TimelinePic tp);
-	
+
+	/**
+	 * 获取到指定经纬度附近照片列表
+	 * @param tp
+	 * @return
+	 */
+	List<TimelinePic> findGeoAdjoinList(TimelinePic tp);
+
+	/**
+	 * 获取geo的合集
+	 * @param tp
+	 * @return
+	 */
+	List<TimelinePic> findGeoList(TimelinePic tp);
+
 	/**
 	 * 获取文件指纹相同的数据
 	 * @return
@@ -74,4 +88,6 @@ public interface TimelinePicMapper extends BaseDao<TimelinePic> {
 	void updateByList(List<TimelinePic> list);
 
 	TimelinePic getUrl(String id);
+
+    TimelinePic getRandomImg();
 }

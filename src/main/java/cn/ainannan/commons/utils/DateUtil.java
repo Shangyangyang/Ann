@@ -11,6 +11,28 @@ import java.util.List;
 
 public class DateUtil {
 
+
+	/**
+	 * 获取指定时间的指定时间
+	 * @param date 指定时间
+	 * @param size 指定时间长度
+	 * @param type 向前还是向后，begin/end
+	 * @return
+	 */
+	public static Date beforeOneHourToNowDate(Date date, int size, String type) {
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+
+		Integer h =
+				"begin".equals(type) ? c.get(Calendar.HOUR_OF_DAY) - size :
+						"end".equals(type) ? c.get(Calendar.HOUR_OF_DAY) + size : 0;
+
+
+		c.set(Calendar.HOUR_OF_DAY, h);//HOUR_OF_DAY 指一天中的小时
+		return c.getTime();
+	}
+
 	/**
 	 * 获得以当前日期为基础的文件名后缀，如（20080808123005）
 	 * 

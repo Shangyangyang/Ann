@@ -61,17 +61,17 @@
 		<if test="belong != null and belong != ''">
 			and a.belong = #{belong}
 		</if>
-		<if test="beginShotDate != null">
-			and a.shot_date &gt;= #{beginShotDate}
-		</if>
-		<if test="endShotDate != null">
-			and a.shot_date &lt;= #{endShotDate}
-		</if>
 		<if test="preSrc != null and preSrc != ''">
 			and a.src like concat(#{preSrc}, '%')
 		</if>
 		<if test="shotDateL != null and shotDateL != ''">
 			and a.shot_date like concat(#{shotDateL}, '%')
+		</if>
+		<if test="beginShotDate != null">
+			and a.shot_date &gt;= #{beginShotDate}
+		</if>
+		<if test="endShotDate != null">
+			and a.shot_date &lt; #{endShotDate}
 		</if>
 		<if test="timelineFlag != null and timelineFlag != ''">
 			and not EXISTS(select * from timeline b where a.id =
@@ -106,6 +106,9 @@
 				)
 			</if>
 		</if>
+        <if test="notId != null and notId != ''">
+            and a.id != #{notId}
+        </if>
 	</sql>
 
 	<sql id="timelinePicJoins">
@@ -113,7 +116,25 @@
 
 	<select id="get" resultType="timelinePic">
 		select
-		<include refid="timelinePicColumns" />
+			a.id as "id",
+			a.short_id as "shortId",
+			a.filename as "filename",
+			a.suffix as "suffix",
+			a.size as "size",
+			a.MD5 as "MD5",
+			a.finger_print as "fingerPrint",
+			a.shot_date as "shotDate",
+			a.similar_id as "similarId",
+			a.similar_status as "similarStatus",
+			a.state as "state",
+			a.belong as "belong",
+			a.create_date as "createDate",
+			a.create_user as "createUser",
+			a.update_date as "updateDate",
+			a.update_user as "updateUser",
+			a.geox,
+			a.geoy,
+			a.del_flag as "delFlag"
 		from timeline_pic a
 		WHERE a.id = #{id}
 	</select>
@@ -127,6 +148,15 @@
 			a.src_thumbnail as "srcThumbnail"
 		from timeline_pic a
 		WHERE a.id = #{id}
+	</select>
+
+	<select id="getRandomImg" resultType="timelinePic">
+		select
+		<include refid="timelinePicColumns" />
+		from timeline_pic a
+		ORDER BY
+			RAND()
+		LIMIT 1
 	</select>
 
 	<!-- 获取拍摄日期为空的记录 -->
@@ -268,16 +298,87 @@
 	<select id="findList" parameterType="timelinePic"
 		resultType="timelinePic">
 		select
-		<include refid="timelinePicColumns" />
+		<include refid="timelinePicColumns"/>
 		from timeline_pic a
-		<include refid="timelinePicJoins" />
+		<include refid="timelinePicJoins"/>
 		<where>
 			<include refid="timelinePic_where" />
 		</where>
-		order by a.create_date desc
+        <choose>
+            <when test="sqlOrderBy != null and sqlOrderBy != ''">
+                ORDER BY #{sqlOrderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
 		<if test="limitNum != null">
 			limit #{limitNum}, 3
 		</if>
+	</select>
+
+
+	<select id="findGeoList" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+			a.id,
+			a.filename,
+			a.path,
+			a.src
+		FROM
+			timeline_pic a
+		WHERE
+			a.del_flag = '0'
+			and (
+				a.geox is null
+				or a.geox = ''
+				or a.geoy is null
+				or a.geoy = ''
+			)
+		limit 0, 200
+
+	</select>
+
+	<select id="findGeoAdjoinList" parameterType="timelinePic" resultType="timelinePic">
+		SELECT
+		<include refid="timelinePicColumns"/>,
+		a.distance as "distance"
+		FROM
+			(
+				SELECT
+					S.*,
+					ROUND(
+						6378.138 * 2 * ASIN(
+							SQRT(
+								POW(
+									SIN(
+										(
+											#{geox} * PI() / 180 - S.geox * PI() / 180
+										) / 2
+									),
+									2
+								) + COS(#{geox} * PI() / 180) * COS(S.geox * PI() / 180) * POW(
+									SIN(
+										(
+											#{geoy} * PI() / 180 - S.geoy * PI() / 180
+										) / 2
+									),
+									2
+								)
+							)
+						) * 1000
+					) AS distance
+				FROM
+					timeline_pic S
+				WHERE
+					S.del_flag = '0'
+					<if test="notId != null and notId != ''">
+						and S.id != #{notId}
+					</if>
+			) a
+		ORDER BY
+			a.distance ASC
+		LIMIT 1, 20
+
 	</select>
 
 	<select id="findTempList" parameterType="timelinePic"

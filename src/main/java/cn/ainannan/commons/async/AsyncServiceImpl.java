@@ -20,21 +20,21 @@ import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
 @Service
-public class AsyncServiceImpl{
+public class AsyncServiceImpl {
 
     private static Logger logger = LogManager.getLogger(AsyncServiceImpl.class.getName());
     public static final Float SIMILAR_MIN_SIZE = 90F;
 
     @Autowired
     private TimelinePicMapper picMapper;
-//    @Autowired(required = false)
+    //    @Autowired(required = false)
     private TimelineSimilarMapper similarMapper;
     @Autowired
     private SqlSessionFactory ssf;
 
 
     @Async
-    public void computeFinger(List<TimelinePic> picList, CountDownLatch latch){
+    public void computeFinger(List<TimelinePic> picList, CountDownLatch latch) {
         SqlSession sqlSession = ssf.openSession();
         similarMapper = sqlSession.getMapper(TimelineSimilarMapper.class);
 
@@ -48,7 +48,7 @@ public class AsyncServiceImpl{
         /*
         初始化
          */
-        synchronized (Object.class){
+        synchronized (Object.class) {
             tsList = similarMapper.findList(new TimelineSimilar());
         }
 
@@ -61,10 +61,10 @@ public class AsyncServiceImpl{
             Long curTime2 = new Date().getTime();   // 进度条统计 当前时间
 
             // 为节省数据库资源，如果没有新发现时，不执行查询。
-            if(computeNum != computeNumOld){
+            if (computeNum != computeNumOld) {
 
                 // 获取一遍最新的指纹列表
-                synchronized (Object.class){
+                synchronized (Object.class) {
                     tsList = similarMapper.findList(new TimelineSimilar());
                     computeNumOld = computeNum;
                 }
@@ -76,7 +76,7 @@ public class AsyncServiceImpl{
             for (TimelinePic p2 : AsyncUtil.picList2) {
 
                 // 如果两条数据不是相同ID，并且指纹都不为空
-                if(!p1.getShortId().equals(p2.getShortId())
+                if (!p1.getShortId().equals(p2.getShortId())
                         && p1.getFingerPrint() != null
                         && p2.getFingerPrint() != null) {
 
@@ -87,7 +87,7 @@ public class AsyncServiceImpl{
                     similar = StringUtils.getSimilarityRatio(p1.getFingerPrint(), p2.getFingerPrint());
 
                     // 如果相似度达到指定值，则进行保存操作
-                    if(similar >= SIMILAR_MIN_SIZE) {
+                    if (similar >= SIMILAR_MIN_SIZE) {
 
                         ts = new TimelineSimilar();
                         ts.setPicid(p1.getShortId());
@@ -101,13 +101,13 @@ public class AsyncServiceImpl{
                                                 item.getPicid().equals(p1.getShortId()) &&
                                                         item.getOtherid().equals(p2.getShortId())
                                         ) ||
-                                        (
-                                                item.getPicid().equals(p2.getShortId()) &&
-                                                        item.getOtherid().equals(p1.getShortId())
-                                        )
+                                                (
+                                                        item.getPicid().equals(p2.getShortId()) &&
+                                                                item.getOtherid().equals(p1.getShortId())
+                                                )
                                 ).findAny();
                         // 如果tsList里不存在，则进行保存操作。
-                        if(!temp.isPresent()) {
+                        if (!temp.isPresent()) {
                             synchronized (Object.class) {
                                 saveList.add(ts);
                             }
@@ -122,13 +122,13 @@ public class AsyncServiceImpl{
             tp.setId(p1.getId());
             tp.setSimilarStatus(1);
 
-            synchronized (Object.class){
+            synchronized (Object.class) {
                 tpList.add(tp);
             }
 
             // 执行批量保存
-            synchronized (Object.class){
-                if(saveList.size() > 0) {
+            synchronized (Object.class) {
+                if (saveList.size() > 0) {
                     similarMapper.insertSimilarByList(saveList);
                 }
 
