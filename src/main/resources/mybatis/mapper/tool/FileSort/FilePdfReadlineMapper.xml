@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FileSortMapper">
+	<sql id="column_List" >
+        a.id as "id",
+		a.pid as "pid",
+		a.readtime as "readtime",
+		a.pagenum as "pagenum",
+		a.p as "p",
+		a.create_date as "createDate",
+		a.create_by as "createBy",
+		a.update_date as "updateDate",
+		a.update_by as "updateBy",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="left_join_include">
+	</sql>
+
+	<sql id="where_List">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="md5 != null and md5 != ''">
+			and a.md5 = #{md5}
+		</if>
+		<if test="suffix != null and suffix != ''">
+			and a.suffix = #{suffix}
+		</if>
+		<if test="type != null and type != ''">
+			and a.type = #{type}
+		</if>
+		<if test="name != null and name != ''">
+			and a.name like '%' || #{name} || '%'
+		</if>
+	</sql>
+
+
+	<select id="get" parameterType="String" resultType="FileSort">
+		select
+		<include refid="column_List" />
+		from file_sort_list a
+		<include refid="left_join_include" />
+		where a.id = #{id}
+	</select>
+
+	<select id="getMd5Str" parameterType="String" resultType="java.lang.String">
+		SELECT GROUP_CONCAT(a. md5) FROM file_sort_list a
+	</select>
+	<select id="getFileInfo" resultType="TongjiBean">
+		select
+			a.*,
+			CONCAT(left(a.n2 / a.n1 * 100, 5),'%') as "s1",
+			CONCAT(left(a.n3 / a.n1 * 100, 5),'%') as "s2"
+		from (
+			SELECT
+				count(1) as "n1",
+				sum(case when a.type = '1' then 1 else 0 end) as "n2",
+				sum(case when a.type = '2' then 1 else 0 end) as "n3",
+				sum(case when a.newid is not null then 1 else 0 end) as "n4",
+				sum(a.size) as "l1",
+				d.d1
+
+			FROM
+				file_sort_list a
+			left join (
+				select max(create_date) as "d1" from file_sort_list where del_flag = '0'
+			)d on 1=1
+			WHERE
+				a.del_flag = '0'
+		)a
+	</select>
+
+	<insert id="insertByList" parameterType="java.util.List">
+		INSERT INTO file_sort_list(
+		id,
+		path,
+		name,
+		old_name,
+		md5,
+		suffix,
+		size,
+		create_by,
+		create_date,
+		del_flag,
+		type
+		)
+		<foreach collection="list" item="entity"
+				 separator=" union all ">
+			SELECT
+			#{entity.id},
+			#{entity.path},
+			#{entity.name},
+			#{entity.oldName},
+			#{entity.md5},
+			#{entity.suffix},
+			#{entity.size},
+			#{entity.createBy},
+			#{entity.createDate},
+			#{entity.delFlag},
+			#{entity.type}
+
+		</foreach>
+	</insert>
+
+	<delete id="delete">
+		update file_sort_list set del_flag = '1' where id = #{id}
+	</delete>
+</mapper>
