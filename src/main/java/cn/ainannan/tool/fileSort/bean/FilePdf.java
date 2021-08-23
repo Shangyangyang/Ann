@@ -41,4 +41,9 @@ public class FilePdf extends BaseBean {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date readEdate;
 
+    private Integer isRead; // 权限控制，1 是阅读相关
+    private FilePdfReadline readline;
+
+
+
 }

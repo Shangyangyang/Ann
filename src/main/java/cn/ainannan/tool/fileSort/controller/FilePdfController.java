@@ -3,6 +3,7 @@ package cn.ainannan.tool.fileSort.controller;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FilePdf;
+import cn.ainannan.tool.fileSort.service.FilePdfReadlineService;
 import cn.ainannan.tool.fileSort.service.FilePdfService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,12 +27,8 @@ public class FilePdfController {
 
 	@Autowired
 	private FilePdfService filePdfService;
-	
-//	@RequestMapping({ "", "findFlieList" })
-//	public ResultObject list(FilePdf bean, HttpServletRequest request) {
-//
-//		return fileSortService.findFileList(bean);
-//	}
+	@Autowired
+	private FilePdfReadlineService readlineService;
 
 	@RequestMapping("list")
 	public ResultObject getFileInfo(FilePdf bean,@RequestParam(defaultValue = "1") Integer page,
@@ -51,6 +49,13 @@ public class FilePdfController {
 	@RequestMapping("save")
 	public ResultObject save(FilePdf bean, HttpServletRequest request) {
 		filePdfService.save(bean);
+
+		// 阅读进度的判断
+		if(bean.getIsRead() != null && bean.getIsRead() == 1){
+			bean.getReadline().setReadtime(new Date());
+			readlineService.save(bean.getReadline());
+		}
+
 		return ResultGen.genSuccessResult();
 	}
 
