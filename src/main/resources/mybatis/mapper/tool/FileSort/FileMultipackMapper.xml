@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FileMultipackMapper">
+	<sql id="FileMultipack_column_List" >
+        a.id as "id",
+		a.filetype as "filetype",
+		a.name as "name",
+		a.brief as "brief",
+		a.label as "label",
+		a.state as "state",
+		a.create_user as "createUser",
+		a.create_date as "createDate",
+		a.update_user as "updateUser",
+		a.update_date as "updateDate",
+		a.del_flag as "delFlag"
+    </sql>
+
+	<sql id="FileMultipack_left_join_include">
+	</sql>
+
+	<sql id="FileMultipack_where_List">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="name != null and name != ''">
+			and a.name like concat('%',#{name}, '%')
+		</if>
+		<if test="brief != null and brief != ''">
+			and a.brief like concat('%',#{brief}, '%')
+		</if>
+		<if test="label != null and label != ''">
+			and a.label like concat('%',#{label}, '%')
+		</if>
+		<if test="filetype != null and filetype != ''">
+			and a.filetype = #{filetype}
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state}
+		</if>
+	</sql>
+
+	<select id="get" parameterType="String" resultType="FileMultipack">
+		select
+		<include refid="FileMultipack_column_List" />
+		from file_multipack a
+		<include refid="FileMultipack_left_join_include" />
+		where a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="FileMultipack">
+		select
+		<include refid="FileMultipack_column_List" />
+		from file_multipack a
+		<include refid="FileMultipack_left_join_include" />
+		where <include refid="FileMultipack_where_List" />
+		order by a.update_date desc
+	</select>
+
+	<insert id="insert">
+		INSERT INTO file_multipack(
+			id,
+            filetype,
+            name,
+            brief,
+            label,
+            state,
+            create_user,
+            create_date,
+            update_user,
+            update_date,
+            del_flag
+		) values (
+			#{id},
+            #{filetype},
+            #{name},
+            #{brief},
+            #{label},
+            #{state},
+            #{createUser},
+            #{createDate},
+            #{updateUser},
+            #{updateDate},
+            #{delFlag},
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE file_multipack
+		<trim prefix="SET" suffixOverrides=",">
+
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		update file_multipack set del_flag = '1' where id = #{id}
+	</delete>
+</mapper>

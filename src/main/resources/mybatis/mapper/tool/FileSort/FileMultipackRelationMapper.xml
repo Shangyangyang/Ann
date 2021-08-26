@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FileMultipackRelationMapper">
+	<sql id="FileMultipackRelation_column_List" >
+        a.mid as "mid",
+        a.rid as "rid",
+        a.sort as "sort"
+    </sql>
+
+	<sql id="FileMultipackRelation_left_join_include">
+	</sql>
+
+	<sql id="FileMultipackRelation_where_List">
+		1=1
+		<if test="mid != null and mid != ''">
+			and a.mid = #{mid}
+		</if>
+		<if test="rid != null and rid != ''">
+			and a.rid = #{rid}
+		</if>
+	</sql>
+
+	<select id="get" parameterType="String" resultType="FileMultipackRelation">
+		select
+		<include refid="FileMultipackRelation_column_List" />
+		from file_multipack_relation a
+		<include refid="FileMultipackRelation_left_join_include" />
+		where a.mid = #{mid} and a.rid = #{rid}
+	</select>
+
+	<select id="findList" resultType="FileMultipackRelation">
+		select
+		<include refid="FileMultipackRelation_column_List" />
+		from file_multipack_relation a
+		<include refid="FileMultipackRelation_left_join_include" />
+		where <include refid="FileMultipackRelation_where_List" />
+		order by a.sort asc
+	</select>
+
+	<insert id="insert">
+		INSERT INTO file_multipack_relation(
+			mid,rid,sort
+		) values (
+			#{mid},
+			#{rid},
+			#{sort}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE file_multipack_relation
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="updateDate != null">
+				sort = #{sort}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete file_multipack_relation  where mid = #{mid} and rid = #{rid}
+	</delete>
+</mapper>
