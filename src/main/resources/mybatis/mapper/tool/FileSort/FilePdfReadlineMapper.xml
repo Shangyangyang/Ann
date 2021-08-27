@@ -20,7 +20,7 @@
 	<sql id="FilePdfReadline_where_List">
 		a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="notZero != null and notZero != '' and notZero == 1">
-			pagenum != 0
+			and pagenum != 0
 		</if>
 		<if test="readtime != null">
 			and left(a.readtime, 10) = left(#{readtime}, 10)

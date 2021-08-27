@@ -114,8 +114,8 @@ public class FileSortService extends BaseService<FileSortMapper, FileSort> {
         } else if(type == Constant.TRUE_TO_FALSE){
             newP = path.replace(basePath, Constant.FILE_SORT_PATH_STR);
         }
-        System.out.println("basePath = " + basePath);
-        System.out.println("newP = " + newP);
+        // System.out.println("basePath = " + basePath);
+        // System.out.println("newP = " + newP);
         return newP;
     }
 
