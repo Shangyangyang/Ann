@@ -40,9 +40,15 @@ public class FileMultipackController {
 
 	@RequestMapping("save")
 	public ResultObject save(FileMultipack bean, HttpServletRequest request) {
+
 		fileMultipackService.save(bean);
 
 		return ResultGen.genSuccessResult();
+	}
+
+	@RequestMapping("add")
+	public ResultObject add(FileMultipack bean, HttpServletRequest request) {
+		return fileMultipackService.add(bean);
 	}
 
 	@RequestMapping("delete")

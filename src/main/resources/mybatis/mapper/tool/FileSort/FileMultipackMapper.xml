@@ -78,7 +78,7 @@
             #{createDate},
             #{updateUser},
             #{updateDate},
-            #{delFlag},
+            #{delFlag}
 		)
 	</insert>
 

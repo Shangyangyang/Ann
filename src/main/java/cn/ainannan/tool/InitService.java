@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -54,7 +55,7 @@ public class InitService {
     /**
      * 将新增的PDF文件更新到PDF表里
      */
-    // @PostConstruct
+    @PostConstruct
     private void insertBySortId() throws IOException {
         filePdfMapper.insertBySortId();
         genThum();
@@ -63,7 +64,7 @@ public class InitService {
     /**
      * 读出PDF，获取页数，生成多张缩略图
      */
-    // @PostConstruct
+    //@PostConstruct
     private void genThum() throws IOException {
 
         FileSortService.basePath = BASE_PANFU + Constant.FILE_SORT_PATH + File.separator;
