@@ -44,6 +44,9 @@ public class FilePdf extends BaseBean {
     private Integer isRead; // 权限控制，1 是阅读相关
     private FilePdfReadline readline;
 
+    // 扩展字段
+    private String multipacks; // 已加入的合集们
+
 
 
 }

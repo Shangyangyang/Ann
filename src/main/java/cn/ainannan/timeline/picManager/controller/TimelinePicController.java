@@ -56,6 +56,7 @@ public class TimelinePicController {
         tp1.setEndShotDate(DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "end"));
         tp1.setNotId(id);
         tp1.setSqlOrderBy("shot_date asc");
+        tp1.setLimitNum(1);
 
         List<TimelinePic> tab1List = tpService.findList(tp1);
 
@@ -64,6 +65,7 @@ public class TimelinePicController {
         tp1.setNotId(id);
         tp1.setShotDateL(new SimpleDateFormat("yyyy-MM-dd").format(pic.getShotDate()));
         tp1.setSqlOrderBy("shot_date asc");
+        tp1.setLimitNum(1);
 
         List<TimelinePic> tab2List = tpService.findList(tp1);
 

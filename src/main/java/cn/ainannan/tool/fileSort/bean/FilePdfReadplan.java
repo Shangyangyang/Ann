@@ -7,20 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
+import java.util.Date;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FileMultipackRelation extends BaseBean {
-    private String mid;
-    private String rid;
-    private Integer sort;
-
-    // 查询参数
-    private String deleteAllId; // 根据rid删除所有合集关联
-    private String list;        // 前端传递过来的json集合
-    private List<FileMultipackRelation> fmrList;
+public class FilePdfReadplan extends BaseBean {
+    private String pid;
+    private FilePdf pdf;
+    private Date readStartTime;
+    private Date planTime;
+    private String state;   // 状态 0未开始计划 1开始计划 9完成计划 3已延时一次 4计划失败
 }

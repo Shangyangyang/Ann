@@ -55,6 +55,19 @@ public class TestController {
         return "hello ccc";
     }
 
+
+    @RequestMapping("receive")
+    public String receive(@RequestParam("list") List<String> list) {
+
+        for (String s : list) {
+            System.out.println("s = " + s);
+        }
+
+
+        return "hello ann";
+
+    }
+
     /**
      * mybatis 查询子集合的试验
      */

@@ -21,9 +21,6 @@
 		<if test="type != null and type != ''">
 			and a.type = #{type}
 		</if>
-		<if test="type != null and type != ''">
-			and a.type = #{type}
-		</if>
 		<if test="labels2 != null and labels2 != ''">
 			<foreach collection="labels2" item="d" open="and (" close=")" separator="or">
 				concat(',',a.label,',') = concat(',',#{d},',')

@@ -29,6 +29,8 @@
 		<if test="showMd5 != null and showMd5 != '' and showMd5 == 1">
 			,sortList.md5 as "md5"
 		</if>
+		,m. mName as "multipacks"
+
     </sql>
 
 	<sql id="left_join_include">
@@ -47,6 +49,18 @@
 			GROUP BY a.pid
 
 		) label on label.pid = a.id
+		LEFT JOIN (
+			SELECT
+				a.rid,
+				GROUP_CONCAT( m.`name` ) as "mName"
+			FROM
+				file_multipack_relation a
+				LEFT JOIN file_multipack m ON m.id = a.mid
+			GROUP BY
+				a.rid
+			ORDER BY
+				a.sort
+		) m ON m.rid = a.id
 	</sql>
 
 	<sql id="where_List">
@@ -92,8 +106,10 @@
 	<select id="get" parameterType="filePdf" resultType="FilePdf">
 		select
 		<include refid="column_List" />
+
 		from file_pdf a
 		<include refid="left_join_include" />
+
 		where a.id = #{id}
 	</select>
 
@@ -105,7 +121,7 @@
 		<where>
 			<include refid="where_List" />
 		</where>
-		order by a.state asc, a.create_date asc
+		order by ((a.readpage+1) / (a.page_count+1)) desc
 	</select>
 
 	<!-- 获取作者名称 -->

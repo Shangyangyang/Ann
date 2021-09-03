@@ -313,7 +313,7 @@
             </otherwise>
         </choose>
 		<if test="limitNum != null">
-			limit #{limitNum}, 3
+			limit 0, 100
 		</if>
 	</select>
 
@@ -371,13 +371,14 @@
 					timeline_pic S
 				WHERE
 					S.del_flag = '0'
+					and S.geox is not null and S.geoy is not null
 					<if test="notId != null and notId != ''">
 						and S.id != #{notId}
 					</if>
 			) a
 		ORDER BY
 			a.distance ASC
-		LIMIT 1, 20
+		LIMIT 1, 50
 
 	</select>
 

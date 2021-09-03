@@ -4,6 +4,7 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FileMultipackRelation;
 import cn.ainannan.tool.fileSort.service.FileMultipackRelationService;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,14 @@ public class FileMultipackRelationController {
 	@RequestMapping("save")
 	public ResultObject save(FileMultipackRelation bean, HttpServletRequest request) {
 		fileMultipackRelationService.save(bean);
+		return ResultGen.genSuccessResult();
+	}
+
+	@RequestMapping("saveByList")
+	public ResultObject saveByList(FileMultipackRelation bean, HttpServletRequest request) {
+	    List<FileMultipackRelation> fmrList = JSONArray.parseArray(bean.getList(), FileMultipackRelation.class);
+		bean.setFmrList(fmrList);
+	    fileMultipackRelationService.saveByList(bean);
 		return ResultGen.genSuccessResult();
 	}
 

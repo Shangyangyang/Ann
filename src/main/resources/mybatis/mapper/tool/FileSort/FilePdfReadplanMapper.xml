@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.fileSort.mapper.FilePdfReadplanMapper">
+	<sql id="file_pdf_readplan_column_List" >
+		a.id as "id",
+		a.pid as "pid",
+		a.read_start_time as "readStartTime",
+		a.plan_time as "planTime",
+		a.state as "state",
+		a.create_user as "createUser",
+		a.create_date as "createDate",
+		a.update_user as "updateUser",
+		a.update_date as "updateDate",
+		a.del_flag as "delFlag",
+		p.name as "pdf.name",
+		p.page_count as "pdf.pageCount"
+	</sql>
+
+	<sql id="file_pdf_readplan_left_join_include">
+		left join file_pdf p on p.id = a.pid and p.del_flag = '0'
+	</sql>
+
+	<sql id="file_pdf_readplan_where_List">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="pid != null and pid != ''">
+			and a.pid = #{pid}
+		</if>
+		<if test="state != null and state != ''">
+			and a.state = #{state}
+		</if>
+		<if test="planTime != null">
+			and a.plan_time = #{planTime}
+		</if>
+	</sql>
+
+	<select id="findList" parameterType="filePdfReadplan" resultType="filePdfReadplan">
+		select
+		<include refid="file_pdf_readplan_column_List" />
+		from file_pdf_readplan a
+		<include refid="file_pdf_readplan_left_join_include" />
+		<where>
+			<include refid="file_pdf_readplan_where_List" />
+		</where>
+		order by a.create_date desc
+	</select>
+	<insert id="insert">
+		INSERT INTO file_pdf_readplan(
+			id,
+			pid,
+			read_start_time,
+			plan_time,
+			state,
+			create_user,
+			create_date,
+			update_user,
+			update_date,
+			del_flag
+		) values (
+			#{id},
+			#{pid},
+			#{readStartTime},
+			#{planTime},
+			#{state},
+			#{createUser},
+			#{createDate},
+			#{updateUser},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE file_pdf_readplan
+		<trim prefix="SET" suffixOverrides=",">
+
+			<if test="planTime != null">
+				plan_time = #{planTime},
+			</if>
+
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteRelationByPid">
+		update file_pdf_readplan set del_flag = '1' where id = #{id}
+	</delete>
+</mapper>
