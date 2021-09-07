@@ -19,5 +19,6 @@ public class FilePdfReadplan extends BaseBean {
     private FilePdf pdf;
     private Date readStartTime;
     private Date planTime;
+    private Integer planDays;
     private String state;   // 状态 0未开始计划 1开始计划 9完成计划 3已延时一次 4计划失败
 }

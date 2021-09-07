@@ -6,14 +6,19 @@
 		a.pid as "pid",
 		a.read_start_time as "readStartTime",
 		a.plan_time as "planTime",
+		a.plan_days as "planDays",
 		a.state as "state",
 		a.create_user as "createUser",
 		a.create_date as "createDate",
 		a.update_user as "updateUser",
 		a.update_date as "updateDate",
 		a.del_flag as "delFlag",
+		p.id as "pdf.id",
 		p.name as "pdf.name",
-		p.page_count as "pdf.pageCount"
+		p.page_count as "pdf.pageCount",
+		p.readpage as "pdf.readpage",
+		p.read_bdate as "pdf.readBdate",
+		p.state as "pdf.state"
 	</sql>
 
 	<sql id="file_pdf_readplan_left_join_include">
@@ -49,6 +54,7 @@
 			pid,
 			read_start_time,
 			plan_time,
+			plan_days,
 			state,
 			create_user,
 			create_date,
@@ -60,6 +66,7 @@
 			#{pid},
 			#{readStartTime},
 			#{planTime},
+			#{planDays},
 			#{state},
 			#{createUser},
 			#{createDate},
@@ -76,7 +83,9 @@
 			<if test="planTime != null">
 				plan_time = #{planTime},
 			</if>
-
+			<if test="planDays != null">
+                plan_days = #{planDays},
+			</if>
 			<if test="state != null and state != ''">
 				state = #{state},
 			</if>
