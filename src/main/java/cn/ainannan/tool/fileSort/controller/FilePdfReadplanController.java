@@ -38,6 +38,12 @@ public class FilePdfReadplanController {
 		return ResultGen.genSuccessResult(readplanService.get(bean));
 	}
 
+
+	@RequestMapping("getPastReadNum")
+	public ResultObject getPastReadNum(FilePdfReadplan bean, HttpServletRequest request) {
+		return ResultGen.genSuccessResult(readplanService.getPastReadNum(bean));
+	}
+
 	@RequestMapping("save")
 	public ResultObject save(FilePdfReadplan bean, HttpServletRequest request) {
 		readplanService.save(bean);

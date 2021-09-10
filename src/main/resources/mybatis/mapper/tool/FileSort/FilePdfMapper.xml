@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.ainannan.tool.fileSort.mapper.FilePdfMapper">
-	<sql id="column_List" >
+	<sql id="filePdf_column_List" >
         a.id as "id",
 		a.name as "name",
 		a.bookname as "bookname",
@@ -33,7 +33,7 @@
 
     </sql>
 
-	<sql id="left_join_include">
+	<sql id="filePdf_left_join_include">
 		<if test="showMd5 != null and showMd5 != '' and showMd5 == 1">
 			left join file_sort_list sortList on a.id = sortList.id
 		</if>
@@ -63,7 +63,7 @@
 		) m ON m.rid = a.id
 	</sql>
 
-	<sql id="where_List">
+	<sql id="filePdf_where_List">
 		a.del_flag = #{DEL_FLAG_NORMAL}
 		<if test="bookname != null and bookname != ''">
 			and a.bookname = #{bookname}
@@ -101,25 +101,28 @@
 		<if test="state != null and state != ''">
 			and a.state = #{state}
 		</if>
+		<if test="excludeExisting != null and excludeExisting != '' and excludeExisting == 1">
+			and a.id not in (select pid from file_pdf_readplan where del_flag = '0')
+		</if>
 	</sql>
 
 	<select id="get" parameterType="filePdf" resultType="FilePdf">
 		select
-		<include refid="column_List" />
+		<include refid="filePdf_column_List" />
 
 		from file_pdf a
-		<include refid="left_join_include" />
+		<include refid="filePdf_left_join_include" />
 
 		where a.id = #{id}
 	</select>
 
 	<select id="findList" parameterType="filePdf" resultType="FilePdf">
 		select
-		<include refid="column_List" />
+		<include refid="filePdf_column_List" />
 		from file_pdf a
-		<include refid="left_join_include" />
+		<include refid="filePdf_left_join_include" />
 		<where>
-			<include refid="where_List" />
+			<include refid="filePdf_where_List" />
 		</where>
 		order by ((a.readpage+1) / (a.page_count+1)) desc
 	</select>

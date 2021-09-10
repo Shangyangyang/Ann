@@ -43,6 +43,7 @@ public class FilePdf extends BaseBean {
 
     private Integer isRead; // 权限控制，1 是阅读相关
     private FilePdfReadline readline;
+    private String excludeExisting; // 1过滤已经在阅读计划的数据
 
     // 扩展字段
     private String multipacks; // 已加入的合集们
