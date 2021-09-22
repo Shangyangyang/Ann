@@ -29,6 +29,10 @@ public class FilePdfReadplanService extends BaseService<FilePdfReadplanMapper, F
     public Integer getPastReadNum(FilePdfReadplan bean) {
         int readnum = 0;
 
+        if("13dc4390ad5240879bb66755181b20fa".equals(bean.getPid())){
+            System.out.println("readnum = " + readnum);
+        }
+
         FilePdfReadline filePdfReadline = new FilePdfReadline();
         filePdfReadline.setPid(bean.getPid());
 
@@ -37,7 +41,7 @@ public class FilePdfReadplanService extends BaseService<FilePdfReadplanMapper, F
         Optional<FilePdfReadline> fprO = readlineList.stream()
                 .filter(item -> LocalDate.now().isEqual(
                         LocalDateUtil.parseLocalDate(item.getReadtime()))
-                ).findFirst();
+                ).max((FilePdfReadline a, FilePdfReadline b) -> a.getPagenum() - b.getPagenum());
 
         /*
         FilePdfReadline query = readlineList.stream()
@@ -52,14 +56,21 @@ public class FilePdfReadplanService extends BaseService<FilePdfReadplanMapper, F
 
             readlineList.remove(fprO.get());
 
-            FilePdfReadline yesterdayReadline = readlineList.stream()
+            Optional<FilePdfReadline> fprO2 = readlineList.stream()
                     .max((FilePdfReadline a, FilePdfReadline b) ->
-                        LocalDateUtil.parseLocalDate(a.getReadtime())
-                                .isBefore(LocalDateUtil.parseLocalDate(b.getReadtime()))
+                        LocalDateUtil.parseLocalDateTime(a.getReadtime())
+                                .isBefore(LocalDateUtil.parseLocalDateTime(b.getReadtime()))
                                 ? -1 : 1
-                    ).get();
+                    );
 
-            readnum = fprO.get().getPagenum() - yesterdayReadline.getPagenum();
+            if(fprO2.isPresent()){
+
+                FilePdfReadline yesterdayReadline = fprO2.get();
+                readnum = fprO.get().getPagenum() - yesterdayReadline.getPagenum();
+
+            } else {
+                readnum = 0;
+            }
         }
 
         return readnum;

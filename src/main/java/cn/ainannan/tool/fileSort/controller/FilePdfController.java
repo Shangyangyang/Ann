@@ -3,7 +3,9 @@ package cn.ainannan.tool.fileSort.controller;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FilePdf;
+import cn.ainannan.tool.fileSort.bean.FilePdfReadplan;
 import cn.ainannan.tool.fileSort.service.FilePdfReadlineService;
+import cn.ainannan.tool.fileSort.service.FilePdfReadplanService;
 import cn.ainannan.tool.fileSort.service.FilePdfService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,6 +31,8 @@ public class FilePdfController {
 	private FilePdfService filePdfService;
 	@Autowired
 	private FilePdfReadlineService readlineService;
+	@Autowired
+	private FilePdfReadplanService readplanService;
 
 	@RequestMapping("list")
 	public ResultObject getFileInfo(FilePdf bean,@RequestParam(defaultValue = "1") Integer page,
@@ -54,6 +58,31 @@ public class FilePdfController {
 		if(bean.getIsRead() != null && bean.getIsRead() == 1){
 			bean.getReadline().setReadtime(new Date());
 			readlineService.save(bean.getReadline());
+		}
+
+		return ResultGen.genSuccessResult();
+	}
+
+	@RequestMapping("endRead")
+	public ResultObject endRead(FilePdf bean, HttpServletRequest request) {
+		filePdfService.save(bean);
+
+		// 阅读计划
+
+		FilePdfReadplan queryFpr = new FilePdfReadplan();
+		// 完成计划
+
+		queryFpr.setPid(bean.getId());
+
+		List<FilePdfReadplan> fprList = readplanService.findList(queryFpr);
+
+		if(fprList.size() <= 0) {
+			return ResultGen.genSuccessResult();
+		} else {
+			queryFpr.setState("9");
+			queryFpr.setId(fprList.get(0).getId());
+
+			readplanService.save(queryFpr);
 		}
 
 		return ResultGen.genSuccessResult();

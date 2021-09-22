@@ -33,6 +33,11 @@
 		<if test="state != null and state != ''">
 			and a.state = #{state}
 		</if>
+		<if test="states != null and states != ''">
+			<foreach collection="states" item="d" open="and (" close=")" separator="or">
+				a.state = #{d}
+			</foreach>
+		</if>
 		<if test="planTime != null">
 			and a.plan_time = #{planTime}
 		</if>
@@ -46,7 +51,7 @@
 		<where>
 			<include refid="file_pdf_readplan_where_List" />
 		</where>
-		order by a.create_date desc
+		order by a.state asc, p.read_bdate asc
 	</select>
 	<insert id="insert">
 		INSERT INTO file_pdf_readplan(
@@ -99,7 +104,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<delete id="deleteRelationByPid">
+	<delete id="delete">
 		update file_pdf_readplan set del_flag = '1' where id = #{id}
 	</delete>
 </mapper>

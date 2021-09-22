@@ -96,10 +96,14 @@
 			and a.press = #{press}
 		</if>
 		<if test="state != null and state != ''">
-			and a.state = #{state}
-		</if>
-		<if test="state != null and state != ''">
-			and a.state = #{state}
+			and
+			<if test="excludeExisting != null and excludeExisting != '' and excludeExisting == 0">
+				(
+			</if>
+			a.state = #{state}
+			<if test="excludeExisting != null and excludeExisting != '' and excludeExisting == 0">
+				 or a.state = '9')
+			</if>
 		</if>
 		<if test="excludeExisting != null and excludeExisting != '' and excludeExisting == 1">
 			and a.id not in (select pid from file_pdf_readplan where del_flag = '0')
