@@ -14,14 +14,14 @@
         a.del_flag as "delFlag"
     </sql>
     
-    <select id="get" resultType="Dict">
+    <select id="get" resultType="SysDict">
 		SELECT 
 			<include refid="Dict_Column_List"/>
 		FROM sys_dict a
 		WHERE a.id = #{id}
 	</select>
 
-    <select id="findList" resultType="Dict">
+    <select id="findList" resultType="SysDict">
         SELECT 
        	<include refid="Dict_Column_List"/>
         FROM sys_dict a

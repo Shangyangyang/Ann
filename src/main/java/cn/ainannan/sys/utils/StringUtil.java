@@ -16,4 +16,9 @@ public class StringUtil {
         Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
         return pattern.matcher(str).matches();
     }
+
+    /** 驼峰转下划线(简单写法，效率低于{@link # */
+    public static String humpToLine(String str) {
+        return str.replaceAll("[A-Z]", "_$0").toLowerCase();
+    }
 }

@@ -1,10 +1,10 @@
 package cn.ainannan.tool.fileSort.mapper;
 
-import cn.ainannan.base.dao.BaseDao;
 import cn.ainannan.tool.fileSort.bean.FileMultipackRelation;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FileMultipackRelationMapper extends BaseDao<FileMultipackRelation> {
+public interface FileMultipackRelationMapper extends BaseMapper<FileMultipackRelation> {
 
 }

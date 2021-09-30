@@ -12,6 +12,7 @@ import cn.ainannan.tool.fileSort.mapper.FilePdfRepeatMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfThumMapper;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
 import cn.ainannan.tool.fileSort.service.FileSortService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,11 +69,7 @@ public class InitService {
     private void genThum() throws IOException {
 
         FileSortService.basePath = BASE_PANFU + Constant.FILE_SORT_PATH + File.separator;
-
-        FilePdf query = new FilePdf();
-        query.setState(STATE_UN_GEN);
-
-        List<FilePdf> fpList = filePdfMapper.findList(query);
+        List<FilePdf> fpList = filePdfMapper.selectList(new QueryWrapper<FilePdf>().eq("state", STATE_UN_GEN));
 
         if(fpList.size() == 0) {
             System.out.println("本次没有可生成的PDF");

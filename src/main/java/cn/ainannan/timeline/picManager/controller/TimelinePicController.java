@@ -6,6 +6,8 @@ import cn.ainannan.commons.utils.DateUtil;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,39 +50,56 @@ public class TimelinePicController {
         if (StringUtils.isBlank(id)) return ResultGen.genFailResult("关键参数不能为空");
 
 
-        TimelinePic pic = tpService.get(id);
+        TimelinePic pic = tpService.getById(id);
 
         // data1
-        TimelinePic tp1 = new TimelinePic();
-        tp1.setBeginShotDate(DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "begin"));
-        tp1.setEndShotDate(DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "end"));
-        tp1.setNotId(id);
-        tp1.setSqlOrderBy("shot_date asc");
-        tp1.setLimitNum(1);
+//        TimelinePic tp1 = new TimelinePic();
+//        tp1.setBeginShotDate(DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "begin"));
+//        tp1.setEndShotDate(DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "end"));
+//        tp1.setNotId(id);
+//        tp1.setSqlOrderBy("shot_date asc");
+//        tp1.setLimitNum(1);
 
-        List<TimelinePic> tab1List = tpService.findList(tp1);
+        QueryWrapper<TimelinePic> query1 = new QueryWrapper<TimelinePic>();
+        query1.between("shot_date",
+                DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "begin"),
+                DateUtil.beforeOneHourToNowDate(pic.getShotDate(), 1, "end")
+        ).ne("id", id).orderByAsc("shot_date");
+
+        Page<TimelinePic> page = new Page<TimelinePic>(1, 50);
+
+        Page<TimelinePic> tab1List = tpService.page(page, query1);
+
+        System.out.println("tab1List.getSize() = " + tab1List.getRecords().size());
 
         // data2
-        tp1 = new TimelinePic();
-        tp1.setNotId(id);
-        tp1.setShotDateL(new SimpleDateFormat("yyyy-MM-dd").format(pic.getShotDate()));
-        tp1.setSqlOrderBy("shot_date asc");
-        tp1.setLimitNum(1);
+        query1 = new QueryWrapper<TimelinePic>();
+        query1.likeRight("shot_date",
+                new SimpleDateFormat("yyyy-MM-dd").format(pic.getShotDate())
+        ).ne("id", id).orderByAsc("shot_date");
+        page = new Page<TimelinePic>(1, 50);
+        Page<TimelinePic> tab2List = tpService.page(page, query1);
 
-        List<TimelinePic> tab2List = tpService.findList(tp1);
+//        tp1 = new TimelinePic();
+//        tp1.setNotId(id);
+//        tp1.setShotDateL(new SimpleDateFormat("yyyy-MM-dd").format(pic.getShotDate()));
+//        tp1.setSqlOrderBy("shot_date asc");
+//        tp1.setLimitNum(1);
+
+//        List<TimelinePic> tab2List = tpService.findList(tp1);
 
         // data3
+
         List<TimelinePic> tab3List = Lists.newArrayList();
-
         if(StringUtils.isNotBlank(pic.getGeox()) && !"0".equals(pic.getGeox())){
-
-            tp1 = new TimelinePic();
+            TimelinePic tp1 = new TimelinePic();
             tp1.setNotId(id);
             tp1.setGeox(pic.getGeox());
             tp1.setGeoy(pic.getGeoy());
 
             tab3List = tpService.findGeoAdjoinList(tp1);
         }
+
 
         return ResultGen.genSuccessResult(tab1List).setData2(tab2List).setData3(tab3List);
     }

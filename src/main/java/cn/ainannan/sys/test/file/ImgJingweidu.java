@@ -1,7 +1,8 @@
 package cn.ainannan.sys.test.file;
 
 import com.drew.imaging.ImageProcessingException;
-import com.github.pagehelper.util.StringUtil;
+import org.junit.platform.commons.util.StringUtils;
+
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ public class ImgJingweidu {
      * @return
      */
     public static String Dms2D(String jwd) {
-        if (StringUtil.isNotEmpty(jwd) && (jwd.contains("°"))) {//如果不为空并且存在度单位
+        if (StringUtils.isNotBlank(jwd) && (jwd.contains("°"))) {//如果不为空并且存在度单位
             //计算前进行数据处理
             jwd = jwd.replace("E", "").replace("N", "").replace(":", "").replace("：", "");
             double d = 0, m = 0, s = 0;

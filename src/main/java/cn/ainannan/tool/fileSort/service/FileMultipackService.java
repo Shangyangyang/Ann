@@ -2,10 +2,11 @@ package cn.ainannan.tool.fileSort.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.tool.fileSort.bean.FileMultipack;
 import cn.ainannan.tool.fileSort.mapper.FileMultipackMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = false)
-public class FileMultipackService extends BaseService<FileMultipackMapper, FileMultipack> {
+public class FileMultipackService extends ServiceImpl<FileMultipackMapper, FileMultipack> {
 
 
     public ResultObject add(FileMultipack entity) {
@@ -23,7 +24,7 @@ public class FileMultipackService extends BaseService<FileMultipackMapper, FileM
         entity.preInsert();
         entity.setId(UUIDUtils.generateShortUuid());
 
-        dao.insert(entity);
+        baseMapper.insert(entity);
 
         return ResultGen.genSuccessResult();
     }
@@ -34,7 +35,8 @@ public class FileMultipackService extends BaseService<FileMultipackMapper, FileM
         query.setFiletype(bean.getFiletype());
         query.setName(bean.getName());
 
-        List<FileMultipack> resultList = dao.findList(query);
+        List<FileMultipack> resultList = baseMapper.selectList(new QueryWrapper<FileMultipack>()
+                .eq("file_type", bean.getFiletype()).eq("name", bean.getName()));
         return resultList != null && resultList.size() > 0;
     }
 }

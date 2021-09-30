@@ -11,8 +11,8 @@
 			a.path as "path", a.src as "src", a.src_thumbnail as "srcThumbnail",
 		</if>
 		a.suffix as "suffix",
-		a.size as "size",
-		a.MD5 as "MD5",
+		a.file_size as "fileSize",
+		a.md5 as "md5",
 		a.finger_print as "fingerPrint",
 		a.shot_date as "shotDate",
 		a.similar_id as "similarId",
@@ -32,10 +32,10 @@
 		a.del_flag = #{DEL_FLAG_NORMAL}
 
 		<if test="bSize != null and bSize != 0">
-			and a.size &gt;= #{bSize}
+			and a.file_size &gt;= #{bSize}
 		</if>
 		<if test="eSize != null and eSize != 0">
-			and a.size &lt;= #{eSize}
+			and a.file_size &lt;= #{eSize}
 		</if>
 		<if test="id != null and id != ''">
 			and a.id = #{id}
@@ -120,8 +120,8 @@
 			a.short_id as "shortId",
 			a.filename as "filename",
 			a.suffix as "suffix",
-			a.size as "size",
-			a.MD5 as "MD5",
+			a.file_size as "fileSize",
+			a.md5 as "md5",
 			a.finger_print as "fingerPrint",
 			a.shot_date as "shotDate",
 			a.similar_id as "similarId",
@@ -445,7 +445,7 @@
 			a.id as 'id',
 			a.short_ID as 'shortId',
 			a.filename as 'filename',
-			a. SIZE as 'size',
+			a. file_SIZE as 'fileSize',
 			a.shot_date as 'shotDate',
 			s.picCount
 		FROM
@@ -476,7 +476,7 @@
             a.id as 'id',
             a.short_ID as 'shortId',
             a.filename as 'filename',
-            a. SIZE as 'size',
+            a. file_size as 'fileSize',
             a.shot_date as 'shotDate',
             s.similarity as "similarity"
         FROM
@@ -497,14 +497,14 @@
 
 	<insert id="insert" parameterType="timelinePic">
 		insert into timeline_pic(id,
-		short_id, filename, path, src, src_thumbnail, suffix, size, MD5,
+		short_id, filename, path, src, src_thumbnail, suffix, file_size, md5,
 		finger_print, shot_date, similar_id, similar_status, state, belong,
 		create_date, create_user,
 		update_date, update_user, del_flag,geox,geoy)
 		value(#{id}, #{shortId},
 		#{filename}, #{path}, #{src}, #{srcThumbnail},
-		#{suffix}, #{size},
-		#{MD5}, #{fingerPrint}, #{shotDate}, #{similarId},
+		#{suffix}, #{fileSize},
+		#{md5}, #{fingerPrint}, #{shotDate}, #{similarId},
 		#{similarStatus}, #{state}, #{belong}
 		#{createDate}, #{createUser},
 		#{updateDate}, #{updateUser},
@@ -520,8 +520,8 @@
 		src,
 		src_thumbnail,
 		suffix,
-		size,
-		MD5,
+		file_size,
+		md5,
 		finger_print,
 		shot_date,
 		similar_id,
@@ -546,8 +546,8 @@
 			#{entity.src},
 			#{entity.srcThumbnail},
 			#{entity.suffix},
-			#{entity.size},
-			#{entity.MD5},
+			#{entity.fileSize},
+			#{entity.md5},
 			#{entity.fingerPrint},
 			#{entity.shotDate},
 			#{entity.similarId},
@@ -586,11 +586,11 @@
 			<if test="suffix != null">
 				suffix = #{suffix},
 			</if>
-			<if test="size != null">
-				size = #{size},
+			<if test="fileSize != null">
+				file_size = #{fileSize},
 			</if>
-			<if test="MD5 != null">
-				MD5 = #{MD5},
+			<if test="md5 != null">
+				md5 = #{md5},
 			</if>
 			<if test="fingerPrint != null">
 				finger_print = #{fingerPrint},
@@ -656,11 +656,11 @@
 				<if test="entity.suffix != null">
 					suffix = #{entity.suffix},
 				</if>
-				<if test="entity.size != null">
-					size = #{entity.size},
+				<if test="entity.fileSize != null">
+					file_size = #{entity.fileSize},
 				</if>
-				<if test="entity.MD5 != null">
-					MD5 = #{entity.MD5},
+				<if test="entity.md5 != null">
+					md5 = #{entity.md5},
 				</if>
 				<if test="entity.fingerPrint != null">
 					finger_print = #{entity.fingerPrint},
@@ -727,11 +727,11 @@
 				<if test="entity.suffix != null">
 					suffix = #{entity.suffix},
 				</if>
-				<if test="entity.size != null">
-					size = #{entity.size},
+				<if test="entity.fileSize != null">
+					file_size = #{entity.fileSize},
 				</if>
-				<if test="entity.MD5 != null">
-					MD5 = #{entity.MD5},
+				<if test="entity.md5 != null">
+					md5 = #{entity.md5},
 				</if>
 				<if test="entity.fingerPrint != null">
 					finger_print = #{entity.fingerPrint},

@@ -3,16 +3,19 @@ package cn.ainannan.timeline.picManager.controller;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.Constant;
+import cn.ainannan.commons.mybatisPlus.QueryGenerator;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.sys.utils.ImageUtil;
 import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.bean.TimelineSimilar;
+import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 import cn.ainannan.timeline.picManager.service.ImportPicService;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+// import com.github.pagehelper.PageHelper;
+// import com.github.pagehelper.PageInfo;
 
 @RestController
 @RequestMapping("timeline/importPic")
@@ -41,8 +48,27 @@ public class ImportPicController {
 	private TimelinePicService timelinePicService;
 	@Autowired
 	private ImportPicService importPicService;
+	@Autowired
+	private TimelinePicMapper timelinePicMapper;
 
 	public static Integer percent = 0; // 图片新增进度统计
+
+
+	@RequestMapping({ "", "list" })
+	public ResultObject list(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page,
+							 @RequestParam(defaultValue = "10") Integer size, HttpServletRequest req) {
+
+		QueryWrapper<TimelinePic> wrapper = QueryGenerator.initQueryWrapper(timelinePic, req.getParameterMap());
+
+		if(page == 0 && size == 0){
+			return ResultGen.genSuccessResult(timelinePicMapper.selectList(wrapper));
+		} else {
+			Page<TimelinePic> page2 = new Page<TimelinePic>(page, size);
+			IPage<TimelinePic> list = timelinePicMapper.selectPage(page2, wrapper);
+
+			return ResultGen.genSuccessResult(list);
+		}
+	}
 
 	@RequestMapping("getSimilarImgList")
 	public ResultObject getSimilarImgList(TimelinePic timelinePic) {
@@ -54,20 +80,12 @@ public class ImportPicController {
 	
 	@RequestMapping("getTest")
 	public ResultObject getTest(TimelinePic timelinePic) {
-		
-		TimelinePic list = timelinePicService.get(timelinePic);
+
+		TimelinePic list = timelinePicService.getById(timelinePic.getId());
 		
 		return ResultGen.genSuccessResult(list); 
 	}
-	
-	@RequestMapping({ "", "list" })
-	public ResultObject list(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page,
-			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
-		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
-		PageInfo pageInfo = new PageInfo(resultList);
-		return ResultGen.genSuccessResult(pageInfo);
-	}
+
 
 	/**
 	 * 获取还没有填充拍摄日期的图片记录
@@ -200,7 +218,14 @@ public class ImportPicController {
 			// 先去数据库查询对比是否已经添加
 			timelinePic.setFilename(FilenameUtils.getName(str));
 			timelinePic.setPath(FilenameUtils.getFullPath(str));
-			List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
+			QueryWrapper<TimelinePic> wrapper = QueryGenerator.initQueryWrapper(timelinePic,
+					new HashMap<String, String []>() {
+						{
+							put("filename", new String[]{FilenameUtils.getName(str)});
+							put("path", new String[]{FilenameUtils.getFullPath(str)});
+						}
+					});
+			List<TimelinePic> resultList = timelinePicMapper.selectList(wrapper);
 			// 进度统计
 			percent = (int) ((double) ++i / (double) fileList.size() * 100);
 			// 数据库中已经存在同路径同名的文件
@@ -359,7 +384,7 @@ public class ImportPicController {
 		// 先删除物理文件，先获取前端传递过来的path，如果为空，则通过Id获取数据库里的记录
 		if (StringUtils.isBlank(tp.getPath())) {
 			if (StringUtils.isNotBlank(tp.getId())) {
-				TimelinePic result = timelinePicService.get(tp.getId());
+				TimelinePic result = timelinePicService.getById(tp.getId());
 				tp.setPath(result.getPath() + result.getFilename());
 			} else {
 				return ResultGen.genFailResult("缺少参数，删除失败。");
@@ -384,7 +409,7 @@ public class ImportPicController {
 			}
 		}
 
-		timelinePicService.delete(tp);
+		timelinePicMapper.deleteById(tp.getId());
 		return ResultGen.genSuccessResult();
 	}
 
@@ -398,7 +423,7 @@ public class ImportPicController {
 	public ResultObject cleanDatabase(TimelinePic timelinePic) {
 		if(!new File("H://").exists()) return ResultGen.genFailResult("图片源不存在，请检查移动硬盘是否存在");
 		timelinePic.setShowPath("1");
-		List<TimelinePic> resultList = timelinePicService.findList(timelinePic);
+		List<TimelinePic> resultList = timelinePicService.list();
 		int i = 0; // 进度统计-当前进度
 		int deleteNum = 0;
 		double size = (double) resultList.size();
@@ -411,7 +436,7 @@ public class ImportPicController {
 			percent = (int) ((double) ++i / size * 100);
 
 			if (!new File(tp.getPath() + tp.getFilename()).exists()) {
-				timelinePicService.delete(tp);
+				timelinePicMapper.deleteById(tp.getId());
 				deleteNum++;
 			}
 			Long newTime = new Date().getTime();
@@ -465,10 +490,10 @@ public class ImportPicController {
 	@RequestMapping("findListByFinger")
     public ResultObject findListByFinger(TimelinePic timelinePic, @RequestParam(defaultValue = "1") Integer page,
                              @RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
-        PageHelper.startPage(page, size);
+        // Pagehelper.startPage(page, size);
         List<TimelinePic> resultList = timelinePicService.findListByFinger(timelinePic);
-        PageInfo pageInfo = new PageInfo(resultList);
-        return ResultGen.genSuccessResult(pageInfo);
+       //  PageInfo pageInfo = new PageInfo(resultList);
+        return ResultGen.genSuccessResult();
     }
 
 	/**

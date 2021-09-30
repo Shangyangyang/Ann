@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+// import com.github.pagehelper.PageHelper;
+// import com.github.pagehelper.PageInfo;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
@@ -26,11 +26,11 @@ public class DogController {
 	@RequestMapping({"","list"})
 	public ResultObject list(Dog dog, @RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 		List<Dog> list = dogService.findList(dog);
-		PageInfo<Dog> pageInfo = new PageInfo<Dog>(list);
+		// PageInfo<w+> pageInfo = new PageInfo<Dog>(list);
 		
-		return ResultGen.genSuccessResult(pageInfo);
+		return ResultGen.genSuccessResult();
 	}
 	
 	/**

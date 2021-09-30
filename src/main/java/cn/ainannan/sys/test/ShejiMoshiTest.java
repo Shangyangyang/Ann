@@ -55,21 +55,6 @@ class SmsSend implements GongchangInterface{
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ShejiMoshiTestObj {
     private static ShejiMoshiTestObj smto = null;
 

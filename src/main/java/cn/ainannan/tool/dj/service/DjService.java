@@ -2,11 +2,12 @@ package cn.ainannan.tool.dj.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.tool.dj.bean.Dj;
 import cn.ainannan.tool.dj.mapper.DjMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,14 +19,14 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class DjService extends BaseService<DjMapper, Dj>{
+public class DjService extends ServiceImpl<DjMapper, Dj> {
 	
 	public List<Dj> listWithChildren(Dj bean){
-		return dao.listWithChildren(bean);
+		return baseMapper.listWithChildren(bean);
 	}
 
     public void getFile(String id, HttpServletResponse resp) {
-		Dj dj = dao.getPathById(id);
+		Dj dj = baseMapper.getPathById(id);
 
 		String filePath = dj.getPath().replace(DJ_PRE_PATH, DJ_FILE_SAVE_PATH);
 
@@ -64,7 +65,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
 
 				obj.setName(FilenameUtils.getBaseName(filePath));
 				obj.setPath(path.getName());
-				obj.setSize(path.length());
+				obj.setFileSize(path.length());
 				// obj.setFileId(MD5Utils.getFileMD5(path));
 				djList.add(obj);
 			}
@@ -78,7 +79,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
 					obj = new Dj();
 					obj.setName(FilenameUtils.getBaseName(f.getAbsolutePath()));
 					obj.setPath(f.getName());
-					obj.setSize(f.length());
+					obj.setFileSize(f.length());
 					// obj.setFileId(MD5Utils.getFileMD5(f));
 					djList.add(obj);
 					if(++count >= 5) break;
@@ -93,10 +94,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		File file = new File(filePath);
 		String md5Str = MD5Utils.getFileMD5(file);
 
-		Dj query = new Dj();
-		query.setFileId(md5Str);
-
-		List<Dj> djList = dao.findList(query);
+		List<Dj> djList = baseMapper.selectList(new QueryWrapper<Dj>().eq("file_id", md5Str));
 
 		if(djList == null) return 0;
 		return djList.size();
@@ -115,7 +113,7 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		Dj obj = new Dj();
 		obj.setName(FilenameUtils.getBaseName(path));
 		obj.setPath(DJ_PRE_PATH + "/" + file.getName());
-		obj.setSize(file.length());
+		obj.setFileSize(file.length());
 		obj.setFileId(MD5Utils.getFileMD5(file));
 		obj.setState(DJ_STATE_WEIJIEXI);
 
@@ -138,11 +136,10 @@ public class DjService extends BaseService<DjMapper, Dj>{
 	 * @param entity
 	 * @return
 	 */
-	@Override
 	public ResultObject delete(Dj entity) {
 		// 先删除文件，再删除数据
 
-		Dj dj = dao.getPathById(entity.getId());
+		Dj dj = baseMapper.getPathById(entity.getId());
 
 		if(dj == null) return ResultGen.genFailResult("删除失败，未找到文件");
 
@@ -151,9 +148,9 @@ public class DjService extends BaseService<DjMapper, Dj>{
 		File file = new File(filePath);
 
 		if(file.delete()){
-			return super.delete(entity);
+			return ResultGen.genSuccessResult(baseMapper.deleteById(entity.getId()));
 		} else {
-			super.delete(entity);
+			baseMapper.deleteById(entity.getId());
 			return ResultGen.genSuccessResult("物理文件已经不存在，本次仅删除了数据");
 		}
 	}

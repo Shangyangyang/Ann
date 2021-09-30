@@ -1,32 +1,23 @@
 package cn.ainannan.timeline.picManager.service;
 
+import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import javax.websocket.*;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
-
-import cn.ainannan.timeline.picManager.bean.TimelinePic;
-import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
 
 
 @ServerEndpoint(value = "/picSimilar/{fuserid}")
@@ -124,10 +115,11 @@ public class PicSimilarUtil {
 			// 获取实体类
 			TimelinePic p = new TimelinePic(); 
 			p.setShortId(message.replace("\"", ""));
-			System.out.println("message.length():");
-			System.out.println(message.length());
-			//p.setFilename("IMG_20180125_170705.jpg");
-			TimelinePic resultPic = picService.findList(p).get(0);
+
+			QueryWrapper<TimelinePic> query = new QueryWrapper<TimelinePic>();
+			query.eq("short_id", message.replace("\"", ""));
+
+			TimelinePic resultPic = picService.getOne(query);
 			
 			while (list.size() != 0) {
 				

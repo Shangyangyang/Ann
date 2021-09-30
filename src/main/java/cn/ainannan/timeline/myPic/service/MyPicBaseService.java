@@ -2,12 +2,12 @@ package cn.ainannan.timeline.myPic.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.List;
 
 @Service
-public class MyPicBaseService extends BaseService<TimelinePicMapper, TimelinePic>{
+public class MyPicBaseService extends ServiceImpl<TimelinePicMapper, TimelinePic> {
 
 	@Value("${myPic-basePath}")
 	private String myPicBasePath;

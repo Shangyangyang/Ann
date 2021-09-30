@@ -1,7 +1,6 @@
 package cn.ainannan.timeline.picManager.service;
 
 import cn.ainannan.base.result.ResultGen;
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.ImageUtils;
@@ -14,6 +13,7 @@ import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic>{
+public class ImportPicService extends ServiceImpl<TimelinePicMapper, TimelinePic> {
 
 	@Value("${myPic-basePath}")
 	private String BASE_PATH;
@@ -131,7 +131,7 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		}// 退出for file list循环
 		
 		if(tpList.size() > 0) {
-			dao.insertByList(tpList);
+			baseMapper.insertByList(tpList);
 		}
 		// 保存list
 		int shengyu = fileList.size() - addNum < 0 ? 0 : fileList.size() - addNum;
@@ -377,8 +377,8 @@ public class ImportPicService extends BaseService<TimelinePicMapper, TimelinePic
 		tp.setPath(FilenameUtils.getFullPath(filePath));
 		tp.setSrc(filePath.replace(BASE_PANFU + BASE_PATH, ""));
 		tp.setSuffix(FilenameUtils.getExtension(filePath));
-		tp.setSize(file.length());
-		tp.setMD5(MD5Utils.getFileMD5(file));
+		tp.setFileSize(file.length());
+		tp.setMd5(MD5Utils.getFileMD5(file));
 		tp.setFingerPrint(FingerPrintUtils.produceFingerPrint(filePath));
 		tp.setShotDate(ImageUtils.getOriginalDate(filePath));
 		tp.setState(Constant.TIMELINE_PIC_STATE_0);

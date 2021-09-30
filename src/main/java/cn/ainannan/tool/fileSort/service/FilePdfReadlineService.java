@@ -15,7 +15,7 @@ public class FilePdfReadlineService extends BaseService<FilePdfReadlineMapper, F
 
     @Override
     public void save(FilePdfReadline entity) {
-        if (entity.isNewRecord()){
+        if (entity.ifNewRecord()){
             // 先做判断
             entity.setNotZero("1");
             List<FilePdfReadline> fprList = dao.findList(entity);

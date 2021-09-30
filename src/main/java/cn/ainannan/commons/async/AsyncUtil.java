@@ -81,7 +81,7 @@ public class AsyncUtil {
         query.setSimilarStatus(0);
         query.setLimitNum(SELECT_MAX_NUM);
 
-        // PageHelper.startPage(1, 10);
+        // // Pagehelper.startPage(1, 10);
         List<TimelinePic> picList = picMapper.findListFor1000(query);
 
         if(picList == null || picList.size() == 0) return null;

@@ -2,13 +2,16 @@ package cn.ainannan.tool.fileSort.controller;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.commons.mybatisPlus.QueryGenerator;
 import cn.ainannan.tool.fileSort.bean.FilePdf;
 import cn.ainannan.tool.fileSort.bean.FilePdfReadplan;
+import cn.ainannan.tool.fileSort.mapper.FilePdfMapper;
 import cn.ainannan.tool.fileSort.service.FilePdfReadlineService;
 import cn.ainannan.tool.fileSort.service.FilePdfReadplanService;
 import cn.ainannan.tool.fileSort.service.FilePdfService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+
+// import com.github.pagehelper.PageHelper;
+// import com.github.pagehelper.PageInfo;
 
 /**
  * 时光轴Controller
@@ -33,21 +39,23 @@ public class FilePdfController {
 	private FilePdfReadlineService readlineService;
 	@Autowired
 	private FilePdfReadplanService readplanService;
+	@Autowired
+	private FilePdfMapper filePdfMapper;
 
 	@RequestMapping("list")
-	public ResultObject getFileInfo(FilePdf bean,@RequestParam(defaultValue = "1") Integer page,
-									@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+	public ResultObject getFileInfo(FilePdf bean,@RequestParam(defaultValue = "1") Integer pageNum,
+									@RequestParam(defaultValue = "10") Integer pageSize, HttpServletRequest req) {
+		QueryWrapper<FilePdf> wrapper = QueryGenerator.initQueryWrapper(bean, req.getParameterMap());
 
-		List<FilePdf> list = filePdfService.findList(bean);
-		PageInfo<FilePdf> pageInfo = new PageInfo<FilePdf>(list);
+		Page<FilePdf> page2 = new Page<FilePdf>(pageNum, pageSize);
+		IPage<FilePdf> list = filePdfMapper.selectPage(page2, wrapper);
 
-		return ResultGen.genSuccessResult(pageInfo);
+		return ResultGen.genSuccessResult(list);
 	}
 
 	@RequestMapping("get")
 	public ResultObject get(FilePdf bean, HttpServletRequest request) {
-		return ResultGen.genSuccessResult(filePdfService.get(bean));
+		return ResultGen.genSuccessResult(filePdfService.getById(bean.getId()));
 	}
 
 	@RequestMapping("save")

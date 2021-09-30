@@ -6,7 +6,7 @@
         a.id as "id",
 		a.name as "name",
 -- 		a.path as "path",
-		a.size as "size",
+		a.file_size as "fileSize",
 		a.length as "length",
 		a.type as "type",
 		a.state as "state",
@@ -103,7 +103,7 @@
 		id,
 		name,
 		path,
-		size,
+		file_size,
 		length,
 		type,
 		state,
@@ -117,7 +117,7 @@
 		#{id},
 		#{name},
 		#{path},
-		#{size},
+		#{fileSize},
 		#{length},
 		#{type},
 		#{state},
@@ -138,8 +138,8 @@
 			<if test="path != null and path != ''">
 				path = #{path},
 			</if>
-			<if test="size != null and size != ''">
-				size = #{size},
+			<if test="fileSize != null and fileSize != ''">
+				file_size = #{fileSize},
 			</if>
 			<if test="length != null and length != ''">
 				length = #{length},

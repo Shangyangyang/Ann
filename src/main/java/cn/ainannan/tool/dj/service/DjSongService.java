@@ -1,19 +1,19 @@
 package cn.ainannan.tool.dj.service;
 
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.sys.utils.PinyinUtil;
 import cn.ainannan.tool.dj.bean.DjSong;
 import cn.ainannan.tool.dj.mapper.DjSongMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class DjSongService extends BaseService<DjSongMapper, DjSong>{
+public class DjSongService extends ServiceImpl<DjSongMapper, DjSong> {
 
     public List<DjSong> getSingerList(){
-        List<String> singerList = dao.getSingerList();
+        List<String> singerList = baseMapper.getSingerList();
         List<DjSong> djSongList = Lists.newArrayList();
 
         singerList.stream().forEach(item -> {

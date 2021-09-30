@@ -1,22 +1,5 @@
 package cn.ainannan.tool.cost.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.utils.DateUtil;
@@ -24,6 +7,18 @@ import cn.ainannan.commons.utils.excel.ExcelData;
 import cn.ainannan.commons.utils.excel.ExportExcelUtils;
 import cn.ainannan.tool.cost.bean.CostLijin;
 import cn.ainannan.tool.cost.service.CostLijinService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 礼金Controller
@@ -43,10 +38,10 @@ public class CostLijinController {
 	
 	@RequestMapping({ "", "list" })
 	public ResultObject list(CostLijin costLijin, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 		List<CostLijin> list = costLijinService.findList(costLijin);
-		PageInfo pageInfo = new PageInfo(list);
-		return ResultGen.genSuccessResult(pageInfo);
+		// PageInfo pageInfo = new PageInfo(list);
+		return ResultGen.genSuccessResult();
 	}
 	
 	@RequestMapping("save")

@@ -2,7 +2,6 @@ package cn.ainannan.tool.fileSort.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.UUIDUtils;
@@ -11,6 +10,7 @@ import cn.ainannan.tool.fileSort.mapper.FilePdfLabelMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfThumMapper;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional(readOnly = false)
-public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
+public class FilePdfService extends ServiceImpl<FilePdfMapper, FilePdf> {
 
     @Autowired(required = false)
     private FileSortMapper fileSortMapper;
@@ -40,18 +40,17 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
     private String BASE_PANFU;
 
 
-    @Override
-    public void save(FilePdf entity) {
-        if (entity.isNewRecord()){
+    public boolean save(FilePdf entity) {
+        if (entity.ifNewRecord()){
             entity.preInsert();
-            dao.insert(entity);
+            baseMapper.insert(entity);
         }else{
             entity.preUpdate();
-            dao.update(entity);
+            baseMapper.updateById(entity);
             // 这里需要把labels拆解，然后保存
             if(StringUtils.isNotBlank(entity.getLabels())) saveLabels(entity.getLabels(), entity.getId());
         }
-
+        return false;
     }
 
     /**
@@ -133,11 +132,11 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
     }
 
     public List<FilePdf> findAuthorList(){
-        return dao.findAuthorList();
+        return baseMapper.findAuthorList();
     }
 
 
-    @Override
+
     public ResultObject delete(FilePdf entity) {
         // 先删除数据，再删除物理文件
         // 先删除关联，再删除pdf表数据，再删除fIle_sort表数据
@@ -148,7 +147,7 @@ public class FilePdfService extends BaseService<FilePdfMapper, FilePdf> {
 
         // if(i1 == 0) return ResultGen.genFailResult("删除relation数据失败！");
 
-        int i2 = dao.delete(entity);
+        int i2 = baseMapper.deleteById(entity.getId());
 
         if(i2 == 0) return ResultGen.genFailResult("删除pdf表数据失败！");
 

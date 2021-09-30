@@ -29,7 +29,7 @@ public class FileController {
 		ServletOutputStream servletOS = null;
 		// 读文件
 
-		TimelinePic tp = picService.get(id);
+		TimelinePic tp = picService.getById(id);
 
 		File file = null;
 

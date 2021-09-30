@@ -1,6 +1,7 @@
 package cn.ainannan.tool.dj.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class DjSong extends BaseBean {
 	private Integer location;
 	private String name;
 	private String singer;
+	@TableField(exist = false)
 	private String singerPy;
 	private String fanchang;
 	private String yuanchangSinger;

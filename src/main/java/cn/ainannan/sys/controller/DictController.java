@@ -1,48 +1,56 @@
 package cn.ainannan.sys.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.commons.mybatisPlus.QueryGenerator;
+import cn.ainannan.sys.bean.SysDict;
+import cn.ainannan.sys.mapper.DictMapper;
+import cn.ainannan.sys.service.DictService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
-import cn.ainannan.base.result.ResultGen;
-import cn.ainannan.base.result.ResultObject;
-import cn.ainannan.sys.bean.Dict;
-import cn.ainannan.sys.service.DictService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("sys/dict")
 public class DictController {
 	@Autowired
 	private DictService dictService;
+	@Autowired
+	private DictMapper dictMapper;
 
 	@RequestMapping({ "", "list" })
-	public ResultObject list(Dict dict, @RequestParam(defaultValue = "1") Integer page,
-			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+	public ResultObject list(SysDict dict, @RequestParam(defaultValue = "1") Integer page,
+							 @RequestParam(defaultValue = "10") Integer size, HttpServletRequest req) {
 
-		PageHelper.startPage(page, size);
-		List<Dict> list = dictService.findList(dict);
-		PageInfo pageInfo = new PageInfo(list);
-		return ResultGen.genSuccessResult(pageInfo);
+		QueryWrapper<SysDict> wrapper = QueryGenerator.initQueryWrapper(dict, req.getParameterMap());
+
+		if(page == 0 && size == 0){
+			return ResultGen.genSuccessResult(dictMapper.selectList(wrapper));
+		} else {
+			Page<SysDict> page2 = new Page<SysDict>(page, size);
+			IPage<SysDict> list = dictMapper.selectPage(page2, wrapper);
+
+			return ResultGen.genSuccessResult(list);
+		}
 	}
 
 	@RequestMapping(value = "lists")
 	public ResultObject lists(String name, String id) {
 		String[] names = name.split(",");
-		List<List<Dict>> dictList = new ArrayList<List<Dict>>();
+		List<List<SysDict>> dictList = new ArrayList<List<SysDict>>();
 
 		for (int i = 0; i < names.length; i++) {
-			Dict dict = new Dict();
+			SysDict dict = new SysDict();
 			dict.setName(names[i]);
-			List<Dict> list = dictService.findList(dict);
+			List<SysDict> list = dictService.list();
 			dictList.add(list);
 		}
 
@@ -50,7 +58,7 @@ public class DictController {
 	}
 
 	@RequestMapping(value = "add")
-	public Boolean add(Dict dict) {
+	public Boolean add(SysDict dict) {
 		dictService.save(dict);
 		return true;
 	}
@@ -69,7 +77,7 @@ public class DictController {
 	 * @return
 	 */
 	@RequestMapping(value = "getLabelByName")
-	public ResultObject getLabelByName(Dict dict) {
+	public ResultObject getLabelByName(SysDict dict) {
 		return ResultGen.genSuccessResult(dictService.getLabelByName(dict));
 	}
 }

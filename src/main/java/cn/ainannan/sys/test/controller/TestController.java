@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("test")
@@ -39,9 +40,32 @@ public class TestController {
     @Autowired
     private DjService djService;
 
-
     @RequestMapping("index")
-    public String index() {
+    public String index(HttpServletRequest req) {
+        System.out.println("req.getParameterMap() = " + req.getParameterMap());
+
+        Map<String, String[]> parameterMap = req.getParameterMap();
+
+        for (String s : parameterMap.keySet()) {
+            System.out.println("s = " + s);
+            System.out.println("parameterMap = " + parameterMap.get(s));
+
+            String[] strings = parameterMap.get(s);
+
+            System.out.println("strings.length = " + strings.length);
+
+            for (String string : strings) {
+                System.out.println("string = " + string);
+            }
+
+            System.out.println("----------------------------");
+
+
+        }
+        System.out.println("+++++++++++++++++++++++++++++++++++");
+
+
+
         return "hello ann";
     }
 

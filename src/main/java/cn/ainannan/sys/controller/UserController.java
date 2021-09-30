@@ -1,21 +1,17 @@
 package cn.ainannan.sys.controller;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.sys.bean.User;
 import cn.ainannan.sys.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("sys/user")
@@ -27,11 +23,11 @@ public class UserController {
 	@RequestMapping({"","list"})
 	public ResultObject list(User user, @RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "20") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 		
 		List<User> list = userService.findList(user);
-		PageInfo pageInfo = new PageInfo(list);
-		return ResultGen.genSuccessResult(pageInfo);
+		// PageInfo pageInfo = new PageInfo(list);
+		return ResultGen.genSuccessResult();
 	}
 	
 	@RequestMapping("add")

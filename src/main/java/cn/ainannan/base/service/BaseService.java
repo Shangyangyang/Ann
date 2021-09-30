@@ -56,7 +56,7 @@ public abstract class BaseService<D extends BaseDao<T>, T extends BaseBean> {
 	 */
 	@Transactional(readOnly = false)
 	public void save(T entity) {
-		if (entity.isNewRecord()){
+		if (entity.ifNewRecord()){
 			entity.preInsert();
 			dao.insert(entity);
 		}else{

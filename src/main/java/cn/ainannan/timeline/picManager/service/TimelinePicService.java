@@ -1,10 +1,10 @@
 package cn.ainannan.timeline.picManager.service;
 
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.StringUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TimelinePicService extends BaseService<TimelinePicMapper, TimelinePic>{
+public class TimelinePicService extends ServiceImpl<TimelinePicMapper, TimelinePic> {
 
 	@Value("${myPic-basePath}")
 	private String BASE_PATH;
@@ -27,7 +27,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public TimelinePic getLastStatus() {
-		return dao.getLastStatus();
+		return baseMapper.getLastStatus();
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public List<TimelinePic> getEqualMd5(){
-		return dao.getEqualMd5();
+		return baseMapper.getEqualMd5();
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public List<TimelinePic> getEqualFingerPrint(){
-		return dao.getEqualFingerPrint();
+		return baseMapper.getEqualFingerPrint();
 	}
 	
 	/**
@@ -51,15 +51,15 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public TimelinePic getShotDateIsnull() {
-		return dao.getShotDateIsnull();
+		return baseMapper.getShotDateIsnull();
 	}
 
 	public List<TimelinePic> getAllShotDateIsnull() {
-		return dao.getAllShotDateIsnull();
+		return baseMapper.getAllShotDateIsnull();
 	}
 
 	public List<TimelinePic> findListFor1000(TimelinePic tp) {
-		return dao.findListFor1000(tp);
+		return baseMapper.findListFor1000(tp);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public List<TimelinePic> findSimilarImgList(TimelinePic tp) {
-		return dao.findSimilarImgList(tp);
+		return baseMapper.findSimilarImgList(tp);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public List<TimelinePic> findGeoAdjoinList(TimelinePic tp) {
-		return dao.findGeoAdjoinList(tp);
+		return baseMapper.findGeoAdjoinList(tp);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @param savePic
 	 */
 	public void saveByList(TimelinePic savePic) {
-		dao.saveByList(savePic);
+		baseMapper.saveByList(savePic);
 	}
 
 	/**
@@ -94,9 +94,9 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	 * @return
 	 */
 	public List<TimelinePic> getSimilarImgList(TimelinePic timelinePic) {
-		TimelinePic thisPic = dao.get(timelinePic.getId());
+		TimelinePic thisPic = baseMapper.selectById(timelinePic.getId());
 		
-		List<TimelinePic> list = dao.getFingerPrintList(timelinePic);
+		List<TimelinePic> list = baseMapper.getFingerPrintList(timelinePic);
 		
 		List<TimelinePic> resultList = list.stream().filter(item -> 
 			StringUtils.getSimilarityRatio(thisPic.getFingerPrint(), item.getFingerPrint()) > 88F && !thisPic.getId().equals(item.getId()))
@@ -112,21 +112,21 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	}
 
 	public List<TimelinePic> getFingerPrintList(TimelinePic queryPic) {
-		return dao.getFingerPrintList(queryPic);
+		return baseMapper.getFingerPrintList(queryPic);
 	}
 	
 	
 	
 	public List<TimelinePic> findListByFinger(TimelinePic pic){
-		return dao.findListByFinger(pic);
+		return baseMapper.findListByFinger(pic);
 	}
 	public List<TimelinePic> findListByShortId(TimelinePic timelinePic){
-		return dao.findListByShortId(timelinePic);
+		return baseMapper.findListByShortId(timelinePic);
 	}
 
 	public void getImg(String id, String type, HttpServletResponse resp) {
 		if(type == null || "".equals(type.trim())) return;
-		TimelinePic bean = dao.getUrl(id);
+		TimelinePic bean = baseMapper.getUrl(id);
 		String filePath = this.changePath("1".equals(type) ? bean.getSrcThumbnail() : bean.getSrc());
 		returnImg(filePath, resp);
 	}
@@ -146,6 +146,6 @@ public class TimelinePicService extends BaseService<TimelinePicMapper, TimelineP
 	}
 
     public TimelinePic getRandomImg() {
-		return dao.getRandomImg();
+		return baseMapper.getRandomImg();
     }
 }

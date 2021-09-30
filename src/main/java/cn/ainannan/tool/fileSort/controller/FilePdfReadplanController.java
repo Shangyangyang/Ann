@@ -4,8 +4,8 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FilePdfReadplan;
 import cn.ainannan.tool.fileSort.service.FilePdfReadplanService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+// import com.github.pagehelper.PageHelper;
+// import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,12 +25,12 @@ public class FilePdfReadplanController {
 	@RequestMapping("list")
 	public ResultObject getFileInfo(FilePdfReadplan bean, @RequestParam(defaultValue = "1") Integer page,
 									@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 
 		List<FilePdfReadplan> list = readplanService.findList(bean);
-		PageInfo<FilePdfReadplan> pageInfo = new PageInfo<FilePdfReadplan>(list);
+		// PageInfo<w+> pageInfo = new PageInfo<FilePdfReadplan>(list);
 
-		return ResultGen.genSuccessResult(pageInfo);
+		return ResultGen.genSuccessResult();
 	}
 
 	@RequestMapping("get")

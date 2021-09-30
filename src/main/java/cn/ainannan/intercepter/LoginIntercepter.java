@@ -63,6 +63,7 @@ public class LoginIntercepter implements HandlerInterceptor {
 
         // 测试的
 		if (url.startsWith("/test")) return true;
+		if (url.startsWith("/cost/car")) return true;
         // uniapp测试
         // if (url.startsWith("/cost/car")) return true;
 		

@@ -1,14 +1,14 @@
 package cn.ainannan.timeline.picManager.mapper;
 
 
-import cn.ainannan.base.dao.BaseDao;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TimelinePicMapper extends BaseDao<TimelinePic> {
+public interface TimelinePicMapper extends BaseMapper<TimelinePic> {
 	/**
 	 * 获取图片库最近状态（总数、最新拍摄日期、最近导入日期）
 	 * @return

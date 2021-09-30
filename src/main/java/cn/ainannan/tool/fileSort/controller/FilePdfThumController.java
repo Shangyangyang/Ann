@@ -4,8 +4,8 @@ import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
 import cn.ainannan.tool.fileSort.bean.FilePdfThum;
 import cn.ainannan.tool.fileSort.service.FilePdfThumService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+// import com.github.pagehelper.PageHelper;
+// import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,12 +31,12 @@ public class FilePdfThumController {
 	public ResultObject getFileInfo(
 			FilePdfThum bean, @RequestParam(defaultValue = "1") Integer page,
 			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 
 		List<FilePdfThum> list = filePdfThumService.findList(bean);
-		PageInfo<FilePdfThum> pageInfo = new PageInfo<FilePdfThum>(list);
+		// PageInfo<w+> pageInfo = new PageInfo<FilePdfThum>(list);
 
-		return ResultGen.genSuccessResult(pageInfo);
+		return ResultGen.genSuccessResult();
 	}
 
 	@RequestMapping("get")

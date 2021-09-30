@@ -1,6 +1,7 @@
 package cn.ainannan.base.bean;
 
 import cn.ainannan.sys.utils.UserUtil;
+import com.baomidou.mybatisplus.annotation.TableField;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,13 +17,16 @@ public abstract class BaseBean implements Serializable {
 	protected String createUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date createDate;
+
 	protected String updateUser;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	protected Date updateDate;
 	protected String delFlag;
-	
+
+	@TableField(exist = false)
 	protected final String dbType = "mysql";
-	
+
+	@TableField(exist = false)
 	protected String sqlOrderBy = "";
 	
 	public BaseBean() {
@@ -37,7 +41,9 @@ public abstract class BaseBean implements Serializable {
 	/**
 	 * 删除标记（0：正常；1：删除；2：审核；）
 	 */
+	@TableField(exist = false)
 	public static final String DEL_FLAG_NORMAL = "0";
+	@TableField(exist = false)
 	public static final String DEL_FLAG_DELETE = "1";
 
 	/**
@@ -57,8 +63,8 @@ public abstract class BaseBean implements Serializable {
 		this.setUpdateDate(new Date());
 		if(UserUtil.getUser() != null) this.setUpdateUser(UserUtil.getUser().getId());
 	}
-	
-	public boolean isNewRecord() {
+
+	public boolean ifNewRecord() {
 		 return StringUtils.isEmpty(this.getId());
 	}
 

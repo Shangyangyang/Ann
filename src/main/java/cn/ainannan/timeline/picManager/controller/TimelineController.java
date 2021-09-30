@@ -7,10 +7,6 @@ import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.bean.TimelineTongji;
 import cn.ainannan.timeline.picManager.service.TimelinePicService;
 import cn.ainannan.timeline.picManager.service.TimelineService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,41 +34,41 @@ public class TimelineController {
 			@RequestParam(defaultValue = "1") Integer page, 
 			@RequestParam(defaultValue = "10") Integer size, 
 			HttpServletRequest request) {
-		PageHelper.startPage(page, size);
+		// Pagehelper.startPage(page, size);
 		List<Timeline> list = timelineService.findList(timeline);
-		PageInfo pageInfo = new PageInfo(list);
-		return ResultGen.genSuccessResult(pageInfo);
+		// PageInfo pageInfo = new PageInfo(list);
+		return ResultGen.genSuccessResult();
 	}
-
-	@RequestMapping("findListByTimeType")
-	public ResultObject findListByTimeType(Timeline timeline, HttpServletRequest request) {
-	
-		if(StringUtils.isBlank(timeline.getTimeType()))
-			return ResultGen.genFailResult("timeType 不能为空");
-		
-		List<Timeline> tList = timelineService.findListByTimeType(timeline);
-		
-		for (Timeline t : tList) {
-			
-			List<TimelinePic> tpList = Lists.newArrayList();
-			TimelinePic tpQuery = new TimelinePic();
-			
-			if("1".equals(timeline.getTimeType())) {
-				tpQuery.setShotDateL(t.getYear());
-			} else if("2".equals(timeline.getTimeType())) {
-				tpQuery.setShotDateL(t.getMonth());
-			}
-			
-			tpQuery.setLimitNum(0);
-	
-			tpList = tpService.findList(tpQuery);
-			
-			t.setPicList(tpList);
-			t.setTimeType(timeline.getTimeType());
-		}
-		
-		return ResultGen.genSuccessResult(tList);
-	}
+//
+//	@RequestMapping("findListByTimeType")
+//	public ResultObject findListByTimeType(Timeline timeline, HttpServletRequest request) {
+//
+//		if(StringUtils.isBlank(timeline.getTimeType()))
+//			return ResultGen.genFailResult("timeType 不能为空");
+//
+//		List<Timeline> tList = timelineService.findListByTimeType(timeline);
+//
+//		for (Timeline t : tList) {
+//
+//			List<TimelinePic> tpList = Lists.newArrayList();
+//			TimelinePic tpQuery = new TimelinePic();
+//
+//			if("1".equals(timeline.getTimeType())) {
+//				tpQuery.setShotDateL(t.getYear());
+//			} else if("2".equals(timeline.getTimeType())) {
+//				tpQuery.setShotDateL(t.getMonth());
+//			}
+//
+//			tpQuery.setLimitNum(0);
+//
+//			tpList = tpService.findList(tpQuery);
+//
+//			t.setPicList(tpList);
+//			t.setTimeType(timeline.getTimeType());
+//		}
+//
+//		return ResultGen.genSuccessResult(tList);
+//	}
 
 	@RequestMapping("get")
 	public ResultObject get(Timeline timeline, HttpServletRequest request) {

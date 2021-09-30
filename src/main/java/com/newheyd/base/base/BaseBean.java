@@ -118,7 +118,7 @@ public class BaseBean implements Serializable {
 		this.updateDate = updateDate;
 	}
 		
-	public boolean getIsNewRecord() {
+	public boolean getifNewRecord() {
         return isNewRecord || StringUtils.isBlank(getId());
     }
 
@@ -127,7 +127,7 @@ public class BaseBean implements Serializable {
 	}
 	
 	public void preInsert(){
-		if(this.getIsNewRecord()) {
+		if(this.getifNewRecord()) {
 			this.id = UUIDUtils.getUUID().toUpperCase();
 		}
 

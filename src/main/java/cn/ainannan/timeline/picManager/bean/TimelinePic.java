@@ -1,15 +1,25 @@
 package cn.ainannan.timeline.picManager.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @SuppressWarnings("deprecation")
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class TimelinePic extends BaseBean {
+public class TimelinePic extends BaseBean implements Serializable {
 
 	private static final Integer SIMILAR_PASS_LINE = 99;
 
@@ -19,8 +29,8 @@ public class TimelinePic extends BaseBean {
 	private String src;
 	private String srcThumbnail;
 	private String suffix;
-	private Long size;
-	private String MD5;
+	private Long fileSize;
+	private String md5;
 	private String fingerPrint;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -33,356 +43,63 @@ public class TimelinePic extends BaseBean {
 	private String geox;
 	private String geoy;
 
+	@TableField(exist = false)
 	private int distance; // 相距距离（米）
 
+	@TableField(exist = false)
 	private Double similarity; // 相似度最高100
 
 	// 三个统计字段
+	@TableField(exist = false)
 	private String lastTotal; // 最新总数
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(exist = false)
 	private Date lastShotDate; // 最新拍摄日期
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(exist = false)
 	private Date lastImportDate; // 最近导入日期
 
+	@TableField(exist = false)
 	private String preSrc; // 查询参数，以src进行模糊查询
+	@TableField(exist = false)
 	private String timelineFlag; // 不为空则进行与timeline表的exists查询
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(exist = false)
 	private Date beginShotDate; // 起始拍摄日期
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@TableField(exist = false)
 	private Date endShotDate; // 结束拍摄日期
 
 	// 查询参数
+	@TableField(exist = false)
 	private String shotDateL; // Like查询拍摄日期
+	@TableField(exist = false)
 	private Integer limitNum; // 查询页数
+	@TableField(exist = false)
 	private Integer limitCount; // 查询条数
+	@TableField(exist = false)
 	private String thumbnailFlag; // 0：srcThumbnail为空
+	@TableField(exist = false)
 	private Integer similarType;	// 1指纹2直方图
+	@TableField(exist = false)
 	private String similarIsNotEmpty;	// 1是
+	@TableField(exist = false)
 	private String geoIsNull; // geo是否为空1是0否
+	@TableField(exist = false)
 	private String showPath;	// 是否查询path src
+	@TableField(exist = false)
 	private Integer bSize;
+	@TableField(exist = false)
 	private Integer eSize;
+	@TableField(exist = false)
 	private String notId;   // 不包含的ID
 
 
+	@TableField(exist = false)
 	private Integer picCount; // 去重模块用到的统计字段，重复图片数
 
+	@TableField(exist = false)
 	private List<TimelinePic> picList;
-
-	public int getDistance() {
-		return distance;
-	}
-
-	public void setDistance(int distance) {
-		this.distance = distance;
-	}
-
-	public String getNotId() {
-        return notId;
-    }
-
-    public void setNotId(String notId) {
-        this.notId = notId;
-    }
-
-    public Integer getbSize() {
-		return bSize;
-	}
-
-	public void setbSize(Integer bSize) {
-		this.bSize = bSize;
-	}
-
-	public Integer geteSize() {
-		return eSize;
-	}
-
-	public void seteSize(Integer eSize) {
-		this.eSize = eSize;
-	}
-
-	public Double getSimilarity() {
-		return similarity;
-	}
-
-	public void setSimilarity(Double similarity) {
-		this.similarity = similarity;
-	}
-
-	public String getShortId() {
-		return shortId;
-	}
-
-	public void setShortId(String shortId) {
-		this.shortId = shortId;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public String getSrc() {
-		return src;
-	}
-
-	public void setSrc(String src) {
-		this.src = src;
-	}
-
-	public String getSuffix() {
-		return suffix;
-	}
-
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-
-	public Long getSize() {
-		return size;
-	}
-
-	public void setSize(Long size) {
-		this.size = size;
-	}
-
-	public String getMD5() {
-		return MD5;
-	}
-
-	public void setMD5(String mD5) {
-		MD5 = mD5;
-	}
-
-	public String getFingerPrint() {
-		return fingerPrint;
-	}
-
-	public void setFingerPrint(String fingerPrint) {
-		this.fingerPrint = fingerPrint;
-	}
-
-	public String getSimilarId() {
-		return similarId;
-	}
-
-	public void setSimilarId(String similarId) {
-		this.similarId = similarId;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public Date getShotDate() {
-		return shotDate;
-	}
-
-	public void setShotDate(Date shotDate) {
-		this.shotDate = shotDate;
-	}
-
-	public String getLastTotal() {
-		return lastTotal;
-	}
-
-	public void setLastTotal(String lastTotal) {
-		this.lastTotal = lastTotal;
-	}
-
-	public Date getLastShotDate() {
-		return lastShotDate;
-	}
-
-	public void setLastShotDate(Date lastShotDate) {
-		this.lastShotDate = lastShotDate;
-	}
-
-	public Date getLastImportDate() {
-		return lastImportDate;
-	}
-
-	public void setLastImportDate(Date lastImportDate) {
-		this.lastImportDate = lastImportDate;
-	}
-
-	public String getPreSrc() {
-		return preSrc;
-	}
-
-	public void setPreSrc(String preSrc) {
-		this.preSrc = preSrc;
-	}
-
-	public String getTimelineFlag() {
-		return timelineFlag;
-	}
-
-	public void setTimelineFlag(String timelineFlag) {
-		this.timelineFlag = timelineFlag;
-	}
-
-	public Date getBeginShotDate() {
-		return beginShotDate;
-	}
-
-	public void setBeginShotDate(Date beginShotDate) {
-		this.beginShotDate = beginShotDate;
-	}
-
-	public Date getEndShotDate() {
-		return endShotDate;
-	}
-
-	public void setEndShotDate(Date endShotDate) {
-		this.endShotDate = endShotDate;
-	}
-
-	public String getShotDateL() {
-		return shotDateL;
-	}
-
-	public void setShotDateL(String shotDateL) {
-		this.shotDateL = shotDateL;
-	}
-
-	public Integer getLimitNum() {
-		return limitNum;
-	}
-
-	public void setLimitNum(Integer limitNum) {
-		this.limitNum = limitNum;
-	}
-
-	public String getSrcThumbnail() {
-		return srcThumbnail;
-	}
-
-	public void setSrcThumbnail(String srcThumbnail) {
-		this.srcThumbnail = srcThumbnail;
-	}
-
-	public String getThumbnailFlag() {
-		return thumbnailFlag;
-	}
-
-	public void setThumbnailFlag(String thumbnailFlag) {
-		this.thumbnailFlag = thumbnailFlag;
-	}
-
-	public List<TimelinePic> getPicList() {
-		return picList;
-	}
-
-	public void setPicList(List<TimelinePic> picList) {
-		this.picList = picList;
-	}
-
-	@Override
-	public String toString() {
-		return "TimelinePic [shortId=" + shortId + ", filename=" + filename + ", path=" + path + ", src=" + src
-				+ ", srcThumbnail=" + srcThumbnail + ", suffix=" + suffix + ", size=" + size + ", MD5=" + MD5
-				+ ", fingerPrint=" + fingerPrint + ", shotDate=" + shotDate + ", similarId=" + similarId + ", state="
-				+ state + ", lastTotal=" + lastTotal + ", lastShotDate=" + lastShotDate + ", lastImportDate="
-				+ lastImportDate + ", preSrc=" + preSrc + ", timelineFlag=" + timelineFlag + ", beginShotDate="
-				+ beginShotDate + ", endShotDate=" + endShotDate + ", shotDateL=" + shotDateL + ", limitNum=" + limitNum
-				+ ", thumbnailFlag=" + thumbnailFlag + ", picList=" + picList + "]";
-	}
-
-	public String getBelong() {
-		return belong;
-	}
-
-	public void setBelong(String belong) {
-		this.belong = belong;
-	}
-
-	public Integer getLimitCount() {
-		return limitCount;
-	}
-
-	public void setLimitCount(Integer limitCount) {
-		this.limitCount = limitCount;
-	}
-
-	public Integer getSimilarStatus() {
-		return similarStatus;
-	}
-
-	public void setSimilarStatus(Integer similarStatus) {
-		this.similarStatus = similarStatus;
-	}
-
-	public String getGeox() {
-		return geox;
-	}
-
-	public void setGeox(String geox) {
-		this.geox = geox;
-	}
-
-	public String getGeoy() {
-		return geoy;
-	}
-
-	public void setGeoy(String geoy) {
-		this.geoy = geoy;
-	}
-
-	public String getGeoIsNull() {
-		return geoIsNull;
-	}
-
-	public void setGeoIsNull(String geoIsNull) {
-		this.geoIsNull = geoIsNull;
-	}
-
-	public Integer getSimilarType() {
-		return similarType;
-	}
-
-	public void setSimilarType(Integer similarType) {
-		this.similarType = similarType;
-	}
-
-	public String getSimilarIsNotEmpty() {
-		return similarIsNotEmpty;
-	}
-
-	public void setSimilarIsNotEmpty(String similarIsNotEmpty) {
-		this.similarIsNotEmpty = similarIsNotEmpty;
-	}
-
-	public Integer getPicCount() {
-		return picCount;
-	}
-
-	public void setPicCount(Integer picCount) {
-		this.picCount = picCount;
-	}
-
-	public String getShowPath() {
-		return showPath;
-	}
-
-	public void setShowPath(String showPath) {
-		this.showPath = showPath;
-	}
 }

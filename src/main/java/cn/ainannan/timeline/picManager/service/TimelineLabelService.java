@@ -1,19 +1,18 @@
 package cn.ainannan.timeline.picManager.service;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import cn.ainannan.base.service.BaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.timeline.picManager.bean.Timeline;
 import cn.ainannan.timeline.picManager.bean.TimelineLabel;
 import cn.ainannan.timeline.picManager.mapper.TimelineLabelMapper;
 import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 时光轴Service
@@ -23,31 +22,30 @@ import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
  */
 @Service
 @Transactional(readOnly = true)
-public class TimelineLabelService extends BaseService<TimelineLabelMapper, TimelineLabel> {
-
-	@Autowired
+public class TimelineLabelService extends ServiceImpl<TimelineLabelMapper, TimelineLabel> {
+	@Autowired(required = false)
 	private TimelineMapper timelineMapper;
-	
-	
+
 	/**
 	 * 更新选择次数，自增一
 	 * @param timelineLabel
 	 */
 	@Transactional(readOnly = false)
 	public void updateSelectNum(TimelineLabel timelineLabel) {
-		dao.updateSelectNum(timelineLabel);
+		baseMapper.updateSelectNum(timelineLabel);
 	}
-	
+
 	@Transactional(readOnly = false)
-	public void save(TimelineLabel entity) {
-		if (entity.isNewRecord()){
+	public boolean save(TimelineLabel entity) {
+		if (entity.ifNewRecord()){
 			entity.preInsert();
 			entity.setId(UUIDUtils.generateShortUuid());
-			dao.insert(entity);
+			baseMapper.insert(entity);
 		}else{
 			entity.preUpdate();
-			dao.update(entity);
+			baseMapper.updateById(entity);
 		}
+		return true;
 	}
 	
 	/**
@@ -66,7 +64,7 @@ public class TimelineLabelService extends BaseService<TimelineLabelMapper, Timel
 		 */
 		
 		// 获取数据
-		List<TimelineLabel> tlList = this.findList(new TimelineLabel());
+		List<TimelineLabel> tlList = this.list();
 		List<Timeline> timelineList = timelineMapper.findListByLabelNotNull();
 
 		// 标签表的字符串集合，用作查询
@@ -110,7 +108,7 @@ public class TimelineLabelService extends BaseService<TimelineLabelMapper, Timel
 					tl.setStatus(Constant.LABEL_STATUS_WEI_TG);
 					tl.setSelectNum(0);
 					
-					dao.insert(tl);
+					baseMapper.insert(tl);
 					
 					labelIds.append(tl.getId()).append(",");
 					

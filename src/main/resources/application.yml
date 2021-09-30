@@ -42,7 +42,7 @@ spring:
 #server: 
 #  context-path: /ann  
 
-mybatis:
+mybatis-plus:
   mapper-locations: classpath*:mybatis/mapper/**/*.xml
   type-aliases-package: cn.ainannan
   configuration:
