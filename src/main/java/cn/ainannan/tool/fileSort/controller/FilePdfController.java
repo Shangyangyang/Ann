@@ -82,7 +82,10 @@ public class FilePdfController {
 
 		queryFpr.setPid(bean.getId());
 
-		List<FilePdfReadplan> fprList = readplanService.findList(queryFpr);
+		QueryWrapper<FilePdfReadplan> fprQuery = new QueryWrapper<FilePdfReadplan>();
+		fprQuery.eq("pid", bean.getId());
+
+		List<FilePdfReadplan> fprList = readplanService.list(fprQuery);
 
 		if(fprList.size() <= 0) {
 			return ResultGen.genSuccessResult();

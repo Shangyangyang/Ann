@@ -26,20 +26,20 @@
 	</sql>
 
 	<sql id="file_pdf_readplan_where_List">
-		a.del_flag = #{DEL_FLAG_NORMAL}
-		<if test="pid != null and pid != ''">
-			and a.pid = #{pid}
+		a.del_flag = #{bean.DEL_FLAG_NORMAL}
+		<if test="bean.pid != null and bean.pid != ''">
+			and a.pid = #{bean.pid}
 		</if>
-		<if test="state != null and state != ''">
-			and a.state = #{state}
+		<if test="bean.state != null and bean.state != ''">
+			and a.state = #{bean.state}
 		</if>
-		<if test="states != null and states != ''">
-			<foreach collection="states" item="d" open="and (" close=")" separator="or">
+		<if test="bean.states != null and bean.states != ''">
+			<foreach collection="bean.states" item="d" open="and (" close=")" separator="or">
 				a.state = #{d}
 			</foreach>
 		</if>
-		<if test="planTime != null">
-			and a.plan_time = #{planTime}
+		<if test="bean.planTime != null">
+			and a.plan_time = #{bean.planTime}
 		</if>
 	</sql>
 
@@ -53,6 +53,7 @@
 		</where>
 		order by a.state asc, p.read_bdate asc
 	</select>
+
 	<insert id="insert">
 		INSERT INTO file_pdf_readplan(
 			id,
