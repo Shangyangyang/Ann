@@ -1,12 +1,12 @@
 package cn.ainannan.timeline.picManager.service;
 
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.timeline.picManager.bean.Timeline;
 import cn.ainannan.timeline.picManager.bean.TimelineLabel;
 import cn.ainannan.timeline.picManager.mapper.TimelineLabelMapper;
 import cn.ainannan.timeline.picManager.mapper.TimelineMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class TimelineLabelService extends ServiceImpl<TimelineLabelMapper, TimelineLabel> {
+public class TimelineLabelService extends MyBaseService<TimelineLabelMapper, TimelineLabel> {
 	@Autowired(required = false)
 	private TimelineMapper timelineMapper;
 

@@ -8,9 +8,9 @@ import com.google.common.collect.Lists;
 import com.newheyd.base.base.BaseBean;
 import com.newheyd.base.util.Collections3;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;

@@ -1,11 +1,11 @@
 package cn.ainannan.tool.fileSort.service;
 
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.utils.LocalDateUtil;
 import cn.ainannan.tool.fileSort.bean.FilePdfReadline;
 import cn.ainannan.tool.fileSort.bean.FilePdfReadplan;
 import cn.ainannan.tool.fileSort.mapper.FilePdfReadlineMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfReadplanMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = false)
-public class FilePdfReadplanService extends ServiceImpl<FilePdfReadplanMapper, FilePdfReadplan> {
+public class FilePdfReadplanService extends MyBaseService<FilePdfReadplanMapper, FilePdfReadplan> {
 
     @Autowired
     private FilePdfReadlineMapper readlineMapper;

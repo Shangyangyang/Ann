@@ -1,6 +1,7 @@
 package cn.ainannan.timeline.picManager.service;
 
 import cn.ainannan.base.result.ResultGen;
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.ImageUtils;
@@ -13,7 +14,6 @@ import cn.ainannan.sys.utils.UserUtil;
 import cn.ainannan.sys.websocket.WebSocketUtil;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class ImportPicService extends ServiceImpl<TimelinePicMapper, TimelinePic> {
+public class ImportPicService extends MyBaseService<TimelinePicMapper, TimelinePic> {
 
 	@Value("${myPic-basePath}")
 	private String BASE_PATH;

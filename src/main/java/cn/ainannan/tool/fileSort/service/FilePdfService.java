@@ -2,6 +2,7 @@ package cn.ainannan.tool.fileSort.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.Constant;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.UUIDUtils;
@@ -10,7 +11,6 @@ import cn.ainannan.tool.fileSort.mapper.FilePdfLabelMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfMapper;
 import cn.ainannan.tool.fileSort.mapper.FilePdfThumMapper;
 import cn.ainannan.tool.fileSort.mapper.FileSortMapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Transactional(readOnly = false)
-public class FilePdfService extends ServiceImpl<FilePdfMapper, FilePdf> {
+public class FilePdfService extends MyBaseService<FilePdfMapper, FilePdf> {
 
     @Autowired(required = false)
     private FileSortMapper fileSortMapper;

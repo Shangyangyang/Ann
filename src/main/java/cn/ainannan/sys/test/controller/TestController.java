@@ -3,6 +3,7 @@ package cn.ainannan.sys.test.controller;
 import cn.ainannan.AnnApplication;
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.fingerPrint.FingerPrintUtils;
 import cn.ainannan.timeline.picManager.bean.TimelinePic;
 import cn.ainannan.timeline.picManager.mapper.TimelinePicMapper;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,20 @@ public class TestController {
     private SyncService syncService;
     @Autowired
     private DjService djService;
+
+    @RequestMapping("getFile")
+    public void getFile(HttpServletResponse resp) {
+
+
+        String filePath = "D:\\opt\\upFiles\\video\\001swuO5lx07yLKy0jqo010412006qRQ0E010_1629770945238.mp4";
+
+        File file = new File(filePath);
+        try {
+            FileUtils.sendFile(file, resp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @RequestMapping("index")
     public String index(HttpServletRequest req) {

@@ -2,12 +2,12 @@ package cn.ainannan.tool.dj.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.utils.FileUtils;
 import cn.ainannan.commons.utils.MD5Utils;
 import cn.ainannan.tool.dj.bean.Dj;
 import cn.ainannan.tool.dj.mapper.DjMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class DjService extends ServiceImpl<DjMapper, Dj> {
+public class DjService extends MyBaseService<DjMapper, Dj> {
 	
 	public List<Dj> listWithChildren(Dj bean){
 		return baseMapper.listWithChildren(bean);

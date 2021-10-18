@@ -88,6 +88,8 @@ public class FileUtils {
 				type = "application/x-xls";
 			} else if (suffix.equalsIgnoreCase("mp3")) {
 				type = "audio/mpeg";
+			} else if (suffix.equalsIgnoreCase("mp4")) {
+				type = "audio/mp4";
 			} else if (suffix.equalsIgnoreCase("pdf")) {
 				type = "application/pdf";
 			} else if (suffix.equalsIgnoreCase("doc")) {

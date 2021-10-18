@@ -1,6 +1,7 @@
 package cn.ainannan.tool.cost.bean;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.ainannan.base.bean.BaseBean;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CostCar implements Serializable {
+public class CostCar extends BaseBean implements Serializable {
 	@Excel(name = "金额", orderNum="1")
 	private Double money;
 	@Excel(name = "类型", orderNum="2", replace= {"油费_1", "过路费_2", "罚款_3", "保险_4", "其它_5"})

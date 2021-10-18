@@ -1,5 +1,6 @@
 package cn.ainannan.sys.bean;
 
+import cn.ainannan.base.bean.BaseBean;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Component
-public class SysDict implements Serializable {
+public class SysDict extends BaseBean implements Serializable {
 	private String label;
 	private String value;
 	private String name;

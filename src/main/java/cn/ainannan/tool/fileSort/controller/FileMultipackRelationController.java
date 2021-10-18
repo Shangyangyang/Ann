@@ -40,12 +40,6 @@ public class FileMultipackRelationController {
 
 			return ResultGen.genSuccessResult(list);
 		}
-
-	}
-
-	@RequestMapping("get")
-	public ResultObject get(FileMultipackRelation bean, HttpServletRequest request) {
-		return ResultGen.genSuccessResult(fileMultipackRelationService.getById(bean.getId()));
 	}
 
 	@RequestMapping("save")
@@ -58,13 +52,14 @@ public class FileMultipackRelationController {
 	public ResultObject saveByList(FileMultipackRelation bean, HttpServletRequest request) {
 	    List<FileMultipackRelation> fmrList = JSONArray.parseArray(bean.getList(), FileMultipackRelation.class);
 		bean.setFmrList(fmrList);
-	    fileMultipackRelationService.saveByList(bean);
+	    fileMultipackRelationService.saveByList(bean, request);
 		return ResultGen.genSuccessResult();
 	}
 
 	@RequestMapping("delete")
 	public ResultObject delete(FileMultipackRelation bean, HttpServletRequest request) {
-		return ResultGen.genSuccessResult(relationMapper.deleteById(bean.getId()));
+		QueryWrapper<FileMultipackRelation> query = QueryGenerator.initQueryWrapper(bean, request.getParameterMap());
+		return ResultGen.genSuccessResult(relationMapper.delete(query));
 	}
 
 }

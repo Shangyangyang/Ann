@@ -1,6 +1,7 @@
 package cn.ainannan.tool.fileSort.bean;
 
 import cn.ainannan.base.bean.BaseBean;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class FilePdfReadline extends BaseBean {
     private Integer pagenum;
     private Double p;
 
+    @TableField(exist = false)
     private String notZero;
 }

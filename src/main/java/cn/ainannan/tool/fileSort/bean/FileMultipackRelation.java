@@ -1,6 +1,5 @@
 package cn.ainannan.tool.fileSort.bean;
 
-import cn.ainannan.base.bean.BaseBean;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FileMultipackRelation extends BaseBean {
+public class FileMultipackRelation{
     private String mid;
     private String rid;
     private Integer sort;

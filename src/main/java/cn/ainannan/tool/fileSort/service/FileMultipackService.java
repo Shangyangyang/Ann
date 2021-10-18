@@ -2,11 +2,11 @@ package cn.ainannan.tool.fileSort.service;
 
 import cn.ainannan.base.result.ResultGen;
 import cn.ainannan.base.result.ResultObject;
+import cn.ainannan.base.service.MyBaseService;
 import cn.ainannan.commons.utils.UUIDUtils;
 import cn.ainannan.tool.fileSort.bean.FileMultipack;
 import cn.ainannan.tool.fileSort.mapper.FileMultipackMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = false)
-public class FileMultipackService extends ServiceImpl<FileMultipackMapper, FileMultipack> {
+public class FileMultipackService extends MyBaseService<FileMultipackMapper, FileMultipack> {
 
 
     public ResultObject add(FileMultipack entity) {
