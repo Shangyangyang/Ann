@@ -150,6 +150,19 @@
 		WHERE a.id = #{id}
 	</select>
 
+	<select id="getGeoList" resultType="timelinePic">
+		SELECT
+			a.geox,
+			a.geoy
+		FROM
+			timeline_pic a
+		WHERE
+			a.geox IS NOT NULL
+		AND a.geox != '0'
+		AND a.geoy IS NOT NULL
+		AND a.geoy != '0'
+	</select>
+
 	<select id="getRandomImg" resultType="timelinePic">
 		select
 		<include refid="timelinePicColumns" />

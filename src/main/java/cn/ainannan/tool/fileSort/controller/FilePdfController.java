@@ -47,8 +47,8 @@ public class FilePdfController {
 									@RequestParam(defaultValue = "10") Integer pageSize, HttpServletRequest req) {
 		QueryWrapper<FilePdf> wrapper = QueryGenerator.initQueryWrapper(bean, req.getParameterMap());
 
-		Page<FilePdf> page2 = new Page<FilePdf>(pageNum, pageSize);
-		IPage<FilePdf> list = filePdfMapper.selectPage(page2, wrapper);
+		Page<FilePdf> page = new Page<FilePdf>(pageNum, pageSize);
+		IPage<FilePdf> list = filePdfMapper.selectPage(page, wrapper);
 
 		return ResultGen.genSuccessResult(list);
 	}

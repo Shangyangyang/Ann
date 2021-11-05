@@ -42,7 +42,7 @@ public class CostCarController {
 			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest req) {
 
 		QueryWrapper<CostCar> wrapper = QueryGenerator.initQueryWrapper(car, req.getParameterMap());
-
+		wrapper.orderByDesc("input_date");
 		if(page == 0 && size == 0){
 			return ResultGen.genSuccessResult(costCarMapper.selectList(wrapper));
 		} else {

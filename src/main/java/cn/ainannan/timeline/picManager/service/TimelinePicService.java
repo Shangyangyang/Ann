@@ -154,4 +154,8 @@ public class TimelinePicService extends MyBaseService<TimelinePicMapper, Timelin
     public TimelinePic getRandomImg() {
 		return baseMapper.getRandomImg();
     }
+
+    public List<TimelinePic> getGeoList(TimelinePic pic) {
+		return baseMapper.getGeoList(pic);
+    }
 }

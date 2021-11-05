@@ -90,4 +90,6 @@ public interface TimelinePicMapper extends BaseMapper<TimelinePic> {
 	TimelinePic getUrl(String id);
 
     TimelinePic getRandomImg();
+
+    List<TimelinePic> getGeoList(TimelinePic pic);
 }

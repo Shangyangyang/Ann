@@ -44,10 +44,8 @@ public class FilePdf extends BaseBean {
     private String showMd5;
     private Integer readpage;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @TableField(exist = false)
     private Date readBdate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @TableField(exist = false)
     private Date readEdate;
 
     @TableField(exist = false)

@@ -33,15 +33,15 @@ public class FilePdfReadlineController {
 	
 	@RequestMapping("list")
 	public ResultObject list(
-			FilePdfReadline bean, @RequestParam(defaultValue = "1") Integer page,
-			@RequestParam(defaultValue = "10") Integer size, HttpServletRequest req) {
+			FilePdfReadline bean, @RequestParam(defaultValue = "1") Integer pageNum,
+			@RequestParam(defaultValue = "10") Integer pageSize, HttpServletRequest req) {
 		QueryWrapper<FilePdfReadline> wrapper = QueryGenerator.initQueryWrapper(bean, req.getParameterMap());
 		wrapper.orderByAsc("readtime");
 
-		if(page == 0 && size == 0){
+		if(pageNum == 0 && pageSize == 0){
 			return ResultGen.genSuccessResult(readlineMapper.selectList(wrapper));
 		} else {
-			Page<FilePdfReadline> page2 = new Page<FilePdfReadline>(page, size);
+			Page<FilePdfReadline> page2 = new Page<FilePdfReadline>(pageNum, pageSize);
 			IPage<FilePdfReadline> list = readlineMapper.selectPage(page2, wrapper);
 
 			return ResultGen.genSuccessResult(list);

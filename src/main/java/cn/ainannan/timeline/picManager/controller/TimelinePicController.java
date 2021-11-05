@@ -44,6 +44,11 @@ public class TimelinePicController {
         return ResultGen.genSuccessResult(tpService.getRandomImg());
     }
 
+    @RequestMapping("getGeoList")
+    public ResultObject getGeoList(TimelinePic pic) {
+        return ResultGen.genSuccessResult(tpService.getGeoList(pic));
+    }
+
 
     @RequestMapping("getTabsList")
     public ResultObject getTabsList(String id) {

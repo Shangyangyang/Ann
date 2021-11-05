@@ -1,28 +1,7 @@
-pagehelper:
-  helperDialect: mysql
-  offset-as-page-num: true
-  row-bounds-with-count: true
-  page-size-zero: true
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
-server:
-  port: 8001
-  servlet:
-    context-path: /
-    session:
-      timeout: 1800
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
-    username: root
-    password: root
-    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://172.20.0.55:3306/dv_db_original?useUnicode=true&characterEncoding=utf8
-#    username: jns_canlian
-#    password: 123456aA?
-#    driver-class-name: com.mysql.jdbc.Driver
-    
+  profiles:
+    active: dev
+
   # json格式化，日期格式化，时间加8小时。
   jackson:
     #date-format: yyyy-MM-dd
@@ -39,8 +18,22 @@ spring:
     host: localhost
     port: 6379
     password: newheyd123321
-#server: 
-#  context-path: /ann  
+
+pagehelper:
+  helperDialect: mysql
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  page-size-zero: true
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+server:
+  port: 8001
+  servlet:
+    context-path: /
+    session:
+      timeout: 1800
 
 mybatis-plus:
   mapper-locations: classpath*:mybatis/mapper/**/*.xml
@@ -50,6 +43,16 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+---
+spring:
+  profiles: dev
+  datasource:
+    # url: jdbc:mysql://localhost:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://82.156.177.180:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    username: root
+    # password: root
+    password: Password_0503
+    driver-class-name: com.mysql.jdbc.Driver
 
 logging: 
   level:
@@ -57,12 +60,27 @@ logging:
     cn.ainannan: debug
     # org.mybatis: info
 
-
 myPanfu: 'H:'
-
 myPic-basePath: '\尚羊羊\图片\个人相册\'
 #myPic-basePath: '\尚羊羊\图片\金馆长\source\'
 ecxel-basePath: '\尚羊羊\个人文档\excel\'
 
-#spring.resources.static-locations: file:H:\尚羊羊\图片\个人相册\
-#spring.mvc.static-path-pattern: /**
+---
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/ainannan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+    username: root
+    password: Password_0503
+    driver-class-name: com.mysql.jdbc.Driver
+
+logging:
+  level:
+    org.springframework.web: info
+    cn.ainannan: debug
+    # org.mybatis: info
+
+myPanfu: 'H:'
+myPic-basePath: '\尚羊羊\图片\个人相册\'
+#myPic-basePath: '\尚羊羊\图片\金馆长\source\'
+ecxel-basePath: '\尚羊羊\个人文档\excel\'
