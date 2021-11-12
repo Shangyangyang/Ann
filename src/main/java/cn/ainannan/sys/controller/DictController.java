@@ -31,7 +31,7 @@ public class DictController {
 							 @RequestParam(defaultValue = "10") Integer size, HttpServletRequest req) {
 
 		QueryWrapper<SysDict> wrapper = QueryGenerator.initQueryWrapper(dict, req.getParameterMap());
-
+		wrapper.orderByAsc("value");
 		if(page == 0 && size == 0){
 			return ResultGen.genSuccessResult(dictMapper.selectList(wrapper));
 		} else {

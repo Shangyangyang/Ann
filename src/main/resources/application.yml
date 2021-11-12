@@ -31,7 +31,7 @@ pagehelper:
 server:
   port: 8001
   servlet:
-    context-path: /
+    context-path: /ann
     session:
       timeout: 1800
 

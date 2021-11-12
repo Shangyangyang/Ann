@@ -24,6 +24,7 @@ public class LoginIntercepter implements HandlerInterceptor {
 
         //请求的url
         String url = request.getRequestURI().substring(request.getContextPath().length());
+		System.out.println("url = " + url);
 		// 取出userName信息
 		User loginUser = UserUtil.getUser();
 
