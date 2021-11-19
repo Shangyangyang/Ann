@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ainannan.tool.cost.mapper.CostGuihuaMapper">
+	
+	<sql id="costGuihuaColumns">
+		a.id as "id",
+		a.name as "name",
+		a.money as "money",
+		a.type as "type",
+		a.fangshi as "fangshi",
+		a.yicixingtime as "yicixingtime",
+		a.cycle as "cycle",
+		a.remarks as "remarks",
+		a.create_date as "createDate",
+		a.create_user as "createUser",
+		a.update_date as "updateDate",
+		a.update_user as "updateUser",
+		a.del_flag as "delFlag"
+	</sql>
+
+	<sql id="costGuihua_where">
+		a.del_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+
+	<sql id="costGuihuaJoins"></sql>
+
+	<select id="get" parameterType="String" resultType="costGuihua">
+		select
+		<include refid="costGuihuaColumns" />
+		from cost_guihua a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" parameterType="costGuihua" resultType="costGuihua">
+		select
+		<include refid="costGuihuaColumns" />
+		from cost_guihua a
+		<include refid="costGuihuaJoins" />
+		<where>
+			<include refid="costGuihua_where" />
+		</where>
+		order by a.create_date desc
+	</select>
+
+	<insert id="insert" parameterType="costGuihua">
+		INSERT INTO cost_guihua (
+			`id`,
+			`name`,
+			`money`,
+			`type`,
+			`fangshi`,
+			`yicixingtime`,
+			`cycle`,
+			`create_user`,
+			`create_date`,
+			`update_user`,
+			`update_date`,
+			`del_flag`
+		)
+		VALUES
+			(
+				#{id},
+				#{name},
+				#{money},
+				#{type},
+				#{fangshi},
+				#{yicixingtime},
+				#{cycle},
+				#{createUser},
+				#{createDate},
+				#{updateUser},
+				#{updateDate},
+				#{delFlag}
+			);
+	</insert>
+
+	<update id="update">
+		update cost_guihua
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				name = #{name},
+			</if>
+			<if test="money != null and money != ''">
+				money = #{money},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="fangshi != null and fangshi != ''">
+				fangshi = #{fangshi},
+			</if>
+			<if test="yicixingtime != null">
+				yicixingtime = #{yicixingtime},
+			</if>
+			<if test="cycle != null and cycle != ''">
+				cycle = #{cycle},
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				update_user = #{updateUser},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				del_flag = #{delFlag}
+			</if>
+		</trim>
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete" parameterType="String">
+		UPDATE cost_guihua SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByEntity" parameterType="dog">
+		delete from cost_guihua where id = #{id}
+	</delete>
+
+</mapper>
